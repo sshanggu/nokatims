@@ -1,0 +1,45 @@
+# Verizon 100G testbed data file
+
+topology:
+    name:  'vzw_5g_ixr_s'
+
+ixia:
+    chassis: '135.228.0.151'
+    server:  '135.228.2.128'
+    port:    '8020'
+    name:    'ixia_poc'
+
+nodes:
+    dut_a:
+        mgmt_ip:   135.228.0.110
+        mgmt_ipv6: 2001:4888:a2f:4025:135:228:0:110
+        #console:   135.228.0.99 2002
+        #username:  admin
+        #password:  Nokia2018!
+        ports:
+            local_port_1: '1/1/1'
+            local_port_2: '1/1/c53/1'
+            local_lag_1:  'lag-1'
+            local_lag_2:  'lag-2'
+        services:
+            vpls_1:
+                id: 1
+                type: vpls
+                saps:
+                    sap_1: '1/1/c53/1:1' 
+    dut_b:
+        mgmt_ip:   135.228.0.107
+        mgmt_ipv6: 2001:4888:a2f:4025:135:228:0:107
+        username:  admin
+        password:  Nokia2018!
+        ports:
+            local_port_1: '1/1/1'
+            local_port_2: '1/1/c53/1'
+            local_lag_1:  'lag-1'
+            local_lag_2:  'lag-2'
+        services:
+            vpls_1:
+                id: 1
+                type: vpls
+                saps:
+                    sap_1: '1/1/c53/1:1' 

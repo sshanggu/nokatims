@@ -1,0 +1,249 @@
+# ott_plte testbed data file
+ixia:
+    chassis: '135.228.0.151'
+    server: '138.120.195.223'
+    port: '8012'
+    name: 'ixplte'
+    pattern: 'VPRN 10 +- +IPv4 Test Flow +- +SARHm\\d+ DC\\d+ +- +(Up|Down)link'
+
+# nodes
+nodes:
+#    SARHm02:
+#        name: "OTT-PLTE_SARHm02 - DC01"
+#        # mgmt_ip: 135.228.2.2
+#        console: 135.228.0.221 2031
+#        username: admin
+#        password: Nokia2018!
+#        area_code: '0032'
+#        ports:
+#            cellif: 1/1/1
+#    SARHm03:
+#        name: "OTT-PLTE_SARHm03 - DC01"
+#        # mgmt_ip: 135.228.2.3
+#        console: 135.228.0.221 2026
+#        username: admin
+#        password: Nokia2018!
+#        area_code: '0032'
+#        ports:
+#            cellif: 1/1/1
+#    SARHm05:
+#        name: "OTT-PLTE_SARHm05 - DC01"
+#        # mgmt_ip: 135.228.2.5
+#        console: 135.228.0.221 2005
+#        username: admin
+#        password: Nokia2018!
+#        area_code: '0032'
+#        ports:
+#            cellif: 1/1/1
+    SARHm06:
+        name: "OTT-PLTE_SARHm06 - DC01"
+        # mgmt_ip: 135.228.2.6
+        console: 135.228.0.221 2006
+        username: admin
+        password: Nokia2018!
+        area_code: '0032'
+        ports:
+            cellif: 1/1/1
+    SARHm07:
+        name: "OTT-PLTE_SARHm07 - DC01"
+        # mgmt_ip: 135.228.2.7
+        console: 135.228.0.221 2007
+        username: admin
+        password: Nokia2018!
+        area_code: '0001'
+        ports:
+            cellif: 1/1/1
+#    SARHm08:
+#        name: "OTT-PLTE_SARHm08 - DC01"
+#        # mgmt_ip: 135.228.2.8
+#        console: 135.228.0.221 2008
+#        username: admin
+#        password: Nokia2018!
+#        area_code: '0001'
+#        ports:
+#            cellif: 1/1/1
+#    SARHm09:
+#        name: "OTT-PLTE_SARHm09 - DC01"
+#        # mgmt_ip: 135.228.2.9
+#        console: 135.228.0.221 2009
+#        username: admin
+#        password: Nokia2018!
+#        area_code: '0001'
+#        ports:
+#            cellif: 1/1/1
+##    SARHm10:
+##        name: OTT-PLTE_SARHm10
+##        mgmt_ip: 135.228.2.10
+##        console: 135.228.0.221 2011
+##        username: admin
+##        password: admin
+##        ports:
+##            cellif: 1/1/1
+#    SARHm11:
+#        name: "OTT-PLTE_SARHm11 - DC02"
+#        # mgmt_ip: 135.228.2.192
+#        console: 135.228.0.23 2011
+#        username: admin
+#        password: Nokia2018!
+#        area_code: '0001'
+#        ports:
+#            cellif: 1/1/1
+#    SARHm12:
+#        name: "OTT-PLTE_SARHm12 - DC02"
+#        # mgmt_ip: 135.228.2.193
+#        console: 135.228.0.23 2012
+#        username: admin
+#        password: Nokia2018!
+#        area_code: '0001'
+#        ports:
+#            cellif: 1/1/1
+#    SARHm13:
+#        name: "OTT-PLTE_SARHm13 - DC02"
+#        # mgmt_ip: 135.228.2.194
+#        console: 135.228.0.23 2013
+#        username: admin
+#        password: Nokia2018!
+#        area_code: '0001'
+#        ports:
+#            cellif: 1/1/1
+#    SARHm14:
+#        name: "OTT-PLTE_SARHm14 - DC02"
+#        # mgmt_ip: 135.228.2.195
+#        console: 135.228.0.23 2019
+#        username: admin
+#        password: Nokia2018!
+#        area_code: '0001'
+#        ports:
+#            cellif: 1/1/1
+#    SARHm15:
+#        name: "OTT-PLTE_SARHm15 - DC02"
+#        # mgmt_ip: 135.228.2.196
+#        console: 135.228.0.23 2015
+#        username: admin
+#        password: Nokia2018!
+#        area_code: '0001'
+#        ports:
+#            cellif: 1/1/1
+#    SARHm16:
+#        name: "OTT-PLTE_SARHm16 - DC02"
+#        # mgmt_ip: 135.228.2.197
+#        console: 135.228.0.23 2016
+#        username: admin
+#        password: Nokia2018!
+#        area_code: '0001'
+#        ports:
+#            cellif: 1/1/1
+#    SARHm17:
+#        name: "OTT-PLTE_SARHm17 - DC02"
+#        # mgmt_ip: 135.228.2.198
+#        console: 135.228.0.23 2017
+#        username: admin
+#        password: Nokia2018!
+#        area_code: '0001'
+#        ports:
+#            cellif: 1/1/1
+#    SARHm18:
+#        name: "OTT-PLTE_SARHm18 - DC02"
+#        # mgmt_ip: 135.228.2.199
+#        console: 135.228.0.23 2018
+#        username: admin
+#        password: Nokia2018!
+#        area_code: '0001'
+#        ports:
+#            cellif: 1/1/1
+    vSRi01:
+        name: OTT-PLTE_vSRi_01
+        mgmt_ip: 135.228.2.39
+        username: admin
+        password: Nokia2018!
+        ports:
+            cellif: 1/1/1
+#    vSRi02:
+#        name: OTT-PLTE_vSRi_02
+#        mgmt_ip: 135.228.2.40
+#        username: admin
+#        password: Nokia2018!
+#        ports:
+#            cellif: 1/1/1
+#    vSRa01:
+#        name: OTT-PLTE_VSRa_01
+#        mgmt_ip: 135.228.2.43
+#        username: admin
+#        password: Nokia2018!
+#        ports:
+#    vSRa02:
+#        name: OTT-PLTE_VSRa_02
+#        mgmt_ip: 135.228.2.42
+#        username: admin
+#        password: Nokia2018!
+#        ports:
+#    SRa8_01:
+#        name: OTT-PLTE_CORE_01
+#        mgmt_ip: 135.228.2.37
+#        username: admin
+#        password: Nokia2018!
+#        ports:
+#            port1: 1/2/11
+#            port2: 1/2/12
+#        services:
+#            ATT:
+#                id: 99
+#            Ericsson:
+#                id: 88
+#            service_a:
+#                type: epipe
+#                id: 987
+#                customer_id: 99
+#                saps:
+#                    sap_b: 1/1/1:255
+#                    sap_c: 1/1/1:333
+#            service_b:
+#                type: vprn
+#                id: 789
+#                customer_id: 88
+#    SRa8_02:
+#        name: OTT-PLTE_CORE_02
+#        mgmt_ip: 135.228.2.38
+#        username: admin
+#        password: Nokia2018!
+#        ports:
+#            port1: 1/2/11
+#            port2: 1/2/12
+#    # cmus 
+#    cmu_master:
+#        name: cmu_master
+#        mgmt_ip: 135.228.2.81
+#        username: root
+#        password: 4D3bugPurp0535.
+#        ports:
+#            intf1: ens1f0
+#    cmu_mate:
+#        name: cmu_mate
+#        mgmt_ip: 135.228.2.82
+#        username: root
+#        password: 4D3bugPurp0535.
+#        ports:
+#            intf1: ens1f0
+#    rfsim1:
+#        name: rfsim1
+#        console: 135.228.2.28 7778
+#    rfsim1a:
+#        name: rfsim1a
+#        console: 135.228.2.28 7781
+#    rfsim1b:
+#        name: rfsim1b
+#        console: 135.228.2.28 7782
+#    rfsim2:
+#        name: rfsim2
+#        console: 135.228.2.28 7771
+#    rfsim2a:
+#        name: rfsim2a
+#        console: 135.228.2.28 7711
+#    rfsim2b:
+#        name: rfsim2b
+#        console: 135.228.2.28 7712
+        
+
+
+
+

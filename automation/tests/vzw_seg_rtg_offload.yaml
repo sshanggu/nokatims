@@ -1,0 +1,122 @@
+# Verizon Segment Routing Offload Test Bed
+
+
+topology:
+    name:  'seg_rtg_offload'
+
+ixia:
+    chassis:     '135.228.0.151'
+    server:      '135.228.2.128'
+    port:        '8015'            #Tresjna Ixia TCL UDP Port on 135.228.2.128
+    name:        'ixia_seg_rtg_offload'
+    pattern:     'IXRs-SR'
+
+nodes:
+
+    #crs:                               
+    #    mgmt_ip: 135.228.0.202
+    #    system_ip: 1.1.1.202
+    #    ports:            
+    #        to_offload_1: '1/1/c10/1'
+    #        to_offload_2: '1/2/c12/1'
+
+    mls_1:
+        mgmt_ip: 135.228.0.163
+        system_ip: 10.0.0.163  
+        ports: 
+            to_offload_1: 'lag-521'
+            to_pe: 'lag-21'
+            to_mls_2_edn_vprn: 'lag-2'
+            to_mls_2_base: 'lag-1'
+
+    mls_2:
+        mgmt_ip: 135.228.0.164
+        system_ip: 10.0.0.164   
+        ports: 
+            to_offload_2: 'lag-521'
+            to_pe: 'lag-22'
+            to_mls_1_edn_vprn: 'lag-2'
+            to_mls_1_base: 'lag-1'
+
+    offload_1:
+        mgmt_ip: 135.228.0.111
+        system_ip: 1.1.1.111
+        ports:
+            to_mls_1:      'lag-521'
+            to_hub1:       'lag-51'     #To IEN Hub 5
+
+        services:
+            ran_vprn:
+                id: 1
+                type: 'vprn'
+                def_nh: '10:111:111::1'                
+            edn_vprn:
+                id: 4
+                type: 'vprn'
+                def_nh: '2001:4888:2015:6072:172:22:163:1'                
+    
+    offload_2:
+        mgmt_ip: 135.228.0.101
+        system_ip: 1.1.1.101
+        ports:
+            to_mls_2:     'lag-521'
+            to_hub2:      'lag-52'      #To IEN Hub 6
+
+        services:
+            ran_vprn:
+                id: 1
+                type: 'vprn'
+                def_nh: '10:101:101::1'
+            edn_vprn:
+                id: 4
+                type: 'vprn'
+                def_nh: '2001:4888:2015:6072:172:22:164:1' 
+
+    hub_1:
+        mgmt_ip:   135.228.0.51
+        system_ip: 1.1.0.51
+        ports:
+            to_bl1:   'lag-51' 
+            to_hub_2: 'lag-3'  
+            to_ixr:   'lag-109'      
+    
+        services:
+            ran_vprn:
+                id: 55
+                type: 'vprn'
+                #def_nh: '2001:4888:2015:6073:172:19:0:2'
+                def_nh: 'ran-evi-101'
+            edn_vprn:
+                id: 44
+                type: 'vprn'
+                #def_nh: '2001:4888:2015:6073:172:19:0:2'
+                def_nh: 'edn-evi-104'  #????
+
+    hub_2:
+        mgmt_ip:   135.228.0.52
+        system_ip: 1.1.0.52
+        ports:
+            to_bl2:   'lag-52' 
+            to_hub_1: 'lag-3'  
+            to_ixr:   'lag-109'    
+
+        services:
+            ran_vprn:
+                id: 55
+                type: 'vprn'
+                #def_nh: '2001:4888:2015:6073:172:19:0:2'
+                def_nh: 'ran-evi-101'  
+            edn_vprn:
+                id: 44
+                type: 'vprn'
+                #def_nh: '2001:4888:2015:6073:172:19:0:2'
+                def_nh: 'edn-evi-104'  
+    
+    #ixr-s:
+    #    mgmt_ip: 135.228.1.97
+    #    ports:
+    #        to_vc_imm_1: '2/1/1'
+    #        to_vc_imm_2: '2/1/7'
+    #    services:
+    #        edn_vpls_411:
+    #            id: 4

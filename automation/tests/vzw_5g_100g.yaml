@@ -1,0 +1,386 @@
+# Verizon 100G testbed data file
+
+
+topology:
+    name:  'vzw_5g_100g'
+
+ixia:
+    chassis: '135.228.0.151'
+    server:  '135.228.2.128'
+    port:    '8010'
+    name:    'ixia_100g'
+
+nodes:
+    # NG nodes - move to their own subset yaml file
+    
+    el_1:
+        mgmt_ip: 135.228.0.72
+        ports:
+            to_crs:     'lag-70'
+            to_el_2:    'lag-82' 
+            to_wbx_spine_1: 'lag-80' 
+            to_wbx_spine_2: 'lag-87' 
+        services:
+            ran_vprn:
+                id: 300
+                type: vprn
+    
+    el_2:
+        mgmt_ip: 135.228.0.73
+        ports:
+            to_crs:     'lag-71'
+            to_el_1:    'lag-82' 
+            to_wbx_spine_1: 'lag-81' 
+            to_wbx_spine_2: 'lag-89' 
+        services:
+            ran_vprn:
+                id: 300
+                type: vprn
+
+
+    #wbx_spine_1:
+    #    mgmt_ip: 135.228.1.88
+    #    ports:
+    #        to_el_1:    'lag-80' 
+    #        to_el_2:    'lag-81' 
+    #        to_mls_1:   'lag-83' 
+    #        to_mls_2:   'lag-84' 
+
+    wbx_spine_2:
+        mgmt_ip:   135.228.0.81
+        mgmt_ipv6: 2001:4888:a2f:4025:135:228:0:81
+        console:     135.228.0.221 2022
+        username:    admin
+        password:    Nokia2018!
+        hv_username: root
+        hv_password: UFXCr4733F
+        ports:
+            to_el_1:    'lag-87' 
+            to_el_2:    'lag-89' 
+            to_mls_1:   'lag-92' 
+            to_mls_2:   'lag-91' 
+            local_port_1 : '1/1/1'
+            local_port_2 : '1/1/2'
+            local_port_3 : '1/1/3'
+            local_port_4 : '1/1/4'
+            local_port_5 : '1/1/5'
+            local_port_6 : '1/1/6'
+            local_port_7 : '1/1/7'
+            local_port_8 : '1/1/8'
+            local_port_9 : '1/1/9'
+            local_port_10 : '1/1/10'
+            local_port_11 : '1/1/11'
+            local_port_12 : '1/1/12'
+            local_port_13 : '1/1/13'
+            local_port_14 : '1/1/14'
+            local_port_15 : '1/1/15'
+            local_port_16 : '1/1/16'
+            local_port_17 : '1/1/17'
+            local_port_18 : '1/1/18'
+            local_port_19 : '1/1/19'
+            local_port_20 : '1/1/20'
+            local_port_21 : '1/1/21'
+            local_port_22 : '1/1/22'
+            local_port_23 : '1/1/23'
+            local_port_24 : '1/1/24'
+            local_port_25 : '1/1/25'
+            local_port_26 : '1/1/26'
+            local_port_27 : '1/1/27'
+            local_port_28 : '1/1/28'
+            local_port_29 : '1/1/29'
+            local_port_30 : '1/1/30'
+            local_port_31 : '1/1/31'
+            local_port_32 : '1/1/32'
+            local_port_33 : '1/1/33'
+            local_port_34 : '1/1/34'
+            local_port_35 : '1/1/35'
+            local_port_36 : '1/1/36'
+            local_port_37 : '1/1/37'
+            local_port_38 : '1/1/38'
+            local_port_39 : '1/1/39'
+            local_port_40 : '1/1/40'
+            local_port_41 : '1/1/41'
+            local_port_42 : '1/1/42'
+            local_port_43 : '1/1/43'
+            local_port_44 : '1/1/44'
+            local_port_45 : '1/1/45'
+            local_port_46 : '1/1/46'
+            local_port_47 : '1/1/47'
+            local_port_48 : '1/1/48'
+            local_lag_1:    'lag-1'
+            local_lag_2:    'lag-2'
+            local_lag_3:    'lag-3'
+            local_lag_4:    'lag-4'
+            local_lag_5:    'lag-5'
+            local_lag_6:    'lag-6'
+            local_lag_7:    'lag-7'
+            local_lag_8:    'lag-8'
+            local_lag_9:    'lag-9'
+            local_lag_10:   'lag-10'
+            local_lag_11:   'lag-11'
+            local_lag_12:   'lag-12'
+            local_lag_13:   'lag-13'
+            local_lag_14:   'lag-14'
+            local_lag_15:   'lag-15'
+            local_lag_16:   'lag-16'
+            local_lag_17:   'lag-17'
+            local_lag_18:   'lag-18'
+            local_lag_19:   'lag-19'
+            local_lag_20:   'lag-20'
+            local_lag_21:   'lag-21'
+            local_lag_22:   'lag-22'
+            local_lag_23:   'lag-23'
+            local_lag_24:   'lag-24'
+            local_lag_25:   'lag-25'
+            local_lag_26:   'lag-26'
+            local_lag_27:   'lag-27'
+            local_lag_28:   'lag-28'
+            local_lag_29:   'lag-29'
+            local_lag_30:   'lag-30'
+            local_lag_31:   'lag-31'
+            local_lag_32:   'lag-32'
+            local_lag_33:   'lag-33'
+            local_lag_34:   'lag-34'
+            local_lag_35:   'lag-35'
+            local_lag_36:   'lag-36'
+            local_lag_37:   'lag-37'
+            local_lag_38:   'lag-38'
+            local_lag_39:   'lag-39'
+            local_lag_40:   'lag-40'
+            local_lag_41:   'lag-41'
+            local_lag_42:   'lag-42'
+            local_lag_43:   'lag-43'
+            local_lag_44:   'lag-44'
+            local_lag_45:   'lag-45'
+            local_lag_46:   'lag-46'
+            local_lag_47:   'lag-47'
+            local_lag_48:   'lag-48'
+        services:
+            vpls_5g:
+                id: 1003
+                type: vpls
+                saps:
+                    sap_to_hub_1: 'lag-47:1' 
+                    sap_to_ixia:  'lag-48:1' 
+
+    # Old school nodes
+    mls_1:
+        mgmt_ip: 135.228.0.163
+        ports:
+            to_wbx_spine_1: 'lag-83' 
+            to_wbx_spine_2: 'lag-92' 
+            to_crs:   'lag-21'
+            to_off_1: 'lag-183'
+            to_mls_2: 'lag-1'
+            to_hub_1: 'lag-8'
+            to_ring_1: 'lag-8'
+            to_sr1_hub_1_10:  'lag-511'
+            to_sr1_hub_1_100:  'lag-51'
+        ioms:
+            iom_1: '1'
+        mdas:
+            mda_1: '1/1'
+        routers:
+            Base:
+                interfaces:
+                    system:
+            vprn300:
+                interfaces:
+                    loopback:
+
+        services:
+            ran_vprn:
+                id: 300
+                type: vprn
+
+    mls_2:
+        mgmt_ip: 135.228.0.164
+        ports:
+            to_wbx_spine_1: 'lag-84' 
+            to_wbx_spine_2: 'lag-91' 
+            to_crs:   'lag-22'
+            to_off_2: 'lag-183'
+            to_mls_1: 'lag-1'
+            to_hub_2: 'lag-8'
+            to_hub_6: 'lag-9'
+            to_ring_2: 'lag-8'
+            to_ring_6: 'lag-9'
+            to_sr1_hub_2_10:  'lag-511'
+            to_sr1_hub_2_100:  'lag-51'
+        ioms:
+            iom_1: '1'
+        mdas:
+            mda_1: '1/1'
+        services:
+            ran_vprn:
+                id: 300
+                type: vprn
+
+
+    off_1:
+        mgmt_ip: 135.228.0.88
+        ports:
+            to_bg_hub_1: 'lag-101'
+            to_bg_hub_2: 'lag-102'
+            to_bg_hub_3: 'lag-103'
+            to_bg_hub_4: 'lag-104'
+            to_bg_hub_5: 'lag-105'
+            to_mls_1:    'lag-183'
+            to_hub_1:    'lag-39'
+            to_ring_1:    'lag-39'
+        services:
+            off_vpls:
+                id: 1621630539
+                type: vpls
+                saps:
+                    sap_to_mls_1: 'lag-183:539' 
+                    sap_to_hub_1: 'lag-39:39'  
+        ioms:
+            iom_1: '1'
+        mdas:
+            mda_1: '1/1'
+
+    off_2:
+        mgmt_ip: 135.228.0.79
+        ports:
+            to_bg_hub_1: 'lag-101'
+            to_bg_hub_2: 'lag-102'
+            to_bg_hub_3: 'lag-103'
+            to_bg_hub_4: 'lag-104'
+            to_bg_hub_5: 'lag-105'
+            to_mls_2:    'lag-183'
+            to_hub_2:    'lag-129'
+            to_ring_2:   'lag-129'
+        services:
+            off_vpls:
+                id: 1621645129
+                type: vpls
+                saps:
+                    sap_to_mls_2: 'lag-183:529' 
+                    sap_to_hub_2: 'lag-129:129'  
+        ioms:
+            iom_1: '1'
+        mdas:
+            mda_1: '1/1'
+            mda_1: '1/1'
+
+    hub_1:
+        mgmt_ip: 135.228.0.39
+        ports:
+            to_mls_1:  'lag-5'  
+            to_off_1:  'lag-1'  
+            to_hub_2:  'lag-2'
+            to_ring_2: 'lag-2'
+            to_wbx_89: 'lag-13'
+        ioms:
+            iom_to_mls_1: '2'
+        mdas:
+            mda_to_mls_1: '2/4'
+            mda_to_hub_2: '1/2'
+
+    hub_2:
+        mgmt_ip: 135.228.0.129
+        ports:
+            to_off_2:  'lag-9'  
+            to_hub_1:  'lag-2'
+            to_hub_3:  'lag-1'
+            to_ring_1: 'lag-2'
+            to_ring_3: 'lag-1'
+            to_mls_2:  'lag-8'
+            to_wbx_98: 'lag-13'
+        ioms:
+            iom_1: '1'
+            iom_2: '2'
+        mdas:
+            mda_1: '1/1'
+            mda_2: '1/2'
+
+    hub_3:
+        mgmt_ip: 135.228.1.205
+        ports:
+            to_ring_2: 'lag-1'  
+            to_ring_4: 'lag-2'  
+        ioms:
+            iom_1: '1'
+            iom_2: '2'
+        mdas:
+            mda_1: '1/1'
+            mda_2: '1/2'
+
+    hub_4:
+        mgmt_ip: 135.228.1.204
+        ports:
+            to_ring_3: 'lag-1'  
+            to_ring_5: 'lag-2'  
+        ioms:
+            iom_1: '1'
+            iom_2: '2'
+        mdas:
+            mda_1: '1/1'
+            mda_2: '1/2'
+
+    hub_5:
+        mgmt_ip: 135.228.1.203
+        ports:
+            to_ring_4: 'lag-1'  
+            to_ring_6: 'lag-2'  
+        ioms:
+            iom_1: '1'
+            iom_2: '2'
+        mdas:
+            mda_1: '1/1'
+            mda_2: '1/2'
+
+    hub_6:
+        mgmt_ip: 135.228.1.206
+        ports:
+            to_ring_5: 'lag-1'  
+            to_mls_2: 'lag-2'
+        ioms:
+            iom_1: '1'
+            iom_2: '2'
+        mdas:
+            mda_1: '1/1'
+            mda_2: '1/2'
+
+    wbx_89:
+        mgmt_ip:     135.228.1.89 
+        #mgmt_ip:     12.0.52.89
+        mgmt_ipv6:   2001:4888:a2f:4025:135:228:1:89
+        #console:     135.228.0.221 2022
+        username:    admin
+        password:    Nokia2018!
+        hv_username: root
+        hv_password: UFXCr4733F
+        ports:
+            test:            'lag-1'
+            to_hub_1:        'lag-13'
+            to_sr1_hub_1_10: 'lag-51'
+            to_sr1_hub_2_10: 'lag-52'
+            to_ixia: '1/2/5'
+        ioms:
+            iom_1: '1'
+        mdas:
+            mda_1: '1/1'
+            mda_2: '1/2'
+        services:
+            vpls_5g:
+                id: 1003
+                type: vpls
+                saps:
+                    sap_to_hub_1: 'lag-14:103' 
+                    sap_to_ixia:  '1/2/5:103' 
+
+
+    wbx_98:
+        mgmt_ip:  135.228.1.98 
+        #mgmt_ip: 12.0.52.98
+        ports:
+            to_hub_2: 'lag-13'
+            to_ixia: '1/1/45'
+        ioms:
+            iom_1: '1'
+        mdas:
+            mda_1: '1/1'
+            mda_2: '1/2'
+

@@ -1,0 +1,32 @@
+# example testbed data file
+
+# ixia pc
+ixia_chassis: '135.228.2.151'
+ixia_pc: '135.228.2.128'
+# nodes
+node_1: 
+    name: node1_name
+    mgmt_ip: 135.228.0.34
+    iom: '1'
+    mda: '1/2'
+    port_1:
+        id: '1/2/3' 
+        type: 'xlgige'
+        encap: 'dot1q'
+    saps:
+        - '48'
+        - '49'
+
+#node_2: 
+#    name: node2_name
+#    mgmt_ip: 135.228.0.35
+#    iom: '1'
+#    mda: '1/2'
+#    port_1:
+#        id: '1/2/3' 
+#        type: 'xlgige'
+#        encap: 'dot1q'
+#    saps:
+#        - '48'
+#        - '49'
+

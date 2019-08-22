@@ -1,0 +1,34 @@
+# 100G Hub testbed data file
+
+
+topology:
+    name:  'vzw_5g_wbx_ping'
+
+nodes:
+
+    wbx_89:
+        #mgmt_ip: 135.228.1.89
+        mgmt_ip: 135.228.1.98
+        #mgmt_ipv6: 2001:4888:a2f:4025:135:228:1:89
+        mgmt_ipv6: 2001:4888:a2f:4025:135:228:1:98
+        ports:
+            to_hub_1: 'lag-14'
+            to_ixia: '1/1/45'
+        ioms:
+            iom_1: '1'
+        mdas:
+            mda_1: '1/1'
+            mda_2: '1/2'
+
+    wbx_98:
+        mgmt_ip: 135.228.1.98
+        mgmt_ipv6: 2001:4888:a2f:4025:135:228:1:98
+        ports:
+            to_hub_2: 'lag-14'
+            to_ixia: '1/1/45'
+        ioms:
+            iom_1: '1'
+        mdas:
+            mda_1: '1/1'
+            mda_2: '1/2'
+

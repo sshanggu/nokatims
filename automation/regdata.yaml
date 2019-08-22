@@ -1,0 +1,501 @@
+exampleA: 
+    module: example1
+    testbed: tb1.yaml
+    testcases:
+        - test-1
+        - test-2 {'traffic_item':'ipv6_hub9'}
+exampleB:
+    module: example1
+    testbed: tb2.yaml
+    testcases:
+        - test-1
+        - test-2 {'traffic_item':'ipv6_hub9'}
+        - test-3
+        - test-4 {'traffic_item':'xxxyyy'}
+
+ott_plte:
+    module: ott_plte
+    testbed: ott_plte.yaml
+    mib_release: timos_15_0_r5
+    testcases:
+        - sanity1
+        #- mobility_test
+        #- headEndFailover_1
+        #- dataCenter01_headEndFailover
+        #- aggregationFailover_1
+        #- aggregationFailover_1n2
+        #- cmuIfFailover
+        #- cmuSvrFailover
+
+vzw_5g_100g_mls:
+    module:  vzw_5g_100g_hub
+    testbed: vzw_5g_100g.yaml
+    mib_release: timos_15_0_r5
+    testcases:
+        - mls_with_bg_set_up
+        - mls_with_bg
+        - mls_with_bg_reboot_mls_1_standby_cpm
+        - mls_with_bg_reboot_mls_2_standby_cpm
+        - mls_with_bg_switch_mls_1_active_cpm
+        - mls_with_bg_switch_mls_2_active_cpm
+        - mls_with_bg_shut_inter_mls_port_one
+        - mls_with_bg_shut_inter_mls_port_one_reboot_mls_1_standby_cpm
+        - mls_with_bg_shut_inter_mls_port_one_reboot_mls_2_standby_cpm
+        - mls_with_bg_shut_inter_mls_port_one_switch_mls_1_active_cpm
+        - mls_with_bg_shut_inter_mls_port_one_switch_mls_2_active_cpm
+        - mls_with_bg_shut_inter_mls_port_two_reboot_mls_1_standby_cpm
+        - mls_1_with_bg_reboot_standby_cpm
+        - mls_2_with_bg_reboot_standby_cpm
+        - mls_1_with_bg_switch_active_cpm
+        - mls_2_with_bg_switch_active_cpm
+        - set_up_hub_with_offload
+
+vzw_5g_100g_ring:
+    module:  vzw_5g_100g_ring
+    testbed: vzw_5g_100g.yaml
+    mib_release: timos_15_0_r5
+    testcases:
+        - ring_set_up
+        - ring_sanity
+        #- ring_reboot_mls_1_standby_cpm
+        #- ring_reboot_mls_2_standby_cpm
+        #- ring_reboot_ring_1_standby_cpm
+        #- ring_reboot_ring_2_standby_cpm
+        #- ring_reboot_ring_3_standby_cpm
+        #- ring_reboot_ring_4_standby_cpm
+        #- ring_reboot_ring_5_standby_cpm
+        #- ring_reboot_ring_6_standby_cpm
+        #- ring_switch_mls_1_active_cpm
+        #- ring_switch_mls_2_active_cpm
+        #- ring_switch_ring_1_active_cpm
+        #- ring_switch_ring_2_active_cpm
+        #- ring_switch_ring_3_active_cpm
+        #- ring_switch_ring_4_active_cpm
+        #- ring_switch_ring_5_active_cpm
+        #- ring_switch_ring_6_active_cpm
+        - ring_fail_ring_1_to_mls_1_lag
+        - ring_fail_ring_2_to_ring_1_lag
+        - ring_fail_ring_3_to_ring_2_lag
+        - ring_fail_ring_4_to_ring_3_lag
+        - ring_fail_ring_5_to_ring_4_lag
+        - ring_fail_ring_6_to_ring_5_lag
+        - ring_fail_ring_6_to_mls_2_lag
+        - ring_fail_1_member_ring_1_to_mls_1_lag
+        - ring_fail_1_member_ring_2_to_ring_1_lag
+        - ring_fail_1_member_ring_3_to_ring_2_lag
+        - ring_fail_1_member_ring_4_to_ring_3_lag
+        - ring_fail_1_member_ring_5_to_ring_4_lag
+        - ring_fail_1_member_ring_6_to_ring_5_lag
+        - ring_fail_1_member_ring_6_to_mls_2_lag
+        #- ring_isolate_ring_1
+        #- ring_reboot_mls_1
+        #- ring_reboot_mls_2
+        #- ring_reboot_ring_1
+        #- ring_reboot_ring_2
+        #- ring_reboot_ring_3
+        #- ring_reboot_ring_4
+        #- ring_reboot_ring_5
+        #- ring_reboot_ring_6
+        - teardown
+
+vzw_5g_100g_hub_offload:
+    module:  vzw_5g_100g_hub
+    testbed: vzw_5g_100g.yaml
+    mib_release: timos_15_0_r5
+    testcases:
+        - hub_offload_set_up
+        - hub_offload_sanity
+
+        - hub_offload_fail_mls_1_lag_to_crs
+        - hub_offload_fail_mls_2_lag_to_crs
+        #- hub_offload_fail_mls_1_lag_to_mls_2
+        - hub_offload_fail_mls_1_lag_to_mls_2_1_member
+
+        - hub_offload_fail_hub_1_lag_to_off_1
+        - hub_offload_fail_hub_1_lag_to_off_1_1_member
+        - hub_offload_fail_hub_2_lag_to_off_2
+        - hub_offload_fail_hub_2_lag_to_off_2_1_member
+
+        - hub_offload_fail_hub_1_lag_to_mls_1
+        - hub_offload_fail_hub_1_lag_to_mls_1_1_member
+        - hub_offload_fail_hub_2_lag_to_mls_2
+        - hub_offload_fail_hub_2_lag_to_mls_2_1_member
+        - hub_offload_fail_hub_1_lag_to_hub_2
+        - hub_offload_fail_hub_1_lag_to_hub_2_1_member
+
+        #- hub_offload_fail_hub_1_iom_to_mls_1
+        #- hub_offload_fail_hub_1_mda_to_mls_1
+
+        - hub_offload_fail_off_1_vpls
+        - hub_offload_fail_off_2_vpls
+
+        #- hub_offload_reboot_mls_1_standby_cpm
+        #- hub_offload_reboot_mls_2_standby_cpm
+        #- hub_offload_reboot_hub_1_standby_cpm
+        #- hub_offload_reboot_hub_2_standby_cpm
+
+        - hub_offload_switch_mls_1_active_cpm
+        #- hub_offload_switch_mls_2_active_cpm
+        - hub_offload_switch_hub_1_active_cpm
+        #- hub_offload_switch_hub_2_active_cpm
+
+        - hub_offload_reboot_mls_1
+        - hub_offload_reboot_hub_1
+        #- hub_offload_reboot_wbx_89
+
+        #- hub_offload_fail_mls_1_lag_to_mls_2_1_member_reboot_mls_1_standby_cpm
+        #- hub_offload_fail_mls_1_lag_to_mls_2_1_member_switch_mls_1_active_cpm
+        #- hub_offload_fail_mls_1_lag_to_mls_2_1_member_reboot_mls_2_standby_cpm
+        #- hub_offload_fail_mls_1_lag_to_mls_2_1_member_switch_mls_2_active_cpm
+
+        - teardown
+
+vzw_5g_100g_hub_no_offload:
+    module:  vzw_5g_100g_hub
+    testbed: vzw_5g_100g.yaml
+    mib_release: timos_15_0_r5
+    testcases:
+        - hub_no_offload_set_up
+        - hub_no_offload_sanity
+
+        - hub_no_offload_fail_mls_1_lag_to_crs
+        - hub_no_offload_fail_mls_2_lag_to_crs
+        #- hub_no_offload_fail_mls_1_lag_to_mls_2
+        - hub_no_offload_fail_mls_1_lag_to_mls_2_1_member
+        - hub_no_offload_fail_hub_1_lag_to_mls_1
+        - hub_no_offload_fail_hub_1_lag_to_mls_1_1_member
+        - hub_no_offload_fail_hub_2_lag_to_mls_2
+        - hub_no_offload_fail_hub_2_lag_to_mls_2_1_member
+        - hub_no_offload_fail_hub_1_lag_to_hub_2
+        - hub_no_offload_fail_hub_1_lag_to_hub_2_1_member
+
+        - hub_no_offload_sf_hub_1_to_mls_1
+        - hub_no_offload_sf_hub_2_to_mls_2
+
+        #- hub_no_offload_fail_hub_1_iom_to_mls_1
+        #- hub_no_offload_fail_hub_1_mda_to_mls_1
+
+        #- hub_no_offload_reboot_mls_1_standby_cpm
+        #- hub_no_offload_reboot_mls_2_standby_cpm
+        #- hub_no_offload_reboot_hub_1_standby_cpm
+        #- hub_no_offload_reboot_hub_2_standby_cpm
+
+        - hub_no_offload_switch_mls_1_active_cpm
+        #- hub_no_offload_switch_mls_2_active_cpm
+        - hub_no_offload_switch_hub_1_active_cpm
+        #- hub_no_offload_switch_hub_2_active_cpm
+
+        - hub_no_offload_reboot_mls_1
+        - hub_no_offload_reboot_hub_1
+        #- hub_no_offload_reboot_wbx_89
+
+        #- hub_no_offload_fail_mls_1_lag_to_mls_2_1_member_reboot_mls_1_standby_cpm
+        #- hub_no_offload_fail_mls_1_lag_to_mls_2_1_member_switch_mls_1_active_cpm
+        #- hub_no_offload_fail_mls_1_lag_to_mls_2_1_member_reboot_mls_2_standby_cpm
+        #- hub_no_offload_fail_mls_1_lag_to_mls_2_1_member_switch_mls_2_active_cpm
+
+        - teardown
+
+vzw_5g_100g_ng_hub_no_offload:
+    module:  vzw_5g_100g_hub
+    testbed: vzw_5g_100g.yaml
+    mib_release: timos_15_0_r5
+    testcases:
+        - ng_hub_no_offload_set_up
+        - ng_hub_no_offload_sanity
+
+        #- ng_hub_no_offload_fail_el1_lag_to_wbx_spine_1
+        #- ng_hub_no_offload_fail_el1_lag_to_wbx_spine_2
+        #- ng_hub_no_offload_fail_el2_lag_to_wbx_spine_1
+        #- ng_hub_no_offload_fail_el2_lag_to_wbx_spine_2
+        #- ng_hub_no_offload_fail_wbx_spine_1_lag_to_mls_1
+        #- ng_hub_no_offload_fail_wbx_spine_1_lag_to_mls_2
+        #- ng_hub_no_offload_fail_wbx_spine_2_lag_to_mls_1
+        #- ng_hub_no_offload_fail_wbx_spine_2_lag_to_mls_2
+
+        #- ng_hub_no_offload_fail_mls_1_lag_to_mls_2
+        #- ng_hub_no_offload_fail_mls_1_lag_to_mls_2_1_member
+        #- ng_hub_no_offload_fail_hub_1_lag_to_mls_1
+        #- ng_hub_no_offload_fail_hub_1_lag_to_mls_1_1_member
+        #- ng_hub_no_offload_fail_hub_1_lag_to_hub_2
+        #- ng_hub_no_offload_fail_hub_1_lag_to_hub_2_1_member
+        #- ng_hub_no_offload_fail_hub_2_lag_to_mls_2
+        #- ng_hub_no_offload_fail_hub_2_lag_to_mls_2_1_member
+
+        #- ng_hub_no_offload_fail_hub_1_iom_to_mls_1
+        #- ng_hub_no_offload_fail_hub_1_mda_to_mls_1
+
+        #- ng_hub_no_offload_sf_hub_1_to_mls_1
+        #- ng_hub_no_offload_sf_hub_2_to_mls_2
+
+        #- ng_hub_no_offload_reboot_mls_1_standby_cpm
+        #- ng_hub_no_offload_reboot_mls_2_standby_cpm
+        #- ng_hub_no_offload_reboot_hub_1_standby_cpm
+        #- ng_hub_no_offload_reboot_hub_2_standby_cpm
+
+        #- ng_hub_no_offload_switch_mls_1_active_cpm
+        #- ng_hub_no_offload_switch_mls_2_active_cpm
+        #- ng_hub_no_offload_switch_hub_1_active_cpm
+        #- ng_hub_no_offload_switch_hub_2_active_cpm
+
+        #- ng_hub_no_offload_reboot_mls_1
+        #- ng_hub_no_offload_reboot_hub_1
+        #- ng_hub_no_offload_reboot_wbx_89
+
+        #- ng_hub_no_offload_fail_mls_1_lag_to_mls_2_1_member_reboot_mls_1_standby_cpm
+        #- ng_hub_no_offload_fail_mls_1_lag_to_mls_2_1_member_reboot_mls_2_standby_cpm
+        #- ng_hub_no_offload_fail_mls_1_lag_to_mls_2_1_member_switch_mls_1_active_cpm
+        #- ng_hub_no_offload_fail_mls_1_lag_to_mls_2_1_member_switch_mls_2_active_cpm
+
+        - teardown
+
+vzw_5g_100g_sr1_hub_no_offload:
+    module:  vzw_5g_100g_sr1
+    testbed: vzw_5g_100g.yaml
+    mib_release: timos_15_0_r5
+    testcases:
+        #- sr1_hub_no_offload_set_up
+        - sr1_hub_no_offload_sanity
+        #- sr1_hub_no_offload_fail_mls_1_lag_to_crs
+        #- sr1_hub_no_offload_fail_mls_2_lag_to_crs
+        #- sr1_hub_no_offload_fail_hub_1_lag_to_mls_1
+        #- sr1_hub_no_offload_fail_hub_2_lag_to_mls_2
+        #- sr1_hub_no_offload_reboot_mls_1
+        #- teardown
+
+vzw_5g_100g_qos:
+    module:  vzw_5g_100g_qos
+    testbed: vzw_5g_100g.yaml
+    mib_release: timos_15_0_r5
+    testcases:
+        - wbx_north_port_to_lag_congestion 
+        - wbx_south_lag_to_port_egress_queues 
+        - wbx_north_port_to_lag_egress_queues 
+
+vzw_5g_wbx_ping:
+    module:  vzw_5g_wbx_ping
+    testbed: vzw_5g_wbx_ping.yaml
+    mib_release: timos_15_0_r5
+    testcases:
+        - ping_1 
+
+vzw_5g_wbx_bash:
+    module:  vzw_5g_wbx_bash
+    testbed: vzw_5g_100g.yaml
+    mib_release: timos_15_0_r5
+    testcases:
+        #- upgrade_node_172_to_144_cloud_v2
+        #- upgrade_node_144_to_172_cloud_v2
+        #- upgrade_node_172_to_172_cloud_v2
+        #- upgrade_node_172_to_144_cloud_v2
+        #- upgrade_node_144_to_172_cloud_v3
+        #- upgrade_node_172_to_172_cloud_v3
+        #- reboot_hv
+        #- reboot_node
+        - remote_port_bounce
+        - remote_lag_bounce
+        #- local_port_bounce
+        - local_multi_port_bounce
+        #- local_lag_bounce
+        - local_vpls_bounce
+        - local_vpls_add_delete
+        - local_vpls_add_delete_many
+        - local_vpls_sap_bounce
+        - local_vpls_sap_add_delete
+        #- local_admin_save_detail
+        - local_admin_save
+        - local_bof_save
+        - mgmt_ipv6_ping
+        - robo_user_show_port_detail 
+        - robo_user_show_service_all
+        - robo_user_show_sap_detail
+
+
+vzw_ense_ran_sanity:
+    module:  new_ng_poc
+    testbed: vzw_ng_poc.yaml
+    mib_release: timos_15_0_r5
+    testcases:
+        - ran_sanity_access_no_vprn 
+
+vzw_ense_edn_sanity:
+    module:  new_ng_poc
+    testbed: vzw_ng_poc.yaml
+    mib_release: timos_15_0_r5
+    testcases:
+        - edn_sanity_access_no_vprn 
+
+vzw_ense_vxlan_sanity:
+    module:  new_ng_poc
+    testbed: vzw_ng_poc.yaml
+    mib_release: timos_15_0_r5
+    testcases:
+        - vxlan_sanity_access_no_vprn 
+
+vzw_ense_ran:
+    module:  new_ng_poc
+    testbed: vzw_ng_poc.yaml
+    mib_release: timos_15_0_r5
+    testcases:
+        - ran_sanity_access_no_vprn 
+        - ran_fail_hub_1_to_access_1_access_no_vprn 
+        - ran_fail_hub_2_to_access_2_access_no_vprn 
+        - ran_fail_access_1_to_spine_1_access_no_vprn 
+        - ran_fail_access_1_to_spine_2_access_no_vprn 
+        - ran_fail_access_2_to_spine_1_access_no_vprn 
+        - ran_fail_access_2_to_spine_2_access_no_vprn 
+        - ran_fail_exit_1_to_spine_1_access_no_vprn 
+        - ran_fail_exit_1_to_spine_2_access_no_vprn 
+        - ran_fail_exit_2_to_spine_1_access_no_vprn 
+        - ran_fail_exit_2_to_spine_2_access_no_vprn 
+        - ran_fail_exit_1_to_ense_vxlan_access_no_vprn 
+        - ran_fail_exit_2_to_ense_vxlan_access_no_vprn 
+        - ran_reboot_exit_1_access_no_vprn 
+        - ran_reboot_spine_1_access_no_vprn 
+        - ran_reboot_access_1_access_no_vprn 
+        - ran_reboot_hub_1_access_no_vprn 
+
+vzw_ense_edn:
+    module:  new_ng_poc
+    testbed: vzw_ng_poc.yaml
+    mib_release: timos_15_0_r5
+    testcases:
+        - edn_sanity_access_no_vprn 
+        - edn_fail_access_3_to_spine_1_1_access_no_vprn 
+        - edn_fail_access_3_to_spine_1_2_access_no_vprn 
+        - edn_fail_access_3_to_spine_2_1_access_no_vprn 
+        - edn_fail_exit_1_to_spine_1_access_no_vprn 
+        - edn_fail_exit_1_to_spine_2_access_no_vprn 
+        - edn_fail_exit_2_to_spine_1_access_no_vprn 
+        - edn_fail_exit_2_to_spine_2_access_no_vprn 
+        - edn_fail_exit_1_to_ense_vxlan_access_no_vprn 
+        - edn_fail_exit_2_to_ense_vxlan_access_no_vprn 
+        - edn_reboot_exit_1_access_no_vprn 
+        - edn_reboot_spine_1_access_no_vprn 
+        - edn_reboot_access_1_access_no_vprn 
+        - edn_reboot_access_3_access_no_vprn 
+        - edn_host_switch_active_to_standby_access_no_vprn
+        - edn_vc_uplink_1_fail_access_no_vprn
+        - edn_vc_uplink_2_fail_access_no_vprn
+
+vzw_ense_vxlan:
+    module:  new_ng_poc
+    testbed: vzw_ng_poc.yaml
+    mib_release: timos_15_0_r5
+    testcases:
+        - vxlan_sanity_access_no_vprn 
+        #- vxlansr_east_west_sanity_access_no_vprn 
+        - vxlan_fail_vxlan_access_1_to_vxlan_spine_1 
+        - vxlan_fail_vxlan_access_1_to_vxlan_spine_2
+        - vxlan_fail_exit_1_to_vxlan_spine_1 
+        - vxlan_fail_exit_1_to_vxlan_spine_2
+        - vxlan_fail_exit_2_to_vxlan_spine_1 
+        - vxlan_fail_exit_2_to_vxlan_spine_2
+        - vxlan_fail_exit_1_to_pe 
+        - vxlan_fail_exit_2_to_pe 
+        - vxlan_fail_visp_1 
+        - vxlan_fail_visp_2 
+        - vxlan_fail_both_visp 
+        - vxlan_fail_fw_1 
+        - vxlan_fail_fw_2 
+        - vxlan_reboot_vxlan_spine_1 
+        - vxlan_reboot_exit_2 
+        # Enable when Ixia added to vlan access leaf 2
+        #- vxlan_fail_vxlan_access_2_to_vxlan_spine_1 
+        #- vxlan_fail_vxlan_access_2_to_vxlan_spine_2 
+
+vzw_ense_full:
+    module:  new_ng_poc
+    testbed: vzw_ng_poc.yaml
+    mib_release: timos_15_0_r5
+    backup_config: True
+    testcases:
+        - sanity_access_no_vprn 
+        - fail_hub_1_to_access_1_access_no_vprn 
+        - fail_hub_2_to_access_2_access_no_vprn 
+        - fail_access_1_to_spine_1_access_no_vprn 
+        - fail_access_1_to_spine_2_access_no_vprn 
+        - fail_access_2_to_spine_1_access_no_vprn 
+        - fail_access_2_to_spine_2_access_no_vprn 
+        - fail_access_3_to_spine_1_1_access_no_vprn 
+        - fail_access_3_to_spine_1_2_access_no_vprn 
+        - fail_access_3_to_spine_2_1_access_no_vprn 
+        - fail_access_3_to_spine_2_2_access_no_vprn 
+        - fail_exit_1_to_spine_1_access_no_vprn 
+        - fail_exit_1_to_spine_2_access_no_vprn 
+        - fail_exit_2_to_spine_1_access_no_vprn 
+        - fail_exit_2_to_spine_2_access_no_vprn 
+        - fail_exit_1_to_ense_vxlan_access_no_vprn 
+        - fail_exit_2_to_ense_vxlan_access_no_vprn 
+        - ran_vrrp_fail_and_recover 
+        - fail_vc_uplink_1
+        - fail_vc_uplink_2
+        - reboot_exit_1_access_no_vprn 
+        - reboot_spine_1_access_no_vprn 
+        - reboot_access_1_access_no_vprn 
+        - reboot_access_3_access_no_vprn 
+        - reboot_hub_1_access_no_vprn 
+        #- edn_host_switch_active_to_standby_access_no_vprn
+
+vzw_5g_ixr_s_bash:
+    module:  vzw_5g_ixr_s_bash
+    testbed: vzw_5g_ixr_s.yaml
+    mib_release: timos_15_0_r5
+    testcases:
+        - reboot_node
+        - local_port_bounce
+        - local_lag_bounce
+        - remote_port_bounce
+        - remote_lag_bounce
+        - local_admin_save
+        - local_bof_save
+        - local_vpls_bounce
+        - local_vpls_add_delete
+        - local_vpls_add_delete_many
+        - local_vpls_sap_bounce
+        - local_vpls_sap_add_delete
+        - mgmt_ipv6_ping
+        - robo_user_show_port_detail 
+        - robo_user_show_service_all
+        - robo_user_show_sap_detail
+
+vzw_seg_rtg_offload:
+    module:  vzw_seg_rtg_offload
+    testbed: vzw_seg_rtg_offload.yaml
+    mib_release: timos_15_0_r5
+    backup_config: True
+    testcases:
+        - sanity_access_no_vprn
+        - fail_offload1_to_hub_1_access_no_vprn
+        - fail_offload2_to_hub_2_access_no_vprn
+        - fail_offload1_to_mls_1_access_no_vprn
+        - fail_offload2_to_mls_2_access_no_vprn
+        - fail_mls_1_to_pe_access_no_vprn
+        - fail_mls_2_to_pe_access_no_vprn
+        - reboot_offload1_access_no_vprn
+        - reboot_offload2_access_no_vprn
+        - reboot_hub1_access_no_vprn
+        - reboot_hub2_access_no_vprn
+ #       - fail_vrrp_edn_hub_to_ixr_no_vprn
+ #       - fail_vrrp_ran_hub_to_ixr_no_vprn
+        - silent_failure_10s_hub_1_to_offload1
+        - silent_failure_10s_hub_2_to_offload2
+        - silent_failure_60s_hub_1_to_offload1
+        - silent_failure_60s_hub_2_to_offload2
+        - ran_vprn_shut_offload1
+        - ran_vprn_shut_offload2
+        - edn_vprn_shut_offload1
+        - edn_vprn_shut_offload2
+        - ran_flap_bgp_offload1
+        - ran_flap_bgp_offload2
+        - edn_flap_bgp_offload1
+        - edn_flap_bgp_offload2
+        - base_bgp_flap_hub1
+        - base_bgp_flap_hub2
+
+        #- isolate_offload1_access_no_vprn
+        #- isolate_offload2_access_no_vprn
+        #- isolate_hub1_access_no_vprn
+        #- isolate_hub2_access_no_vprn
+        #- teardown
+

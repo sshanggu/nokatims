@@ -44,15 +44,15 @@ nodes:
         area_code: '0032'
         ports:
             cellif: 1/1/1
-    SARHm07:
-        name: "OTT-PLTE_SARHm07 - DC01"
-        # mgmt_ip: 135.228.2.7
-        console: 135.228.0.221 2007
-        username: admin
-        password: Nokia2018!
-        area_code: '0001'
-        ports:
-            cellif: 1/1/1
+#    SARHm07:
+#        name: "OTT-PLTE_SARHm07 - DC01"
+#        # mgmt_ip: 135.228.2.7
+#        console: 135.228.0.221 2007
+#        username: admin
+#        password: Nokia2018!
+#        area_code: '0001'
+#        ports:
+#            cellif: 1/1/1
 #    SARHm08:
 #        name: "OTT-PLTE_SARHm08 - DC01"
 #        # mgmt_ip: 135.228.2.8

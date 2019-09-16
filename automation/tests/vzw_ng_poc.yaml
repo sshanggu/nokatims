@@ -23,6 +23,7 @@ nodes:
 
     bl_1:
         mgmt_ip: 135.228.0.203
+        mgmt_ipv6: 2001:4888:a2f:4025:135:228:0:203 
         system_ip: 1.1.1.203
         ports:
             to_ense_vxlan: '1/1/c1/1'
@@ -40,8 +41,8 @@ nodes:
     
     bl_2:
         mgmt_ip: 135.228.0.112
+        mgmt_ipv6: 2001:4888:a2f:4025:135:228:0:112 
         system_ip: 1.1.1.112
-        netconf: True
         ports:
             to_ense_vxlan: '1/1/c7/1'
             to_spine_1: '1/1/c2/1' 
@@ -59,6 +60,7 @@ nodes:
 
     spine_1:
         mgmt_ip:   135.228.0.113
+        mgmt_ipv6: 2001:4888:a2f:4025:135:228:0:113 
         system_ip: 1.1.1.113
         ports:
             #to_bl_1:    '1/1/c1/1' 
@@ -71,6 +73,7 @@ nodes:
 
     spine_2:
         mgmt_ip:   135.228.0.114
+        mgmt_ipv6: 2001:4888:a2f:4025:135:228:0:114 
         system_ip: 1.1.1.114
         ports:
             #to_bl_1:    '1/1/c1/1' 
@@ -83,6 +86,7 @@ nodes:
 
     al_1:
         mgmt_ip:   135.228.0.115
+        mgmt_ipv6: 2001:4888:a2f:4025:135:228:0:115 
         system_ip: 1.1.1.115
         ports:
             to_spine_1:  '1/1/c1/1' 
@@ -94,6 +98,7 @@ nodes:
                 type: vprn
     al_2:
         mgmt_ip:   135.228.0.74
+        mgmt_ipv6: 2001:4888:a2f:4025:135:228:0:74 
         system_ip: 1.1.1.74
         ports:
             to_spine_1:  '1/1/c1/1' 
@@ -106,6 +111,7 @@ nodes:
 
     al_4:
         mgmt_ip:   135.228.1.83
+        mgmt_ipv6: 2001:4888:a2f:4025:135:228:1:83 
         system_ip: 1.1.1.83
         ports:
             to_spine_1_1:  '1/3/1' 
@@ -120,6 +126,8 @@ nodes:
     al_3:
         #mgmt_ip:   135.228.1.75
         mgmt_ip:   192.168.100.75
+        #mgmt_ipv6: 2001:4888:a2f:4025:135:228:0:75 
+        mgmt_ipv6: 192:168:100:100::75
         system_ip: 1.1.2.74
         ports:
             to_spine_1_1:  '1/1/1' 
@@ -134,6 +142,7 @@ nodes:
 
     hub_1:
         mgmt_ip:   135.228.0.73
+        mgmt_ipv6: 2001:4888:a2f:4025:135:228:0:73 
         system_ip: 1.1.1.73
         ports:
             to_al_1:  '1/1/c1/1' 
@@ -148,6 +157,7 @@ nodes:
 
     hub_2:
         mgmt_ip:   135.228.0.72
+        mgmt_ipv6: 2001:4888:a2f:4025:135:228:0:72 
         system_ip: 1.1.1.72
         ports:
             to_al_2:  '1/1/c1/1' 
@@ -161,6 +171,7 @@ nodes:
                 def_nh: 'ran-evi-101'
     ca_1:
         mgmt_ip:   192.168.100.107 
+        mgmt_ipv6: 192:168:100:100::107
         system_ip: 192.168.0.107 
         ports:
             to_hub_1:  '1/1/c49/1' 
@@ -170,14 +181,18 @@ nodes:
             ran_vprn:
                 id: 1
                 type: vprn
+
     imn_102:
         mgmt_ip: 192.168.100.102
+        mgmt_ipv6: 192:168:100:100::102
 
     imn_105:
         mgmt_ip: 192.168.100.105
+        mgmt_ipv6: 192:168:100:100::105
 
     vc:
         mgmt_ip: 192.168.100.103
+        mgmt_ipv6: 192:168:100:100::103
         ports:
             uplink_1:  '1/1/51' 
             uplink_2:  '2/1/51' 
@@ -185,17 +200,37 @@ nodes:
     ixr6:
         mgmt_ip: 135.228.1.97
         ports:
-            to_vc_imm_1: '2/1/1'
-            to_vc_imm_2: '2/1/7'
+            to_vc_sn_1_1_A: '2/1/1'
+            to_vc_sn_1_1_S: '2/1/7'
+            to_vc_sn_1_2_A: '2/1/2'
+            to_vc_sn_1_2_S: '2/1/8'
         services:
             edn_vpls_411:
                 id: 411
+            edn_vpls_412:
+                id: 412
+
+    ixrs_110:
+        mgmt_ip: 135.228.0.110
+        mgmt_ipv6: 2001:4888:a2f:4025:135:228:0:110
+        ports:
+            to_bl1_1: '1/1/c49/1'
+            to_bl2_1: '1/1/c50/1'
+
+    ixrs_127:
+        mgmt_ip: 135.228.0.127
+        mgmt_ipv6: 2001:4888:a2f:4025:135:228:0:127
+        ports:
+            to_bl1_1: '1/1/c49/1'
+            to_bl2_1: '1/1/c50/1'
 
     wbx32:
         mgmt_ip: 135.228.0.78
         services:
             edn_vpls_411:
                 id: 411
+            edn_vpls_412:
+                id: 412
 
 # SR-7s VXLAN POC
     vxlan_spine_1:
@@ -218,17 +253,17 @@ nodes:
         mgmt_ip:   135.228.1.225
         system_ip: 1.1.1.225
         ports:
-            to_vxlan_spine_1: '1/2/c12/1' 
-            to_vxlan_spine_2: '1/2/c12/2' 
-            to_ixia:          '1/1/c1/1' 
-            visp_1_inside:    '1/1/c2/1' 
-            visp_1_outside:   '1/1/c2/1' 
-            fw_1_inside:      '1/1/c2/1' 
-            fw_1_outside:     '1/1/c2/1' 
-            visp_2_inside:    '1/1/c3/1' 
-            visp_2_outside:   '1/1/c3/1' 
-            fw_2_inside:      '1/1/c3/1' 
-            fw_2_outside:     '1/1/c3/1' 
+            #to_vxlan_spine_1: '1/2/c12/1' 
+            #to_vxlan_spine_2: '1/2/c12/2' 
+            #to_ixia:          '1/1/c1/1' 
+            #visp_1_inside:    '1/1/c2/1' 
+            #visp_1_outside:   '1/1/c2/1' 
+            #fw_1_inside:      '1/1/c2/1' 
+            #fw_1_outside:     '1/1/c2/1' 
+            #visp_2_inside:    '1/1/c3/1' 
+            #visp_2_outside:   '1/1/c3/1' 
+            #fw_2_inside:      '1/1/c3/1' 
+            #fw_2_outside:     '1/1/c3/1' 
         services:
             visp_1:
                 id: 1000

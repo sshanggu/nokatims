@@ -352,6 +352,7 @@ import paramiko
 import getpass
 import imsext
 import ftplib
+import xrpc
 
 mylog=logging.getLogger(__name__)
 mylog.addHandler(logging.StreamHandler())
@@ -582,7 +583,17 @@ class Node(paramiko.SSHClient):
         else:
             mylog.info("%s Neither ssh nor console exists" % self.sysname)
             return str() # return empty string
-            
+    
+    def nc_config(self, cmd, format='xml'):
+        self._netconf()
+        if format == 'cli':
+            mylog.info('Send %s to %s' %(cmd, self.sysname))
+        return self.nccon.load_configuration(format=format, config=cmd)
+
+    def nc_show(self, cmd):
+        self._netconf()
+        mylog.info('%s# netconf show %s' %(self.sysname, cmd))
+        return self.nccon.show_cli(cmd).data_text
 
     def reboot(self):
         try:
@@ -960,6 +971,9 @@ class Node(paramiko.SSHClient):
         elif re.search ('IXR-s', str(chassis)):
            cpm_a = 2
            cpm_b = 'FALSE'
+        elif re.search ('7210 SAS-VC', str(chassis)):
+           cpm_a = 9
+           cpm_b = 10
         else:
            print("ERROR: Currently unsupported node of %s at ip %s" %(chassis,self))
            cpm_a = 'FALSE'
@@ -1609,12 +1623,12 @@ class Node(paramiko.SSHClient):
     def isolate(self):
         mylog.info("Isolate node %s" %(self.ip))
         for px in self.port_dict.keys() :
-            self.port_dict[px].shutdown(snmp=True)
+            self.port_dict[px].shutdown(opt='snmp')
 
     def no_isolate(self):
         mylog.info("No isolate node %s" %(self.ip))
         for px in self.port_dict.keys() :
-            self.port_dict[px].no_shutdown(snmp=True)
+            self.port_dict[px].no_shutdown(opt='snmp')
 
     def add_port(self, **portd):
         mylog.info('Add ports in node instance')
@@ -1857,6 +1871,31 @@ class Node(paramiko.SSHClient):
                 time.sleep(1)
 
         return arp_nd_result
+
+
+    def wait_vpls_mac(self,service, mac, wait):
+        count = 0
+        self.sysname = self.get_system_name()
+        res, cli_return = self.send_cli_command('show service id %s fdb detail | match %s' %(service,mac), see_return=True)
+        mylog.info("Wait up to %s seconds for MAC %s on node %s vpls %s" %(wait,mac,self.sysname,service))
+
+        while count <= wait:
+            res, cli_return = self.send_cli_command('show service id %s fdb detail | match %s' %(service,mac), see_return=True)
+            if mac not in cli_return:
+                mac_result = False 
+                mylog.error("MAC %s is NOT seen on node %s vpls %s after %s seconds" %(mac,self.sysname,service,count))
+            else:
+                mac_result = True 
+
+            if mac_result:
+                mylog.info("MAC %s is seen on node %s vpls %s after %s seconds" %(mac,self.sysname,service,count))
+                break
+            else:
+                count +=1
+                time.sleep(1)
+
+        return mac_result
+
 
     def Is_VRRP_Master(self,interface,router):
          
@@ -3094,37 +3133,34 @@ class Port(object):
         # parse port info
         return utils.parse_show_port_detail(cret)
 
-    # shutdow port
-    def shutdown(self,snmp=False):
-        if not snmp:
-            if 'cmu' in self.node.name:
-                # for cmu to shutdowm interface
-                self.node.cliexe('ifconfig %s down' %self.port)
-                # show interface state
-                self.node.cliexe('ifconfig %s' %self.port)
-            else:
-                # for router to shut down interface
-                self.node.cliexe('/configure port %s shutdown' %self.port)
-        else:
+    # shutdown port
+    def shutdown(self, opt='ssh'):
+        if opt == 'snmp':
             self.set_port_info('admin','down')
+        elif opt == 'netconf':
+            self.node.nc_config(xrpc.pset(self.port, shutdown='true'))
+        else:
+            if 'cmu' in self.node.name:
+                self.node.cliexe('ifconfig %s down' %self.port)
+                self.node.cliexe('ifconfig %s' %self.port)  # show intf
+            else:
+                self.node.cliexe('configure port %s shutdown' %self.port)
 
     # noshutdow port
-    def noshutdown(self,snmp=False,verbose=True):
-        #mylog.info('no shutdown %s port %s' %(self.node.name,self.port))
-        if not snmp:
-            if 'cmu' in self.node.name:
-                # for cmu to shutdowm interface
-                self.node.cliexe('ifconfig %s up' %self.port)
-                # show interface state
-                self.node.cliexe('ifconfig %s' %self.port)
-            else:    
-                self.node.cliexe('configure port %s no shutdown' %self.port)
-        else:
+    def noshutdown(self, opt='ssh', verbose=True):
+        if opt == 'snmp':
             self.set_port_info('admin','up',verbose)
+        elif opt == 'netconf':
+            self.node.nc_config(xrpc.pset(self.port, shutdown='false'))
+        else:
+            if 'cmu' in self.node.name:
+                self.node.cliexe('ifconfig %s up' %self.port)
+                self.node.cliexe('ifconfig %s' %self.port)  # show intf
+            else:
+                self.node.cliexe('configure port %s no shutdown' %self.port)
 
-    def no_shutdown(self,snmp=False,verbose=False):
-        self.noshutdown(snmp,verbose=False)
-
+    def no_shutdown(self,opt='ssh',verbose=True):
+        self.noshutdown(opt=opt,verbose=verbose)
 
     def clear_host_mda(self):
         print("Clear MDA %s" %(self.mda))

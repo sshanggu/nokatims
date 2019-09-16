@@ -120,6 +120,11 @@ if (__name__ == '__main__'):
     # make log file based on timestamps
     logfile = os.path.join(logdir, t0.strftime("%g%b%d_%H%M%S_%f.log"))
 
+    # remove all handlers associated with root logger object
+    # without this, log file not created in virtual env
+    for lh in logging.root.handlers[:]:
+        logging.root.removeHandler(lh)
+
     # configure logging file, level and format
     logging.basicConfig(
         filename=logfile, level=logging.INFO,
@@ -135,11 +140,6 @@ if (__name__ == '__main__'):
     # save testbed configuration before tests
     bkdir = None
     bks = os.path.basename(BKPDIR)
-    
-    import node
-    tb = node.Testbed(tbyaml, use_ixia=False)
-    import pdb; pdb.set_trace()
-
     if RUNNER == REGUSER and bks in suited and suited[bks]:
         bkdir = utils.save_tb_config(tbyaml)
     mylog.info('Testbed backup: %s' % bkdir)

@@ -28,6 +28,7 @@ log_file.addHandler(logging.StreamHandler(sys.stdout))
 
 tb  = attrdict.AttrDict()
 topology = 'none'
+byway = 'snmp'
 
 
 def testbed_init(testbed_file):
@@ -392,46 +393,46 @@ def sanity():
 def fail_offload1_to_hub1():
 
     result = True
-    tb.offload_1.to_hub1.shutdown(snmp=True)
+    tb.offload_1.to_hub1.shutdown(opt=byway)
     return result
 
 def fail_offload2_to_hub2():
 
     result = True
-    tb.offload_2.to_hub2.shutdown(snmp=True)
+    tb.offload_2.to_hub2.shutdown(opt=byway)
     return result
 
 def fail_offload1_to_mls_1():
 
     result = True
 
-    tb.offload_1.to_mls_1.shutdown(snmp=True)
+    tb.offload_1.to_mls_1.shutdown(opt=byway)
     return result
 
 def fail_offload2_to_mls_2():
 
     result = True
 
-    tb.offload_2.to_mls_2.shutdown(snmp=True)
+    tb.offload_2.to_mls_2.shutdown(opt=byway)
     return result
 
 def fail_hub_2_to_ixr():
 
     result = True
 
-    tb.hub_2.to_ixr.shutdown(snmp=True)
+    tb.hub_2.to_ixr.shutdown(opt=byway)
     return result
 
 def fail_mls1_to_pe():
     result = True
 
-    tb.mls_1.to_pe.shutdown(snmp=True)
+    tb.mls_1.to_pe.shutdown(opt=byway)
     return result
     
 def fail_mls2_to_pe():
     result = True
 
-    tb.mls_2.to_pe.shutdown(snmp=True)
+    tb.mls_2.to_pe.shutdown(opt=byway)
     return result
 
 def reboot_offload1():
@@ -488,8 +489,8 @@ def isolate_offload_1():
     log_file.info("Isolate Border Leaf 1")
     log_file.info("-----------------------------------")
 
-    tb.offload_1.to_mls_1_vxlan.shutdown(snmp=True)
-    tb.offload_1.to_hub1.shutdown(snmp=True)
+    tb.offload_1.to_mls_1_vxlan.shutdown(opt=byway)
+    tb.offload_1.to_hub1.shutdown(opt=byway)
     
     result = True
     return result
@@ -500,8 +501,8 @@ def isolate_offload_2():
     log_file.info("Isolate Border Leaf 2")
     log_file.info("-----------------------------------")
 
-    tb.offload_2.to_mls_2_vxlan.shutdown(snmp=True)
-    tb.offload_2.to_hub2.shutdown(snmp=True)
+    tb.offload_2.to_mls_2_vxlan.shutdown(opt=byway)
+    tb.offload_2.to_hub2.shutdown(opt=byway)
     
     result = True
     return result
@@ -512,9 +513,9 @@ def isolate_hub_1():
     log_file.info("Isolate Hub 1")
     log_file.info("-----------------------------------")
 
-    tb.hub_1.to_offload_1.shutdown(snmp=True)
-    #tb.hub_1.to_hub_2.shutdown(snmp=True)
-    tb.hub_1.to_ixr.shutdown(snmp=True)
+    tb.hub_1.to_offload_1.shutdown(opt=byway)
+    #tb.hub_1.to_hub_2.shutdown(opt=byway)
+    tb.hub_1.to_ixr.shutdown(opt=byway)
     result = True
     return result
 
@@ -524,9 +525,9 @@ def isolate_hub_2():
     log_file.info("Isolate Hub 2")
     log_file.info("-----------------------------------")
 
-    tb.hub_2.to_offload_2.shutdown(snmp=True)
-    #tb.hub_2.to_hub_1.shutdown(snmp=True)
-    tb.hub_2.to_ixr.shutdown(snmp=True)
+    tb.hub_2.to_offload_2.shutdown(opt=byway)
+    #tb.hub_2.to_hub_1.shutdown(opt=byway)
+    tb.hub_2.to_ixr.shutdown(opt=byway)
     result = True
     return result
 
@@ -554,17 +555,17 @@ def fail_vrrp_edn_hub_to_ixr():
 
     result = True
 
-    #tb.hub_1.to_ixr.shutdown(snmp=True)
+    #tb.hub_1.to_ixr.shutdown(opt=byway)
     if not check_edn_vrrp_master_on_hub1():
       if not check_edn_vrrp_master_on_hub2():
         log_file.info("ERROR:  NO VRRP MASTER ON EDN")
         result = False
       else:
         log_file.info("EDN VRRP Master on Hub2")
-        tb.hub_2.to_ixr.shutdown(snmp=True)
+        tb.hub_2.to_ixr.shutdown(opt=byway)
     else:
         log_file.info("EDN VRRP Master on Hub1")
-        tb.hub_1.to_ixr.shutdown(snmp=True)
+        tb.hub_1.to_ixr.shutdown(opt=byway)
     return result
 
 def check_ran_vrrp_master_on_hub1():
@@ -599,10 +600,10 @@ def fail_vrrp_ran_hub_to_ixr():
           result = False
       else:
           log_file.info("RAN VRRP Master on Hub2")
-          tb.hub_2.to_ixr.shutdown(snmp=True)
+          tb.hub_2.to_ixr.shutdown(opt=byway)
     else:
         log_file.info("RAN VRRP Master on Hub1")
-        tb.hub_1.to_ixr.shutdown(snmp=True)
+        tb.hub_1.to_ixr.shutdown(opt=byway)
     return result
 
 def silent_failure_10s_hub1():
@@ -698,7 +699,7 @@ def restore_base_set_up():
     for nx in tb.node_dict.values():
         for px in nx.port_dict.values() :
             print (px.name)
-            px.no_shutdown(snmp=True,verbose=False)
+            px.no_shutdown(opt=byway,verbose=False)
 
 def check_base_set_up(wait):
 

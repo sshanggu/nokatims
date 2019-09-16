@@ -1,4 +1,4 @@
-#!/usr/bin/python
+
 from __future__ import division
 
 import node
@@ -28,7 +28,7 @@ log_file.addHandler(logging.StreamHandler(sys.stdout))
 
 tb  = attrdict.AttrDict()
 topology = 'none'
-
+protocol = 'snmp'
 
 def testbed_init(testbed_file):
 
@@ -862,21 +862,21 @@ def fail_hub_1_to_access_1():
 
     result = True
 
-    tb.hub_1.to_al_1.shutdown(snmp=True)
+    tb.hub_1.to_al_1.shutdown(opt=protocol)
     return result
 
 def fail_hub_2_to_access_2():
 
     result = True
 
-    tb.hub_2.to_al_2.shutdown(snmp=True)
+    tb.hub_2.to_al_2.shutdown(opt=protocol)
     return result
 
 def fail_access_1_to_spine_1():
 
     result = True
 
-    tb.al_1.to_spine_1.shutdown(snmp=True)
+    tb.al_1.to_spine_1.shutdown(opt=protocol)
     return result
 
 
@@ -884,7 +884,7 @@ def fail_access_1_to_spine_2():
 
     result = True
 
-    tb.al_1.to_spine_2.shutdown(snmp=True)
+    tb.al_1.to_spine_2.shutdown(opt=protocol)
     return result
 
 
@@ -892,7 +892,7 @@ def fail_access_2_to_spine_1():
 
     result = True
 
-    tb.al_2.to_spine_1.shutdown(snmp=True)
+    tb.al_2.to_spine_1.shutdown(opt=protocol)
     return result
 
 
@@ -900,7 +900,7 @@ def fail_access_2_to_spine_2():
 
     result = True
 
-    tb.al_2.to_spine_2.shutdown(snmp=True)
+    tb.al_2.to_spine_2.shutdown(opt=protocol)
     return result
 
 
@@ -908,63 +908,63 @@ def fail_access_3_to_spine_1_1():
 
     result = True
 
-    tb.al_3.to_spine_1_1.shutdown(snmp=True)
+    tb.al_3.to_spine_1_1.shutdown(opt=protocol)
     return result
 
 def fail_access_3_to_spine_1_2():
 
     result = True
 
-    tb.al_4.to_spine_1_2.shutdown(snmp=True)
+    tb.al_4.to_spine_1_2.shutdown(opt=protocol)
     return result
 
 def fail_access_3_to_spine_2_1():
 
     result = True
 
-    tb.al_3.to_spine_2_1.shutdown(snmp=True)
+    tb.al_3.to_spine_2_1.shutdown(opt=protocol)
     return result
 
 def fail_access_3_to_spine_2_2():
 
     result = True
 
-    tb.al_3.to_spine_2_1.shutdown(snmp=True)
+    tb.al_3.to_spine_2_1.shutdown(opt=protocol)
     return result
 
 def fail_access_4_to_spine_1_1():
 
     result = True
 
-    tb.al_4.to_spine_1_1.shutdown(snmp=True)
+    tb.al_4.to_spine_1_1.shutdown(opt=protocol)
     return result
 
 def fail_access_4_to_spine_1_2():
 
     result = True
 
-    tb.al_4.to_spine_1_2.shutdown(snmp=True)
+    tb.al_4.to_spine_1_2.shutdown(opt=protocol)
     return result
 
 def fail_access_4_to_spine_2_1():
 
     result = True
 
-    tb.al_4.to_spine_2_1.shutdown(snmp=True)
+    tb.al_4.to_spine_2_1.shutdown(opt=protocol)
     return result
 
 def fail_access_4_to_spine_2_2():
 
     result = True
 
-    tb.al_4.to_spine_2_1.shutdown(snmp=True)
+    tb.al_4.to_spine_2_1.shutdown(opt=protocol)
     return result
 
 def fail_exit_1_to_spine_1():
 
     result = True
 
-    tb.bl_1.to_spine_1.shutdown(snmp=True)
+    tb.bl_1.to_spine_1.shutdown(opt=protocol)
     return result
 
 
@@ -972,7 +972,7 @@ def fail_exit_1_to_spine_2():
 
     result = True
 
-    tb.bl_1.to_spine_2.shutdown(snmp=True)
+    tb.bl_1.to_spine_2.shutdown(opt=protocol)
     return result
 
 
@@ -980,7 +980,7 @@ def fail_exit_2_to_spine_1():
 
     result = True
 
-    tb.bl_2.to_spine_1.shutdown(snmp=True)
+    tb.bl_2.to_spine_1.shutdown(opt=protocol)
     return result
 
 
@@ -988,7 +988,7 @@ def fail_exit_2_to_spine_2():
 
     result = True
 
-    tb.bl_2.to_spine_2.shutdown(snmp=True)
+    tb.bl_2.to_spine_2.shutdown(opt=protocol)
     return result
 
 
@@ -996,7 +996,7 @@ def fail_exit_1_to_ense_vxlan():
 
     result = True
 
-    tb.bl_1.to_ense_vxlan.shutdown(snmp=True)
+    tb.bl_1.to_ense_vxlan.shutdown(opt=protocol)
     return result
 
 
@@ -1004,14 +1004,14 @@ def fail_exit_2_to_ense_vxlan():
 
     result = True
 
-    tb.bl_2.to_ense_vxlan.shutdown(snmp=True)
+    tb.bl_2.to_ense_vxlan.shutdown(opt=protocol)
     return result
 
 def fail_ixr_to_hub_1():
 
     result = True
 
-    tb.ca_1.to_hub_1.shutdown(snmp=True)
+    tb.ca_1.to_hub_1.shutdown(opt=protocol)
 
     return result
 
@@ -1019,7 +1019,7 @@ def fail_ixr_to_hub_2():
 
     result = True
 
-    tb.ca_1.to_hub_2.shutdown(snmp=True)
+    tb.ca_1.to_hub_2.shutdown(opt=protocol)
 
     return result
 
@@ -1031,18 +1031,18 @@ def ran_vrrp_switch_and_recover():
     log_file.info("Switch VRRP from Hub 1 to Hub 2")
     log_file.info("-----------------------------------")
 
-    tb.ca_1.to_hub_1.shutdown(snmp=True)
+    tb.ca_1.to_hub_1.shutdown(opt=protocol)
     time.sleep(5)
 
     log_file.info("-----------------------------------")
     log_file.info("Switch VRRP from Hub 2 to Hub 1")
     log_file.info("-----------------------------------")
 
-    tb.ca_1.to_hub_1.no_shutdown(snmp=True)
+    tb.ca_1.to_hub_1.no_shutdown(opt=protocol)
     time.sleep(5)
-    tb.ca_1.to_hub_2.shutdown(snmp=True)
+    tb.ca_1.to_hub_2.shutdown(opt=protocol)
     time.sleep(5)
-    tb.ca_1.to_hub_2.no_shutdown(snmp=True)
+    tb.ca_1.to_hub_2.no_shutdown(opt=protocol)
 
     return result
 
@@ -1054,7 +1054,7 @@ def fail_vc_uplink_1():
     log_file.info("Fail EDN VC Uplink 1 ")
     log_file.info("-----------------------------------")
 
-    tb.vc.uplink_1.shutdown(snmp=True)
+    tb.vc.uplink_1.shutdown(opt=protocol)
 
     return result
 
@@ -1066,7 +1066,7 @@ def fail_vc_uplink_2():
     log_file.info("Fail EDN VC Uplink 2 ")
     log_file.info("-----------------------------------")
 
-    tb.vc.uplink_2.shutdown(snmp=True)
+    tb.vc.uplink_2.shutdown(opt=protocol)
 
     return result
 
@@ -1139,15 +1139,6 @@ def reboot_access_3():
     tb.al_3.sr_reboot()
     tb.al_3.close()
 
-    log_file.info("--------------------------------------------------")
-    log_file.info("Simulate Host Losing GW & Switching To Its Standby")
-    log_file.info("--------------------------------------------------")
-
-    tb.ixr6.to_vc_imm_1.shutdown(snmp=True)
-    tb.ixr6.to_vc_imm_2.no_shutdown(snmp=True)
-    tb.ixr6.send_cli_command('/clear service id %s fdb all' %(tb.ixr6.edn_vpls_411.id)) 
-    tb.wbx32.send_cli_command('/clear service id %s fdb all' %(tb.wbx32.edn_vpls_411.id)) 
-
     return result
 
 def reboot_hub_1():
@@ -1163,60 +1154,60 @@ def reboot_hub_1():
     return result
 
 def isolate_exit_1():
-    tb.bl_1.to_ense_vxlan.shutdown(snmp=True)
-    tb.bl_1.to_spine_1.shutdown(snmp=True)
-    tb.bl_1.to_spine_2.shutdown(snmp=True)
+    tb.bl_1.to_ense_vxlan.shutdown(opt=protocol)
+    tb.bl_1.to_spine_1.shutdown(opt=protocol)
+    tb.bl_1.to_spine_2.shutdown(opt=protocol)
     result = True
     return result
 
 def isolate_exit_2():
-    tb.bl_2.to_ense_vxlan.shutdown(snmp=True)
-    tb.bl_2.to_spine_1.shutdown(snmp=True)
-    tb.bl_2.to_spine_2.shutdown(snmp=True)
+    tb.bl_2.to_ense_vxlan.shutdown(opt=protocol)
+    tb.bl_2.to_spine_1.shutdown(opt=protocol)
+    tb.bl_2.to_spine_2.shutdown(opt=protocol)
     result = True
     return result
 
 def isolate_spine_1():
-    tb.spine_1.to_bl_1.shutdown(snmp=True)
-    tb.spine_1.to_bl_2.shutdown(snmp=True)
-    tb.spine_1.to_al_1.shutdown(snmp=True)
-    tb.spine_1.to_al_2.shutdown(snmp=True)
+    tb.spine_1.to_bl_1.shutdown(opt=protocol)
+    tb.spine_1.to_bl_2.shutdown(opt=protocol)
+    tb.spine_1.to_al_1.shutdown(opt=protocol)
+    tb.spine_1.to_al_2.shutdown(opt=protocol)
     result = True
     return result
 
 def isolate_spine_2():
-    tb.spine_2.to_bl_1.shutdown(snmp=True)
-    tb.spine_2.to_bl_2.shutdown(snmp=True)
-    tb.spine_2.to_al_1.shutdown(snmp=True)
-    tb.spine_2.to_al_2.shutdown(snmp=True)
+    tb.spine_2.to_bl_1.shutdown(opt=protocol)
+    tb.spine_2.to_bl_2.shutdown(opt=protocol)
+    tb.spine_2.to_al_1.shutdown(opt=protocol)
+    tb.spine_2.to_al_2.shutdown(opt=protocol)
     result = True
     return result
 
 def isolate_access_1():
-    tb.al_1.to_spine_1.shutdown(snmp=True)
-    tb.al_1.to_spine_2.shutdown(snmp=True)
-    tb.al_1.to_hub_1.shutdown(snmp=True)
+    tb.al_1.to_spine_1.shutdown(opt=protocol)
+    tb.al_1.to_spine_2.shutdown(opt=protocol)
+    tb.al_1.to_hub_1.shutdown(opt=protocol)
     result = True
     return result
 
 def isolate_access_2():
-    tb.al_2.to_spine_1.shutdown(snmp=True)
-    tb.al_2.to_spine_2.shutdown(snmp=True)
-    tb.al_2.to_hub_2.shutdown(snmp=True)
+    tb.al_2.to_spine_1.shutdown(opt=protocol)
+    tb.al_2.to_spine_2.shutdown(opt=protocol)
+    tb.al_2.to_hub_2.shutdown(opt=protocol)
     result = True
     return result
 
 def isolate_hub_1():
-    tb.hub_1.to_al_1.shutdown(snmp=True)
-    #tb.hub_1.to_hub_2.shutdown(snmp=True)
-    tb.hub_1.to_wbx.shutdown(snmp=True)
+    tb.hub_1.to_al_1.shutdown(opt=protocol)
+    #tb.hub_1.to_hub_2.shutdown(opt=protocol)
+    tb.hub_1.to_wbx.shutdown(opt=protocol)
     result = True
     return result
 
 def isolate_hub_2():
-    tb.hub_2.to_al_2.shutdown(snmp=True)
-    #tb.hub_2.to_hub_1.shutdown(snmp=True)
-    tb.hub_2.to_wbx.shutdown(snmp=True)
+    tb.hub_2.to_al_2.shutdown(opt=protocol)
+    #tb.hub_2.to_hub_1.shutdown(opt=protocol)
+    tb.hub_2.to_wbx.shutdown(opt=protocol)
     result = True
     return result
 
@@ -1226,14 +1217,16 @@ def edn_host_switch_active_to_standby():
     log_file.info("--------------------------------------------------------")
     log_file.info("Simulate an EDN host activity switch - active to standby")
     log_file.info("--------------------------------------------------------")
-    tb.ixr6.to_vc_imm_1.shutdown(snmp=True)
-    tb.ixr6.to_vc_imm_2.no_shutdown(snmp=True)
-    tb.ixr6.send_cli_command('/clear service id %s fdb all' %(tb.ixr6.edn_vpls_411.id)) 
-    tb.wbx32.send_cli_command('/clear service id %s fdb all' %(tb.wbx32.edn_vpls_411.id)) 
-    if not tb.al_4.wait_arp_nd('12:1:74:1:1:1:1:11',4,'"Remote  ARP-ND"',61):
-        result = False
-    if not tb.al_3.wait_arp_nd('12:1:74:1:1:1:1:11',4,'"Remote  EVPN"',61):
-        result = False
+    tb.ixr6.to_vc_sn_1_1_A.shutdown(opt=protocol)
+    tb.ixr6.to_vc_sn_1_2_A.shutdown(opt=protocol)
+    tb.ixr6.to_vc_sn_1_1_S.no_shutdown(opt=protocol)
+    tb.ixr6.to_vc_sn_1_2_S.no_shutdown(opt=protocol)
+    #tb.ixr6.send_cli_command('/clear service id %s fdb all' %(tb.ixr6.edn_vpls_411.id)) 
+    #tb.wbx32.send_cli_command('/clear service id %s fdb all' %(tb.wbx32.edn_vpls_411.id)) 
+    #if not tb.al_4.wait_arp_nd('12:1:74:1:1:1:1:11',4,'"Remote  ARP-ND"',61):
+    #    result = False
+    #if not tb.al_3.wait_arp_nd('12:1:74:1:1:1:1:11',4,'"Remote  EVPN"',61):
+    #    result = False
     return result
 
 def edn_host_switch_standby_to_active():
@@ -1242,10 +1235,11 @@ def edn_host_switch_standby_to_active():
     log_file.info("--------------------------------------------------------")
     log_file.info("Simulate an EDN host activity switch - standby to active")
     log_file.info("--------------------------------------------------------")
-    tb.ixr6.to_vc_imm_2.shutdown(snmp=True)
-    tb.ixr6.to_vc_imm_1.no_shutdown(snmp=True)
+    tb.ixr6.to_vc_sn_1_1_S.shutdown(opt=protocol)
+    tb.ixr6.to_vc_sn_1_2_S.shutdown(opt=protocol)
+    tb.ixr6.to_vc_sn_1_1_A.no_shutdown(opt=protocol)
+    tb.ixr6.to_vc_sn_1_2_A.no_shutdown(opt=protocol)
     tb.ixr6.send_cli_command('/clear service id %s fdb all' %(tb.ixr6.edn_vpls_411.id)) 
-    tb.wbx32.send_cli_command('/clear service id %s fdb all' %(tb.wbx32.edn_vpls_411.id)) 
     if not tb.al_3.wait_arp_nd('12:1:74:1:1:1:1:11',4,'"Remote  ARP-ND"',61):
         result = False
     if not tb.al_4.wait_arp_nd('12:1:74:1:1:1:1:11',4,'"Remote  EVPN"',61):
@@ -1258,7 +1252,7 @@ def edn_vc_uplink_1_fail():
     log_file.info("--------------------------------------------------------")
     log_file.info("Fail VC uplink #1")
     log_file.info("--------------------------------------------------------")
-    tb.vc.uplink_1.shutdown(snmp=True)
+    tb.vc.uplink_1.shutdown(opt=protocol)
     return result
 
 def edn_vc_uplink_2_fail():
@@ -1267,63 +1261,63 @@ def edn_vc_uplink_2_fail():
     log_file.info("--------------------------------------------------------")
     log_file.info("Fail VC uplink #2")
     log_file.info("--------------------------------------------------------")
-    tb.vc.uplink_2.shutdown(snmp=True)
+    tb.vc.uplink_2.shutdown(opt=protocol)
     return result
 
 def fail_vxlan_access_1_to_vxlan_spine_1():
 
     result = True
 
-    tb.vxlan_al_1.to_vxlan_spine_1.shutdown(snmp=True)
+    tb.vxlan_al_1.to_vxlan_spine_1.shutdown(opt=protocol)
     return result
 
 def fail_vxlan_access_1_to_vxlan_spine_2():
 
     result = True
 
-    tb.vxlan_al_1.to_vxlan_spine_2.shutdown(snmp=True)
+    tb.vxlan_al_1.to_vxlan_spine_2.shutdown(opt=protocol)
     return result
 
 def fail_vxlan_access_2_to_vxlan_spine_1():
 
     result = True
 
-    tb.vxlan_al_2.to_vxlan_spine_1.shutdown(snmp=True)
+    tb.vxlan_al_2.to_vxlan_spine_1.shutdown(opt=protocol)
     return result
 
 def fail_vxlan_access_2_to_vxlan_spine_2():
 
     result = True
 
-    tb.vxlan_al_2.to_vxlan_spine_2.shutdown(snmp=True)
+    tb.vxlan_al_2.to_vxlan_spine_2.shutdown(opt=protocol)
     return result
 
 def fail_exit_1_to_vxlan_spine_1():
 
     result = True
 
-    tb.bl_1.to_vxlan_spine_1.shutdown(snmp=True)
+    tb.bl_1.to_vxlan_spine_1.shutdown(opt=protocol)
     return result
 
 def fail_exit_1_to_vxlan_spine_2():
 
     result = True
 
-    tb.bl_1.to_vxlan_spine_2.shutdown(snmp=True)
+    tb.bl_1.to_vxlan_spine_2.shutdown(opt=protocol)
     return result
 
 def fail_exit_2_to_vxlan_spine_1():
 
     result = True
 
-    tb.bl_2.to_vxlan_spine_1.shutdown(snmp=True)
+    tb.bl_2.to_vxlan_spine_1.shutdown(opt=protocol)
     return result
 
 def fail_exit_2_to_vxlan_spine_2():
 
     result = True
 
-    tb.bl_2.to_vxlan_spine_2.shutdown(snmp=True)
+    tb.bl_2.to_vxlan_spine_2.shutdown(opt=protocol)
     return result
 
 
@@ -1413,14 +1407,71 @@ def fail_exit_1_to_pe():
 
     result = True
 
-    tb.bl_1.to_ense_vxlan.shutdown(snmp=True)
+    tb.bl_1.to_ense_vxlan.shutdown(opt=protocol)
     return result
 
 def fail_exit_2_to_pe():
 
     result = True
 
-    tb.bl_2.to_ense_vxlan.shutdown(snmp=True)
+    tb.bl_2.to_ense_vxlan.shutdown(opt=protocol)
+    return result
+
+def fail_mec_wsn_access_1_to_border_leaf_1():
+    result = True
+    log_file.info("")
+    log_file.info("---------------------------------------")
+    log_file.info("Fail MEC WSN Access 1 to Border Leaf 1 ")
+    log_file.info("---------------------------------------")  
+    tb.ixrs_110.to_bl1_1.shutdown(opt=protocol)
+    return result
+
+def fail_mec_wsn_access_1_to_border_leaf_2():
+    result = True
+    log_file.info("")
+    log_file.info("---------------------------------------")
+    log_file.info("Fail MEC WSN Access 1 to Border Leaf 2 ")
+    log_file.info("---------------------------------------")  
+    tb.ixrs_110.to_bl2_1.shutdown(opt=protocol)
+    return result
+
+def fail_mec_edn_access_1_to_border_leaf_1():
+    result = True
+    log_file.info("")
+    log_file.info("---------------------------------------")
+    log_file.info("Fail MEC EDN Access 1 to Border Leaf 1 ")
+    log_file.info("---------------------------------------")  
+    tb.ixrs_127.to_bl1_1.shutdown(opt=protocol)
+    return result
+
+def fail_mec_edn_access_1_to_border_leaf_2():
+    result = True
+    log_file.info("")
+    log_file.info("---------------------------------------")
+    log_file.info("Fail MEC EDN Access 1 to Border Leaf 2 ")
+    log_file.info("---------------------------------------")  
+    tb.ixrs_127.to_bl2_1.shutdown(opt=protocol)
+    return result
+
+def switch_cpm_vc():
+
+    log_file.info("")
+    log_file.info("-----------------------------------")
+    log_file.info("Switch CPM-IMMs on the 7210 VC")
+    log_file.info("-----------------------------------")
+    tb.vc.switch_active_cpm()
+    log_file.info("")
+    log_file.info("----------------------------------------------------")
+    log_file.info("Simulate EDN Hosts switching over to the new CPM-IMM")
+    log_file.info("----------------------------------------------------")
+    tb.ixr6.to_vc_sn_1_1_A.shutdown(opt=protocol)
+    tb.ixr6.to_vc_sn_1_2_A.shutdown(opt=protocol)
+    tb.ixr6.to_vc_sn_1_1_S.no_shutdown(opt=protocol)
+    tb.ixr6.to_vc_sn_1_2_S.no_shutdown(opt=protocol)
+    tb.ixr6.send_cli_command('/clear service id %s fdb all' %(tb.ixr6.edn_vpls_411.id)) 
+    tb.ixr6.send_cli_command('/clear service id %s fdb all' %(tb.ixr6.edn_vpls_412.id)) 
+    result = True
+
     return result
 
 def restore_base_set_up(mode):
@@ -1431,11 +1482,13 @@ def restore_base_set_up(mode):
     log_file.info("-----------------------------------")
     for nx in tb.node_dict.values():
         for px in nx.port_dict.values() :
-            px.no_shutdown(snmp=True,verbose=False)
-    tb.ixr6.to_vc_imm_2.shutdown(snmp=True)
-    tb.ixr6.to_vc_imm_1.no_shutdown(snmp=True)
+            px.no_shutdown(opt=protocol,verbose=False)
+    tb.ixr6.to_vc_sn_1_1_A.no_shutdown(opt=protocol)
+    tb.ixr6.to_vc_sn_1_2_A.no_shutdown(opt=protocol)
+    tb.ixr6.to_vc_sn_1_1_S.shutdown(opt=protocol)
+    tb.ixr6.to_vc_sn_1_2_S.shutdown(opt=protocol)
     tb.ixr6.send_cli_command('/clear service id %s fdb all' %(tb.ixr6.edn_vpls_411.id)) 
-    tb.wbx32.send_cli_command('/clear service id %s fdb all' %(tb.wbx32.edn_vpls_411.id)) 
+    tb.ixr6.send_cli_command('/clear service id %s fdb all' %(tb.ixr6.edn_vpls_412.id)) 
 
     #Allan
     restore_visp_1()
@@ -1463,7 +1516,7 @@ def check_base_set_up(wait):
             for px in nx.port_dict.values() :
                 port_oper_status  = px.get_port_info('oper', verbose=True)
                 if port_oper_status == 'down':
-                    if 'to_vc_imm_' in px.name:
+                    if 'to_vc_sn_' in px.name:
                         log_file.info("-----------------------------------------------")
                         log_file.info("IXR to VC IMM port is down - OK - it's expected")
                         log_file.info("-----------------------------------------------")
@@ -1583,12 +1636,212 @@ def check_imn_inband_mgt():
 def ping_all_nodes():
 
     ping_result = True
+    log_file.info("")
+    log_file.info("Ping IPv4 BOF Management Addresses")
     for nx in tb.node_dict.values():
         if not nx.ping():
             log_file.error("Ping to %s failed" %(nx.name))
             ping_result = False
 
+    log_file.info("")
+    log_file.info("Ping IPv6 BOF Management Addresses")
+    for nx in tb.node_dict.values():
+        if nx.ipv6 != '2001:4888:a2f:4025:192:168:0:1':
+            if not nx.ping6():
+                log_file.error("Ping to %s failed" %(nx.name))
+                ping_result = False
+        else:
+            log_file.info("Skip ping of %s - no mgmt_ipv6 address defined in yaml" %(nx.name))
+
     return ping_result
+
+def edn_route_show():
+ 
+    log_file.info("-----------------------")
+    log_file.info("eNSE BL1 EDN route info")
+    log_file.info("-----------------------")
+    tb.bl_1.send_cli_command("show router 4 route-table ipv6 12:1:74:1:1:1:1:11/128")
+    tb.bl_1.send_cli_command("show router 4 route-table ipv6 12:1:74:1:1:1:1:12/128")
+    tb.bl_1.send_cli_command("show router 4 route-table ipv6 12:1:127:1:1:1:1:2/64")
+    log_file.info("-----------------------")
+    log_file.info("eNSE BL2 EDN route info")
+    log_file.info("-----------------------")
+    tb.bl_2.send_cli_command("show router 4 route-table ipv6 12:1:74:1:1:1:1:11/128")
+    tb.bl_2.send_cli_command("show router 4 route-table ipv6 12:1:74:1:1:1:1:12/128")
+    tb.bl_2.send_cli_command("show router 4 route-table ipv6 12:1:127:1:1:1:1:2/64")
+    log_file.info("-----------------------")
+    log_file.info("eNSE AL3 EDN route info")
+    log_file.info("-----------------------")
+    tb.al_3.send_cli_command("show router 4 route-table ipv6 12:1:74:1:1:1:1:11/128")
+    tb.al_3.send_cli_command("show router 4 route-table ipv6 12:1:74:1:1:1:1:12/128")
+    tb.al_3.send_cli_command("show router 4 route-table ipv6 12:1:127:1:1:1:1:2/64")
+    log_file.info("-----------------------")
+    log_file.info("eNSE AL4 EDN route info")
+    log_file.info("-----------------------")
+    tb.al_4.send_cli_command("show router 4 route-table ipv6 12:1:74:1:1:1:1:11/128")
+    tb.al_4.send_cli_command("show router 4 route-table ipv6 12:1:74:1:1:1:1:12/128")
+    tb.al_4.send_cli_command("show router 4 route-table ipv6 12:1:127:1:1:1:1:2/64")
+    log_file.info("-----------------------")
+    log_file.info("MEC IXRS 127 EDN route info")
+    log_file.info("-----------------------")
+    tb.ixrs_127.send_cli_command("show router 4 route-table ipv6 12:1:74:1:1:1:1:11/128")
+    tb.ixrs_127.send_cli_command("show router 4 route-table ipv6 12:1:74:1:1:1:1:12/128")
+    tb.ixrs_127.send_cli_command("show router 4 route-table ipv6 12:1:127:1:1:1:1:2/64")
+
+def edn_route_check():
+ 
+    edn_result = True
+    log_file.info("------------------------------")
+    log_file.info("Check: eNSE BL1 EDN route info")
+    log_file.info("------------------------------")
+
+    res, cli_return = tb.bl_1.send_cli_command("show router 4 route-table ipv6 12:1:74:1:1:1:1:11/128", see_return=True)
+    if "12:1:74:1:1:1:1:11" not in cli_return:
+        log_file.error("12:1:74:1:1:1:1:11/128 host route not seen on BL1")
+        edn_result = False
+    if "BGP EVPN" not in cli_return:
+        log_file.error("12:1:74:1:1:1:1:11/128 host route should be seen via BGP EVPN seen on BL1")
+        edn_result = False
+    if "BGP VPN" in cli_return:
+        log_file.error("12:1:74:1:1:1:1:11/128 should NOT be seen on BL1 via BGP VPN")
+        edn_result = False
+
+    res, cli_return = tb.bl_1.send_cli_command("show router 4 route-table ipv6 12:1:74:1:1:1:1:12/128", see_return=True)
+    if "12:1:74:1:1:1:1:12" not in cli_return:
+        log_file.error("12:1:74:1:1:1:1:12/128 host route not seen on BL1")
+        edn_result = False
+    if "BGP EVPN" not in cli_return:
+        log_file.error("12:1:74:1:1:1:1:12/128 host route should be seen via BGP EVPN on BL1")
+        edn_result = False
+    if "BGP VPN" in cli_return:
+        log_file.error("12:1:74:1:1:1:1:12/128 should NOT be seen on BL1 via BGP VPN")
+        edn_result = False
+
+    res, cli_return = tb.bl_1.send_cli_command("show router 4 route-table ipv6 12:1:127:1:1:1:1:2/64", see_return=True)
+    if "12:1:127:1::/64" not in cli_return:
+        log_file.error("12:1:127:1::/64 host route not seen on BL1")
+        edn_result = False
+    if "BGP EVPN" in cli_return:
+        log_file.error("12:1:127:1::/64 should NOT be seen on BL1 via BGP EVPN")
+        edn_result = False
+
+    log_file.info("------------------------------")
+    log_file.info("Check: eNSE BL2 EDN route info")
+    log_file.info("------------------------------")
+
+    res, cli_return = tb.bl_2.send_cli_command("show router 4 route-table ipv6 12:1:74:1:1:1:1:11/128", see_return=True)
+    if "12:1:74:1:1:1:1:11" not in cli_return:
+        log_file.error("12:1:74:1:1:1:1:11/128 host route not seen")
+        edn_result = False
+    if "BGP EVPN" not in cli_return:
+        log_file.error("12:1:74:1:1:1:1:11/128 host route should be seen via BGP EVPN on BL2")
+        edn_result = False
+    if "BGP VPN" in cli_return:
+        log_file.error("12:1:74:1:1:1:1:11/128 should NOT be seen on BL2 via BGP VPN")
+        edn_result = False
+
+    res, cli_return = tb.bl_2.send_cli_command("show router 4 route-table ipv6 12:1:74:1:1:1:1:12/128", see_return=True)
+    if "12:1:74:1:1:1:1:12" not in cli_return:
+        log_file.error("12:1:74:1:1:1:1:12/128 host route not seen on BL2")
+        edn_result = False
+    if "BGP EVPN" not in cli_return:
+        log_file.error("12:1:74:1:1:1:1:12/128 host route should be seen via BGP EVPN seen on BL2")
+        edn_result = False
+    if "BGP VPN" in cli_return:
+        log_file.error("12:1:74:1:1:1:1:12/128 should NOT be seen on BL2 via BGP VPN")
+        edn_result = False
+
+    res, cli_return = tb.bl_2.send_cli_command("show router 4 route-table ipv6 12:1:127:1:1:1:1:2/64", see_return=True)
+    if "12:1:127:1::/64" not in cli_return:
+        log_file.error("12:1:127:1::/64 host route not seen on BL2")
+        edn_result = False
+    if "BGP EVPN" in cli_return:
+        log_file.error("12:1:127:1::/64 should NOT be seen on BL2 via BGP EVPN")
+        edn_result = False
+
+    log_file.info("-----------------------")
+    log_file.info("Check: eNSE AL3 EDN route info")
+    log_file.info("-----------------------")
+    res, cli_return = tb.al_3.send_cli_command("show router 4 route-table ipv6 12:1:74:1:1:1:1:11/128", see_return=True)
+    if "ARP-ND" not in cli_return:
+        log_file.error("12:1:74:1:1:1:1:11/128 should be seen on AL3 via ARP-ND")
+        edn_result = False
+
+    res, cli_return = tb.al_3.send_cli_command("show router 4 route-table ipv6 12:1:74:1:1:1:1:12/128", see_return=True)
+    if "ARP-ND" not in cli_return:
+        log_file.error("12:1:74:1:1:1:1:12/128 should be seen on AL3 via ARP-ND")
+        edn_result = False
+
+    res, cli_return = tb.al_3.send_cli_command("show router 4 route-table ipv6 12:1:127:1:1:1:1:2/128", see_return=True)
+    if "12:1:127::/52" not in cli_return:
+        log_file.error("12:1:127::/52 route NOT seen on AL3")
+        edn_result = False
+
+    if "BGP EVPN" not in cli_return:
+        log_file.error("12:1:127::/52 route NOT seen on AL3 via BGP-EVPN")
+        edn_result = False
+
+    log_file.info("-----------------------")
+    log_file.info("Check: eNSE AL4 EDN route info")
+    log_file.info("-----------------------")
+    res, cli_return = tb.al_4.send_cli_command("show router 4 route-table ipv6 12:1:74:1:1:1:1:11/128", see_return=True)
+    if "ARP-ND" not in cli_return:
+        log_file.error("12:1:74:1:1:1:1:11/128 should be seen on AL4 via ARP-ND")
+        edn_result = False
+
+    res, cli_return = tb.al_4.send_cli_command("show router 4 route-table ipv6 12:1:74:1:1:1:1:12/128", see_return=True)
+    if "ARP-ND" not in cli_return:
+        log_file.error("12:1:74:1:1:1:1:12/128 should be seen on AL4 via ARP-ND")
+        edn_result = False
+
+    res, cli_return = tb.al_4.send_cli_command("show router 4 route-table ipv6 12:1:127:1:1:1:1:2/128", see_return=True)
+    if "12:1:127::/52" not in cli_return:
+        log_file.error("12:1:127::/52 route NOT seen on AL4")
+        edn_result = False
+
+    if "BGP EVPN" not in cli_return:
+        log_file.error("12:1:127::/52 route NOT seen on AL4 via BGP-EVPN")
+        edn_result = False
+
+
+    log_file.info("-----------------------")
+    log_file.info("MEC IXRS 127 EDN route info")
+    log_file.info("-----------------------")
+    res, cli_return = tb.ixrs_127.send_cli_command("show router 4 route-table ipv6 12:1:74:1:1:1:1:11/128", see_return=True)
+    if "12:1:74:1:1:1:1:11/128" not in cli_return:
+        log_file.error("12:1:74:1:1:1:1:11/128 host route not seen on IXR")
+        edn_result = False
+
+    if "BGP VPN" not in cli_return:
+        log_file.error("12:1:74:1:1:1:1:11/128 host route not seen on IXR via BGP VPN")
+        edn_result = False
+
+    res, cli_return = tb.ixrs_127.send_cli_command("show router 4 route-table ipv6 12:1:74:1:1:1:1:12/128", see_return=True)
+    if "12:1:74:1:1:1:1:12/128" not in cli_return:
+        log_file.error("12:1:74:1:1:1:1:12/128 host route not seen on IXR")
+        edn_result = False
+
+    if "BGP VPN" not in cli_return:
+        log_file.error("12:1:74:1:1:1:1:12/128 host route not seen on IXR via BGP VPN")
+        edn_result = False
+
+    res, cli_return = tb.ixrs_127.send_cli_command("show router 4 route-table ipv6 12:1:127:1:1:1:1:2/64", see_return=True)
+    if "12:1:127:1::/64" not in cli_return:
+        log_file.error("12:1:127:1::/64 host not seen on IXR")
+        edn_result = False
+
+    if "Local" not in cli_return:
+        log_file.error("12:1:127:1::/64 host not seen as local on IXR")
+        edn_result = False
+
+    if edn_result:
+        log_file.info("")
+        log_file.info("---------------------")
+        log_file.info("All EDN routes are OK")
+        log_file.info("---------------------")
+        log_file.info("")
+
+    return edn_result
 
 def main(testcase_name='',testsuite_name='vzw_5g_poc',csv='false',testbed_file='vzw_5g_poc.yaml'):
 
@@ -1604,6 +1857,7 @@ def main(testcase_name='',testsuite_name='vzw_5g_poc',csv='false',testbed_file='
     max_outage_edn_host_switch = 2000
     max_outage_visp_fail       = 4500
     max_outage_fw_fail         = 4500
+    max_outage_vc_cpm_host_switch = 20000
 
 
     # Initialize the testbed
@@ -1615,8 +1869,8 @@ def main(testcase_name='',testsuite_name='vzw_5g_poc',csv='false',testbed_file='
     log_file.info("Shutdown links to MLS1 and MLS2")
     log_file.info("Offload Project")
     log_file.info("-----------------------------------")
-    tb.bl_1.to_mls_1.shutdown(snmp=True)
-    tb.bl_2.to_mls_2.shutdown(snmp=True)
+    tb.bl_1.to_mls_1.shutdown(opt=protocol)
+    tb.bl_2.to_mls_2.shutdown(opt=protocol)
 
     # Print testbed info
     print_testbed_info()
@@ -1687,10 +1941,20 @@ def main(testcase_name='',testsuite_name='vzw_5g_poc',csv='false',testbed_file='
         log_file.info("Enable EVPN VXLAN To RAN Ixia streams")
         log_file.info("-----------------------------------")
         ixia_pattern = 'a-' 
+    elif 'mec' in testcase_name:
+        log_file.info("")
+        log_file.info("-----------------------------------")
+        log_file.info("Enable MEC WSN and EDN Ixia streams")
+        log_file.info("-----------------------------------")
+        ixia_pattern = 'MEC-' 
     else:
         log_file.info("")
         log_file.info("-----------------------------------")
-        log_file.info("Enable RAN and EDN Ixia streams")
+        log_file.info("Enable the following Ixia streams: ")
+        log_file.info("- eNSE RAN ")
+        log_file.info("- eNSE EDN ")
+        log_file.info("- MEC  WSN ")
+        log_file.info("- MEC  EDN ")
         log_file.info("-----------------------------------")
         ixia_pattern = '-v' 
 
@@ -1747,7 +2011,12 @@ def main(testcase_name='',testsuite_name='vzw_5g_poc',csv='false',testbed_file='
     log_file.info("------------------------------------------")
     log_file.info('Look at the number of BGP routes')
     log_file.info("------------------------------------------")
-    tb.bl_1.send_cli_command('show router bgp summary neighbor 1.1.1.113 |  match Summary post-lines 13' , see_return=True)
+    log_file.info("")
+    tb.bl_1.send_cli_command('show router bgp summary neighbor 1.1.1.110 |  match Summary post-lines 13' , see_return=True)
+    log_file.info("")
+    tb.bl_1.send_cli_command('show router bgp summary neighbor 1.1.1.127 |  match Summary post-lines 13' , see_return=True)
+    log_file.info("")
+    tb.bl_1.send_cli_command('show router bgp summary neighbor 1.1.1.74 |  match Summary post-lines 13' , see_return=True)
 
     log_file.info("------------------------------------------")
     log_file.info('Ping all nodes ')
@@ -1789,18 +2058,12 @@ def main(testcase_name='',testsuite_name='vzw_5g_poc',csv='false',testbed_file='
         log_file.info("-----------------------------------")
         log_file.info("Force Hub 1 to be RAN VRRP Master ")
         log_file.info("-----------------------------------")
-        tb.ca_1.to_hub_2.shutdown(snmp=True)
+        tb.ca_1.to_hub_2.shutdown(opt=protocol)
         time.sleep(5)
-        tb.ca_1.to_hub_2.no_shutdown(snmp=True)
-        log_file.info("")
-        log_file.info("-----------------------------------")
-        log_file.info("Force the EDN ALs to initiate a gratuitous ARP ")
-        log_file.info("-----------------------------------")
-        tb.vc.uplink_1.shutdown(snmp=True)
-        tb.vc.uplink_2.shutdown(snmp=True)
-        time.sleep(2)
-        tb.vc.uplink_1.no_shutdown(snmp=True)
-        tb.vc.uplink_2.no_shutdown(snmp=True)
+        tb.ca_1.to_hub_2.no_shutdown(opt=protocol)
+
+        #Allan
+        if not edn_route_check(): test_pass = False
         log_file.info("")
         log_file.info("-----------------------------------")
         log_file.info("Enable Ixia streams")
@@ -1812,8 +2075,8 @@ def main(testcase_name='',testsuite_name='vzw_5g_poc',csv='false',testbed_file='
             log_file.info("-----------------------------------")
             log_file.info("Simulate remote hubs")
             log_file.info("-----------------------------------")
-            tb.hub_1.to_hub_2.shutdown(snmp=True)
-            tb.hub_2.to_hub_1.shutdown(snmp=True)
+            tb.hub_1.to_hub_2.shutdown(opt=protocol)
+            tb.hub_2.to_hub_1.shutdown(opt=protocol)
             tb.ixia_poc.set_traffic(pattern='East-West-Hub-1-Hub-3', commit=True)
         else:
             tb.ixia_poc.set_traffic(pattern=ixia_pattern, commit=True)
@@ -1838,6 +2101,11 @@ def main(testcase_name='',testsuite_name='vzw_5g_poc',csv='false',testbed_file='
             show_north_visp_fw_usage()
             show_south_traffic_util_vx()
             show_south_visp_fw_usage()
+        elif 'mec' in testcase_name:
+            log_file.info("")
+            log_file.info("-----------------------------------")
+            log_file.info("MEC plot pending")
+            log_file.info("-----------------------------------")
         else:
             show_north_traffic_util()
             show_south_traffic_util()
@@ -1846,7 +2114,7 @@ def main(testcase_name='',testsuite_name='vzw_5g_poc',csv='false',testbed_file='
         tmp_pattern = tb.ixia_poc.pattern
         max_outage = max_outage_default
         
-        # TODO - Change this to if 'xxx' in yyy
+        # Looking for testcase name and run it
         if 'testbed_setup' in testcase_name:
             if not testbed_setup():  test_pass = False
         elif 'testbed_teardown' in testcase_name:
@@ -1857,8 +2125,8 @@ def main(testcase_name='',testsuite_name='vzw_5g_poc',csv='false',testbed_file='
             max_outage = max_outage_sanity 
         elif 'e_w_remote_hub_sanity_access' in testcase_name:
             max_outage = max_outage_sanity 
-            tb.hub_1.to_hub_2.shutdown(snmp=True)
-            tb.hub_2.to_hub_1.shutdown(snmp=True)
+            tb.hub_1.to_hub_2.shutdown(opt=protocol)
+            tb.hub_2.to_hub_1.shutdown(opt=protocol)
         elif 'fail_hub_1_to_access_1' in testcase_name:
             if not fail_hub_1_to_access_1(): test_pass = False 
         elif 'fail_hub_2_to_access_2' in testcase_name:
@@ -1933,6 +2201,13 @@ def main(testcase_name='',testsuite_name='vzw_5g_poc',csv='false',testbed_file='
         elif 'edn_vc_uplink_2_fail' in testcase_name:
             max_outage = max_outage_edn_host_switch
             if not edn_vc_uplink_2_fail(): test_pass = False 
+        elif 'switch_cpm_vc' in testcase_name:
+            max_outage = max_outage_vc_cpm_host_switch
+            if tb.vc.get_active_cpm() == 'B':
+                log_file.info("Skipping: CPM-IMM switchover on 7210 VC")
+                log_file.info("Skipping: CPM-A in needs to be active for this test")
+            else:
+                if not switch_cpm_vc(): test_pass = False 
         elif 'vxlan_fail_vxlan_access_1_to_vxlan_spine_1' in testcase_name:
             if not fail_vxlan_access_1_to_vxlan_spine_1(): test_pass = False 
         elif 'vxlan_fail_vxlan_access_1_to_vxlan_spine_2' in testcase_name:
@@ -1982,6 +2257,16 @@ def main(testcase_name='',testsuite_name='vzw_5g_poc',csv='false',testbed_file='
         elif 'fail_vc_uplink_2' in testcase_name:
             max_outage = max_outage_vrrp 
             if not fail_vc_uplink_2():  test_pass = False
+        elif 'mec_sanity' in testcase_name:
+            max_outage = max_outage_sanity 
+        elif 'mec_fail_wsn_access_1_to_border_leaf_1' in testcase_name:
+            if not fail_mec_wsn_access_1_to_border_leaf_1():  test_pass = False
+        elif 'mec_fail_wsn_access_1_to_border_leaf_2' in testcase_name:
+            if not fail_mec_wsn_access_1_to_border_leaf_2():  test_pass = False
+        elif 'mec_fail_edn_access_1_to_border_leaf_1' in testcase_name:
+            if not fail_mec_edn_access_1_to_border_leaf_1():  test_pass = False
+        elif 'mec_fail_edn_access_1_to_border_leaf_2' in testcase_name:
+            if not fail_mec_edn_access_1_to_border_leaf_2():  test_pass = False
         else:
             log_file.error("Testcase %s does not exist" %(testcase_name))
 
@@ -1991,7 +2276,6 @@ def main(testcase_name='',testsuite_name='vzw_5g_poc',csv='false',testbed_file='
                 utils.countdown(30)
                 if 'vxlan' in testcase_name:
                     #tb.vxlan_al_1.sshcon.cmdline("/clear service statistics id %s counters" %(tb.vxlan_al_1.visp_1.id), timeout=0)
-                    #tb.vxlan_al_1.sshcon.cmdline("/clear service statistics id %s counters" %(tb.vxlan_al_1.visp_2.id), timeout=0)
                     #tb.vxlan_al_1.sshcon.cmdline("/clear service statistics id %s counters" %(tb.vxlan_al_1.fw_1.id), timeout=0)
                     #tb.vxlan_al_1.sshcon.cmdline("/clear service statistics id %s counters" %(tb.vxlan_al_1.fw_2.id), timeout=0)
                     #tb.vxlan_al_1.send_cli_command("/clear service statistics id %s counters" %(tb.vxlan_al_1.visp_1.id))
@@ -1999,21 +2283,24 @@ def main(testcase_name='',testsuite_name='vzw_5g_poc',csv='false',testbed_file='
                     #tb.vxlan_al_1.send_cli_command("/clear service statistics id %s counters" %(tb.vxlan_al_1.fw_1.id))
                     #tb.vxlan_al_1.send_cli_command("/clear service statistics id %s counters" %(tb.vxlan_al_1.fw_2.id))
                     tb.vxlan_al_1.send_cli_command("/clear service statistics id [1000,2000,1100,2100] counters")
-                utils.countdown(30)
                 log_file.info("")
                 log_file.info("------------------------------------------")
                 log_file.info('Traffic flow after network failure')
                 log_file.info("------------------------------------------")
-                # Show initial traffic flow 
+                # Show final traffic flow 
                 if 'vxlan' in testcase_name:
                     show_north_traffic_util_vx()
                     show_north_visp_fw_usage()
                     show_south_traffic_util_vx()
                     show_south_visp_fw_usage()
+                elif 'mec' in testcase_name:
+                    log_file.info("")
+                    log_file.info("-----------------------------------")
+                    log_file.info("MEC plot pending")
+                    log_file.info("-----------------------------------")
                 else:
                     show_north_traffic_util()
                     show_south_traffic_util()
-
 
                 # Check PIM again 
                 log_file.info("")
@@ -2082,6 +2369,8 @@ def main(testcase_name='',testsuite_name='vzw_5g_poc',csv='false',testbed_file='
             if not tb.hub_2.wait_route_match('1','::/0','1:1:1:111',90): test_pass = False
             if not tb.hub_2.wait_route_match('1','::/0','1:1:1:112',90): test_pass = False
 
+        if not edn_route_check(): test_pass = False
+
         # Check the Ixia stats 
         if not check_stats(max_outage,testcase_name): test_pass = False 
 
@@ -2102,8 +2391,8 @@ def main(testcase_name='',testsuite_name='vzw_5g_poc',csv='false',testbed_file='
         log_file.info("No Shutdown links to MLS1 and MLS2")
         log_file.info("Offload Project")
         log_file.info("-----------------------------------")
-        #tb.bl_1.to_mls_1.no_shutdown(snmp=True)
-        #tb.bl_2.to_mls_2.no_shutdown(snmp=True)
+        #tb.bl_1.to_mls_1.no_shutdown(opt=protocol)
+        #tb.bl_2.to_mls_2.no_shutdown(opt=protocol)
         utils.countdown(5)
 
     # close ssh connections

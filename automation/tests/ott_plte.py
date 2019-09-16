@@ -93,17 +93,10 @@ def sanity1():
     srhm=utils.find_nodes(_tbd.node_dict,'_SARHm06 - DC01')
     vsrs=utils.find_nodes(_tbd.node_dict,'_vSRi')
 
-    #bgpsum = vsrs[0].cliexe('show router bgp summary')
+    bgpsum = vsrs[0].cliexe('show router bgp summary')
     ports = srhm[0].cliexe("show port")
-    
-    _tbd.SARHm06.sr_reboot2()
-    ports = _tbd.SARHm06.cliexe("show port")
-    _tbd.SARHm07.sr_reboot2()
-    ports = _tbd.SARHm07.cliexe("show port")
-    
-    vsrs[0].sr_reboot2()
+
     ports = vsrs[0].cliexe("show port")
-    
     vsrs[0].cellif.shutdown()
     sst = vsrs[0].cellif.getstate()
 

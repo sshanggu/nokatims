@@ -425,17 +425,29 @@ vzw_ense_full:
         - fail_exit_1_to_spine_2_access_no_vprn 
         - fail_exit_2_to_spine_1_access_no_vprn 
         - fail_exit_2_to_spine_2_access_no_vprn 
-        - fail_exit_1_to_ense_vxlan_access_no_vprn 
-        - fail_exit_2_to_ense_vxlan_access_no_vprn 
-        - ran_vrrp_fail_and_recover 
+        #- fail_exit_1_to_ense_vxlan_access_no_vprn 
+        #- fail_exit_2_to_ense_vxlan_access_no_vprn 
+        #- ran_vrrp_fail_and_recover 
         - fail_vc_uplink_1
         - fail_vc_uplink_2
         - reboot_exit_1_access_no_vprn 
         - reboot_spine_1_access_no_vprn 
         - reboot_access_1_access_no_vprn 
-        - reboot_access_3_access_no_vprn 
+        #- reboot_access_3_access_no_vprn 
         - reboot_hub_1_access_no_vprn 
-        #- edn_host_switch_active_to_standby_access_no_vprn
+        - switch_cpm_vc_access_no_vprn 
+        - edn_host_switch_active_to_standby_access_no_vprn
+
+vzw_mec:
+    module:  new_ng_poc
+    testbed: vzw_ng_poc.yaml
+    mib_release: timos_15_0_r5
+    testcases:
+        - mec_sanity
+        - mec_fail_wsn_access_1_to_border_leaf_1
+        - mec_fail_wsn_access_1_to_border_leaf_2
+        - mec_fail_edn_access_1_to_border_leaf_1
+        - mec_fail_edn_access_1_to_border_leaf_2
 
 vzw_5g_ixr_s_bash:
     module:  vzw_5g_ixr_s_bash

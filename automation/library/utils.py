@@ -23,19 +23,27 @@ import re
 import sys
 import glob
 import time
-import node
 import json
 import shutil
 import getpass
 import logging
+import traceback
 import subprocess
 from datetime import datetime
 from collections import OrderedDict
 from common_vars import *
 
-mylog = logging.getLogger(__name__)
-mylog.addHandler(logging.StreamHandler(sys.stdout))
 TF1 = "%Y-%m-%d %H:%M:%S"
+
+
+def get_logger(name, level=logging.INFO):
+    logger = logging.getLogger(name)
+    logger.setLevel(level)
+    logger.addHandler(logging.StreamHandler(sys.stdout))
+    return logger
+
+
+mylog = get_logger(__name__)
 
 
 def countdown(t):  # in seconds
@@ -275,6 +283,7 @@ def log2html(logfile, message, bkdir=None):
     hrflog = os.path.join(URLPFX, logfile[LSI:])
     if bkdir:
         bklog = os.path.join(URLPFX, bkdir[LSI:])
+        bklogx = bklog+'xml'
     logmtime = datetime.fromtimestamp(
         os.path.getmtime(logfile)).strftime(TF1)
     entry = tdmsg(logmtime)
@@ -287,7 +296,8 @@ def log2html(logfile, message, bkdir=None):
     entry += tdmsg(tcpass)
     entry += tdmsg(tcfail)
     entry += tdlog(hrflog)
-    entry += tdlog(bklog, 'backup') if bkdir else tdmsg('-')
+    entry += tdlog(bklog, 'cli_config') if bkdir else tdmsg('-')
+    entry += tdlog(bklogx, 'xml_config') if bkdir else tdmsg('-')
     entry = tbrow(entry)
 
     # open suite index file and add table entry
@@ -428,14 +438,6 @@ def framelog(m, c='-', n=70):
     mylog.info(c*(n))
 
 
-def save_tb_config(tbfile):
-    """ save testbed nodes configuration """
-    tb = node.Testbed(tbfile, use_ixia=False)
-    for _, nd in tb.node_dict.items():
-        nd.backup_config()
-    return tb.bkup_dir
-
-
 # re-generate suite log web index file
 # /var/www/html/$user/rrlog/$suite/index.html
 def refresh_index(logdir):
@@ -451,18 +453,16 @@ def refresh_index(logdir):
         # but drop any lines after "Testbed file:"
         htmlfile = False
         dropline = False
-        count = 0
         sinfo = str()
         with open(f) as g:
             for line in g:
-                count += 1
                 if not dropline:
                     sinfo += line
                 if "DOCTYPE html" in line:
                     htmlfile = True
                 if "Testbed file:" in line:
                     dropline = True
-                if "Testbed backup:" in line or count > 500:
+                if "Testbed backup:" in line:
                     sinfo += line
                     break
         # extract data from log header & build index table row
@@ -485,8 +485,10 @@ def refresh_index(logdir):
         tr += tdmsg(rs.group(1) if rs else '-')
         tr += tdlog(os.path.join(URLPFX, f[LSI:]))
         rs = re.search(r' Testbed backup: *(/\S+)\n', sinfo)
-        tr += tdlog(os.path.join(URLPFX, rs.group(1)[LSI:]), 'backup')\
-            if rs else tdmsg('-')
+        tr += tdlog(os.path.join(URLPFX, rs.group(1)[LSI:]),
+                    'cli_config') if rs else tdmsg('-')
+        tr += tdlog(os.path.join(URLPFX, rs.group(1)[LSI:]+'xml'),
+                    'xml_config') if rs else tdmsg('-')
         tr = tbrow(tr)
         tablerows += tr
         # in case log not html style, add tags
@@ -523,3 +525,11 @@ def d2s(d):
     for k, v in d.items():
         kv.append("%s=%s" % (k, v))
     return ", ".join(kv)
+
+
+def log_exc(exc_info):
+    mylog.error('Exception type: %s' % exc_info[0].__name__)
+    mylog.error('Exception message: %s' % exc_info[1])
+    for t in traceback.extract_tb(exc_info[2]):
+        mylog.error('Stack trace: ' +
+                    "%s, Line %d %s, Func: %s" % (t[0], t[1], t[3], t[2]))

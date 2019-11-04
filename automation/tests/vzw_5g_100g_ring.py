@@ -1,6 +1,5 @@
 #!/usr/bin/python
 from __future__ import division
-
 import node
 import service
 import stats
@@ -12,22 +11,16 @@ import getopt
 import yaml
 import pdb
 import time
-import logging
 import attrdict 
-
 from datetime import datetime
 from easysnmp import Session
 from textwrap import dedent
 from collections import OrderedDict  
 
 # Create a log file
-log_file=logging.getLogger(__name__)
-
-# Configure log file to output to stdout too
-log_file.addHandler(logging.StreamHandler(sys.stdout))
+log_file=utils.get_logger(__name__)
 
 testbed_data=attrdict.AttrDict()
-
 
 def testbed_init(testbed_file):
 
@@ -1086,11 +1079,11 @@ def check_edn_ready(edn_routes, wait_min):
 
     while count <= wait_min:
         edn_check = True 
-        edn_results['mls_1_up']   = testbed_data['mls_1'].send_cli_command('show router 4 interface | match SRa8-Hub1 | match "Down/Up" | count ', see_return=True)
-        edn_results['mls_1_down'] = testbed_data['mls_1'].send_cli_command('show router 4 interface | match SRa8-Hub2 | match "Down/Up" | count ', see_return=True)
+        edn_results['mls_1_up']   = testbed_data['mls_1'].send_cli_command('show router 4 interface | match SRa8-Hub1 | match "Down/Up" | count ')
+        edn_results['mls_1_down'] = testbed_data['mls_1'].send_cli_command('show router 4 interface | match SRa8-Hub2 | match "Down/Up" | count ')
 
-        edn_results['mls_2_up']   = testbed_data['mls_2'].send_cli_command('show router 4 interface | match SRa8-Hub2 | match "Down/Up" | count ', see_return=True)
-        edn_results['mls_2_down'] = testbed_data['mls_2'].send_cli_command('show router 4 interface | match SRa8-Hub1 | match "Down/Up" | count ', see_return=True)
+        edn_results['mls_2_up']   = testbed_data['mls_2'].send_cli_command('show router 4 interface | match SRa8-Hub2 | match "Down/Up" | count ')
+        edn_results['mls_2_down'] = testbed_data['mls_2'].send_cli_command('show router 4 interface | match SRa8-Hub1 | match "Down/Up" | count ')
 
         for key, value in edn_results.iteritems():
             val_1 = value[1].split('Count')
@@ -1733,7 +1726,7 @@ def wait_all_default_routes (testbed_nodes, wait):
     while count <= wait:
         default_result = True 
         for key, value in default_route.iteritems():
-            res, cli_return = testbed_nodes[key].send_cli_command('show router route-table ipv6 ::/0',see_return=True)
+            res, cli_return = testbed_nodes[key].send_cli_command('show router route-table ipv6 ::/0')
             if value not in cli_return:
                 default_result = False 
             else:

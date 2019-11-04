@@ -21,8 +21,7 @@ from utils import framelog
 ###############################################################################
 # module common setup
 ###############################################################################
-mylog=logging.getLogger(__name__)
-mylog.addHandler(logging.StreamHandler())
+mylog=utils.get_logger(__name__)
 today=calendar.day_name[datetime.today().weekday()]
 
 def ppf(checks):
@@ -407,7 +406,7 @@ if (__name__ == '__main__'):
     logfile=os.path.join(logdir,logfile)
 
     # configure logging file, level and format
-    logging.basicConfig(filename=logfile,level=logging.INFO,
+    logging.basicConfig(filename=logfile,
         format='%(asctime)s %(name)s %(levelname)s %(message)s')
 
     # invoke function main

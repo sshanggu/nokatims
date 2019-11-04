@@ -20,11 +20,12 @@
 ###
 ###     Needs updating!      
 
-from utils import *
 from IxNetwork import IxNet
 from tabulate import tabulate
 from collections import OrderedDict
-import time, logging
+import utils
+import time
+import re
 
 # TODO - move to within class
 def take_stats_snapshot (ixNet, name, csvLoc):
@@ -49,8 +50,7 @@ def take_stats_snapshot (ixNet, name, csvLoc):
 #
 # Add class IxNetx that inherits IxNet
 ###############################################################################
-mylog=logging.getLogger(__name__)
-mylog.addHandler(logging.StreamHandler(sys.stdout))
+mylog = utils.get_logger(__name__)
 
 # convert ns-str to ms-str
 def n2m(lns):

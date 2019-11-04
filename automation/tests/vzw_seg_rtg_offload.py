@@ -1,6 +1,5 @@
 #!/usr/bin/env python3.7
 from __future__ import division
-
 import node
 import service
 import stats
@@ -12,19 +11,14 @@ import getopt
 import yaml
 import pdb
 import time
-import logging
 import attrdict 
-
 from datetime import datetime
 from easysnmp import Session
 from textwrap import dedent
 from collections import OrderedDict
 
 # Create a log file
-log_file=logging.getLogger(__name__)
-
-# Configure log file to output to stdout too
-log_file.addHandler(logging.StreamHandler(sys.stdout))
+log_file=utils.get_logger(__name__)
 
 tb  = attrdict.AttrDict()
 topology = 'none'
@@ -537,7 +531,7 @@ def check_edn_vrrp_master_on_hub1():
     log_file.info("--------------------------------------------------------")
     log_file.info("Check EDN VRRP Master For IXR-S on Hub1")
     log_file.info("--------------------------------------------------------")
-    if not tb.hub_1.Is_VRRP_Master('SR-IXR-CRAN-Hubs-BBU-OAM_2',44):
+    if not tb.hub_1.is_vrrp_master('SR-IXR-CRAN-Hubs-BBU-OAM_2',44):
         result = False
     return result
 
@@ -547,7 +541,7 @@ def check_edn_vrrp_master_on_hub2():
     log_file.info("--------------------------------------------------------")
     log_file.info("Check EDN VRRP Master For IXR-S on Hub2")
     log_file.info("--------------------------------------------------------")
-    if not tb.hub_2.Is_VRRP_Master('SR-IXR-CRAN-Hubs-BBU-OAM_2',44):
+    if not tb.hub_2.is_vrrp_master('SR-IXR-CRAN-Hubs-BBU-OAM_2',44):
         result = False
     return result
 
@@ -574,7 +568,7 @@ def check_ran_vrrp_master_on_hub1():
     log_file.info("--------------------------------------------------------")
     log_file.info("Check RAN VRRP Master For IXR-S on Hub1")
     log_file.info("--------------------------------------------------------")
-    if not tb.hub_1.Is_VRRP_Master('To-IXR-S-DH-2',55):
+    if not tb.hub_1.is_vrrp_master('To-IXR-S-DH-2',55):
         result = False
     return result
 
@@ -584,7 +578,7 @@ def check_ran_vrrp_master_on_hub2():
     log_file.info("--------------------------------------------------------")
     log_file.info("Check RAN VRRP Master For IXR-S on Hub2")
     log_file.info("--------------------------------------------------------")
-    if not tb.hub_2.Is_VRRP_Master('To-IXR-S-DH-2',55):
+    if not tb.hub_2.is_vrrp_master('To-IXR-S-DH-2',55):
         result = False
     else:
         result = True
@@ -980,16 +974,16 @@ def main(testcase_name='sanity_access_no_vprn',testsuite_name='vzw_seg_rtg_offlo
             test_pass = False
         else:
             log_file.info(' -----> PIM resolved on Hub 2. ')
-            tb.hub_1.send_cli_command('show router %s pim group %s' %(tb.hub_1.ran_vprn.id,'ipv6'), see_return=True)            
+            tb.hub_1.send_cli_command('show router %s pim group %s' %(tb.hub_1.ran_vprn.id,'ipv6'))            
     else:
         log_file.info(' -----> PIM resolved on Hub 1. ')
-        tb.hub_1.send_cli_command('show router %s pim group %s' %(tb.hub_1.ran_vprn.id,'ipv6'), see_return=True)
+        tb.hub_1.send_cli_command('show router %s pim group %s' %(tb.hub_1.ran_vprn.id,'ipv6'))
 
     log_file.info("")
     log_file.info("------------------------------------------")
     log_file.info('Look at the number of BGP routes')
     log_file.info("------------------------------------------")
-    tb.offload_1.send_cli_command('show router bgp summary neighbor 1.1.0.51 |  match Summary post-lines 13' , see_return=True)
+    tb.offload_1.send_cli_command('show router bgp summary neighbor 1.1.0.51 |  match Summary post-lines 13')
 
     log_file.info("------------------------------------------")
     log_file.info('Ping all nodes ')
@@ -1221,13 +1215,11 @@ def main(testcase_name='sanity_access_no_vprn',testsuite_name='vzw_seg_rtg_offlo
             else:
                log_file.info(' --------> PIM resolved on Hub 2. ')
                log_file.info("")
-               tb.hub_1.send_cli_command('show router %s pim group %s' %(tb.hub_1.ran_vprn.id,'ipv6'), 
-                    see_return=True)            
+               tb.hub_1.send_cli_command('show router %s pim group %s' %(tb.hub_1.ran_vprn.id,'ipv6'))            
         else:
             log_file.info(' ----------> PIM resolved on Hub 1. ')
             log_file.info("")
-            tb.hub_1.send_cli_command('show router %s pim group %s' %(tb.hub_1.ran_vprn.id,'ipv6'), 
-                    see_return=True)
+            tb.hub_1.send_cli_command('show router %s pim group %s' %(tb.hub_1.ran_vprn.id,'ipv6'))
         
         log_file.info("")
         log_file.info("------------------------------------------------------------")

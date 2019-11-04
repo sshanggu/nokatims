@@ -13,10 +13,10 @@ REGUSER = 'nightly'
 TEAMMAIL = str("sam.shangguan.ext{x},"
                "allan.phoenix{x},"
                "tresnja.pesut{x},"
-               "jim.hurd{x},"
                "kevin.oriet{x}").format(x=MAILSFX)
-# luis.lima_guimaraes
-# frederico.collodetti
+# jim.hurd{x}
+# luis.lima_guimaraes{x}
+# frederico.collodetti{x}
 
 # running user and host
 RUNNER = getpass.getuser()

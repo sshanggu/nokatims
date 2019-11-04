@@ -35,14 +35,10 @@
 ###
 
 
-
 import re
-import pdb
-import logging
-from easysnmp import Session
+import utils
 
-mylog=logging.getLogger(__name__)
-mylog.addHandler(logging.StreamHandler())
+mylog = utils.get_logger(__name__)
 
 class Service(object):
 
@@ -55,6 +51,7 @@ class Service(object):
         self.type = svcd.get('type','customer')
         self.custid = svcd.get('customer_id',1)
         self.def_nh = svcd.get('def_nh',1)
+        self.def_nh_2 = svcd.get('def_nh_2',1)
         setattr(cpm_obj, svcn, self)
 
         # add sap in service 

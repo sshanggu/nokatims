@@ -1,6 +1,5 @@
 #!/usr/bin/python
 from __future__ import division
-
 import node
 import service
 import stats
@@ -12,22 +11,16 @@ import getopt
 import yaml
 import pdb
 import time
-import logging
 import attrdict 
-
 from datetime import datetime
 from easysnmp import Session
 from textwrap import dedent
 from collections import OrderedDict
 
 # Create a log file
-log_file=logging.getLogger(__name__)
-
-# Configure log file to output to stdout too
-log_file.addHandler(logging.StreamHandler(sys.stdout))
+log_file=utils.get_logger(__name__)
 
 testbed_data=attrdict.AttrDict()
-
 
 def testbed_init(testbed_file):
 
@@ -475,11 +468,11 @@ def check_edn_ready(edn_routes, wait_min):
 
     while count <= wait_min:
         edn_check = True 
-        edn_results['mls_1_up']   = testbed_data['mls_1'].send_cli_command('show router 4 interface | match SRa8-Hub1 | match "Down/Up" | count ', see_return=True)
-        edn_results['mls_1_down'] = testbed_data['mls_1'].send_cli_command('show router 4 interface | match SRa8-Hub2 | match "Down/Up" | count ', see_return=True)
+        edn_results['mls_1_up']   = testbed_data['mls_1'].send_cli_command('show router 4 interface | match SRa8-Hub1 | match "Down/Up" | count ')
+        edn_results['mls_1_down'] = testbed_data['mls_1'].send_cli_command('show router 4 interface | match SRa8-Hub2 | match "Down/Up" | count ')
 
-        edn_results['mls_2_up']   = testbed_data['mls_2'].send_cli_command('show router 4 interface | match SRa8-Hub2 | match "Down/Up" | count ', see_return=True)
-        edn_results['mls_2_down'] = testbed_data['mls_2'].send_cli_command('show router 4 interface | match SRa8-Hub1 | match "Down/Up" | count ', see_return=True)
+        edn_results['mls_2_up']   = testbed_data['mls_2'].send_cli_command('show router 4 interface | match SRa8-Hub2 | match "Down/Up" | count ')
+        edn_results['mls_2_down'] = testbed_data['mls_2'].send_cli_command('show router 4 interface | match SRa8-Hub1 | match "Down/Up" | count ')
 
         for key, value in edn_results.iteritems():
             val_1 = value[1].split('Count')
@@ -522,13 +515,13 @@ def check_sr1_edn_ready(edn_routes, wait_min):
 
     log_file.info('Wait up to %s MINUTES for EDN to be ready' %(wait_min))
 
-    testbed_data['mls_1'].send_cli_command('/clear router 4 vrrp interface "SR1-CRAN-Hubs-BBU-OAM" ', see_return=True)
+    testbed_data['mls_1'].send_cli_command('/clear router 4 vrrp interface "SR1-CRAN-Hubs-BBU-OAM" ')
 
     while count <= wait_min:
         edn_check = True 
-        edn_results['mls_1_down'] = testbed_data['mls_1'].send_cli_command('show router 4 interface | match SR1-CRAN-Hub | match "Down/Down" | count ', see_return=True)
+        edn_results['mls_1_down'] = testbed_data['mls_1'].send_cli_command('show router 4 interface | match SR1-CRAN-Hub | match "Down/Down" | count ')
 
-        edn_results['mls_2_up']   = testbed_data['mls_2'].send_cli_command('show router 4 interface | match SR1-CRAN-Hub | match "Down/Up" | count ', see_return=True)
+        edn_results['mls_2_up']   = testbed_data['mls_2'].send_cli_command('show router 4 interface | match SR1-CRAN-Hub | match "Down/Up" | count ')
 
         for key, value in edn_results.iteritems():
             val_1 = value[1].split('Count')
@@ -2061,7 +2054,7 @@ def wait_expected_route (node, route, match, wait):
     log_file.info("Wait up to %s seconds for route %s to be present on node %s" %(wait,route,node.sysname))
     while count <= wait:
         default_result = 'OK'
-        res, cli_return = node.send_cli_command('show router route-table ipv6 %s' %(route), see_return=True)
+        res, cli_return = node.send_cli_command('show router route-table ipv6 %s' %(route))
         if match not in cli_return:
             route_result = False 
             log_file.error("Route %s NOT present on node %s after %s seconds" %(route,node.sysname,count))

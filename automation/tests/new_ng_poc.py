@@ -1,4 +1,3 @@
-
 from __future__ import division
 
 import node
@@ -12,7 +11,6 @@ import getopt
 import yaml
 import pdb
 import time
-import logging
 import attrdict 
 
 from datetime import datetime
@@ -21,30 +19,20 @@ from textwrap import dedent
 from collections import OrderedDict
 
 # Create a log file
-log_file=logging.getLogger(__name__)
+log_file = utils.get_logger(__name__)
 
-# Configure log file to output to stdout too
-log_file.addHandler(logging.StreamHandler(sys.stdout))
-
-tb  = attrdict.AttrDict()
+tb = None
 topology = 'none'
 protocol = 'snmp'
 
 def testbed_init(testbed_file):
 
-    global tb
     log_file.info("")
     log_file.info("--------------------------------------------------")
     log_file.info('Initalize Testbed')
     log_file.info("--------------------------------------------------")
 
-    if tb:
-        log_file.info("")
-        log_file.info("--------------------------------------------------")
-        log_file.info('Testbed already initialized')
-        #return
-
-    tb = node.Testbed(testbed_file)
+    return node.Testbed(testbed_file)
 
 def config_v4_underlay(status):
 
@@ -223,8 +211,8 @@ def print_testbed_info():
 
 def show_north_traffic_util():
 
-    bl1crstx  = round(tb.bl_1.to_ense_vxlan.get_util_perc('tx'),1)
-    bl2crstx  = round(tb.bl_2.to_ense_vxlan.get_util_perc('tx'),1)
+    bl1crstx  = round(tb.bl_1.to_pe.get_util_perc('tx'),1)
+    bl2crstx  = round(tb.bl_2.to_pe.get_util_perc('tx'),1)
 
     s2bl1tx  = round(tb.spine_2.to_bl_1.get_util_perc('tx'),1)
     s2bl2tx  = round(tb.spine_2.to_bl_2.get_util_perc('tx'),1)
@@ -272,71 +260,71 @@ def show_north_traffic_util():
     log_fmt_e = ' ||{:>12}{:>5}'
 
 
-    log_file.info(" Northbound traffic flow" )
-    log_file.info(" Percent link utilization" )
+    log_file.info(" Northbound traffic flow")
+    log_file.info(" Percent link utilization")
     log_file.info("")
-    log_file.info("------------------------" )
-    log_file.info("" )
-    log_file.info(" /\\                                       " )
-    log_file.info(" ||                            |           " )
-    log_file.info(" ||                        +-------+       " )
-    log_file.info(" ||                        |  SAP  |       " )
-    log_file.info(" ||                        +-------+       " )
-    log_file.info(" ||                          /  \          " )
+    log_file.info("------------------------")
+    log_file.info("")
+    log_file.info(" /\\                                       ")
+    log_file.info(" ||                            |           ")
+    log_file.info(" ||                        +-------+       ")
+    log_file.info(" ||                        |  SAP  |       ")
+    log_file.info(" ||                        +-------+       ")
+    log_file.info(" ||                          /  \          ")
     log_file.info(log_fmt_a.format(bl1crstx,bl2crstx))
-    log_file.info(" ||                        /      \        " )
-    log_file.info(" ||                 +-----+        +-----+ " )
-    log_file.info(" ||                 | BL1 |        | BL2 | " )
-    log_file.info(" ||                 +-----+        +-----+ " )
-    log_file.info(" ||                    |   \      /   |    " )
-    log_file.info(" ||                    |    \    /    |    " )
+    log_file.info(" ||                        /      \        ")
+    log_file.info(" ||                 +-----+        +-----+ ")
+    log_file.info(" ||                 | BL1 |        | BL2 | ")
+    log_file.info(" ||                 +-----+        +-----+ ")
+    log_file.info(" ||                    |   \      /   |    ")
+    log_file.info(" ||                    |    \    /    |    ")
     log_file.info(log_fmt_b.format(s1bl1tx,s2bl2tx))
-    log_file.info(" ||                    |      \/      |    " )
-    log_file.info(" ||                    |      /\      |    " )
-    log_file.info(" ||                    |     /  \     |    " )
+    log_file.info(" ||                    |      \/      |    ")
+    log_file.info(" ||                    |      /\      |    ")
+    log_file.info(" ||                    |     /  \     |    ")
     log_file.info(log_fmt_c.format(s1bl2tx,s2bl1tx))
-    log_file.info(" ||                    |   /      \   |    " )
-    log_file.info(" ||                 +-----+        +-----+ " )
-    log_file.info(" ||     +---------- | SP1 |--+  +--| SP2 | ----------+    " )
-    log_file.info(" ||     |           +-----+   \/   +-----+           |    " )
-    log_file.info(" ||     |              |   \  /\  /   |              |    " )
-    log_file.info(" ||     |              |    \/  \/    |              |    " )
-    log_file.info(" ||     |              |    /\  /\    |              |    " )
-    log_file.info(" ||     |              |   /  \/  \   |              |    " )
-    log_file.info(" ||     |      +-------|--+   /\   +--|-------+      |    " )
-    log_file.info(" ||     |     /        |     /  \     |        \     |    " )
+    log_file.info(" ||                    |   /      \   |    ")
+    log_file.info(" ||                 +-----+        +-----+ ")
+    log_file.info(" ||     +---------- | SP1 |--+  +--| SP2 | ----------+    ")
+    log_file.info(" ||     |           +-----+   \/   +-----+           |    ")
+    log_file.info(" ||     |              |   \  /\  /   |              |    ")
+    log_file.info(" ||     |              |    \/  \/    |              |    ")
+    log_file.info(" ||     |              |    /\  /\    |              |    ")
+    log_file.info(" ||     |              |   /  \/  \   |              |    ")
+    log_file.info(" ||     |      +-------|--+   /\   +--|-------+      |    ")
+    log_file.info(" ||     |     /        |     /  \     |        \     |    ")
     log_file.info(log_fmt_x.format(al1s1tx,al1s2tx,al2s1tx,al2s2tx,al3s11tx,al3s21tx,al4s11tx,al4s12tx,al4s21tx,al4s22tx))               
-    log_file.info(" ||     |   /          |   /      \   |          \   |    " )
-    log_file.info(" ||  +-----+        +-----+        +-----+        +-----+ " )
-    log_file.info(" ||  | AL1 |        | AL2 |        | AL3 |        | AL4 | " )
-    log_file.info(" ||  +-----+        +-----+        +-----+        +-----+ " )
-    log_file.info(" ||     |              |             |               |    " )
-    log_file.info(" ||     |              |             |               |    " )
-    log_file.info(" ||     |              |             |               |    " )
-    log_file.info(" ||     |              |             |               |    " )
-    log_file.info(" ||     |              |             |               |    " )
-    log_file.info(" ||     |              |             |               |    " )
+    log_file.info(" ||     |   /          |   /      \   |          \   |    ")
+    log_file.info(" ||  +-----+        +-----+        +-----+        +-----+ ")
+    log_file.info(" ||  | AL1 |        | AL2 |        | AL3 |        | AL4 | ")
+    log_file.info(" ||  +-----+        +-----+        +-----+        +-----+ ")
+    log_file.info(" ||     |              |             |               |    ")
+    log_file.info(" ||     |              |             |               |    ")
+    log_file.info(" ||     |              |             |               |    ")
+    log_file.info(" ||     |              |             |               |    ")
+    log_file.info(" ||     |              |             |               |    ")
+    log_file.info(" ||     |              |             |               |    ")
     log_file.info(log_fmt_d.format(h1al1tx,h2al2tx,al3vc1rx,al4vc1rx))
-    log_file.info(" ||     |              |             |               |    " )
-    log_file.info(" ||  +-----+        +-----+       +-----+         +-----+ " )
-    log_file.info(" ||  |     |        |     |       |     |         |     | " )
-    log_file.info(" ||  | CBL |        | CBL |       | VC1 |         | VC1 | " )
-    log_file.info(" ||  |  1  |        |  2  |       | IM1 |         | IMM | " )
-    log_file.info(" ||  |     |        |     |       |  1  |         |  2  | " )
-    log_file.info(" ||  +-----+        +-----+       +-----+         +-----+ " )
-    log_file.info(" ||         \      /               |||||           |||||  " )
+    log_file.info(" ||     |              |             |               |    ")
+    log_file.info(" ||  +-----+        +-----+       +---------------------+ ")
+    log_file.info(" ||  |     |        |     |       |                     | ")
+    log_file.info(" ||  | CBL |        | CBL |       | VC1             VC1 | ")
+    log_file.info(" ||  |  1  |        |  2  |       | IM1             IMM | ")
+    log_file.info(" ||  |     |        |     |       |  1               2  | ")
+    log_file.info(" ||  +-----+        +-----+       +---------------------+ ")
+    log_file.info(" ||         \      /               |||||           |||||  ")
     log_file.info(log_fmt_e.format(h1ca1rx,h2ca1rx))
-    log_file.info(" ||           \  /          " )
-    log_file.info(" ||         +-------+       " )
-    log_file.info(" ||         |  IXR  |       " )
-    log_file.info(" ||         +-------+       " )
-    log_file.info(" ||             |           " )
-    log_file.info("" )
+    log_file.info(" ||           \  /          ")
+    log_file.info(" ||         +-------+       ")
+    log_file.info(" ||         |  IXR  |       ")
+    log_file.info(" ||         +-------+       ")
+    log_file.info(" ||             |           ")
+    log_file.info("")
 
 def show_south_traffic_util():
 
-    bl1crsrx  = round(tb.bl_1.to_ense_vxlan.get_util_perc('rx'),1)
-    bl2crsrx  = round(tb.bl_2.to_ense_vxlan.get_util_perc('rx'),1)
+    bl1crsrx  = round(tb.bl_1.to_pe.get_util_perc('rx'),1)
+    bl2crsrx  = round(tb.bl_2.to_pe.get_util_perc('rx'),1)
 
     s2bl1rx  = round(tb.spine_2.to_bl_1.get_util_perc('rx'),1)
     s2bl2rx  = round(tb.spine_2.to_bl_2.get_util_perc('rx'),1)
@@ -385,70 +373,70 @@ def show_south_traffic_util():
     log_fmt_e = ' ||{:>12}{:>5}'
 
 
-    log_file.info(" Southbound traffic flow" )
-    log_file.info(" Percent link utilization" )
+    log_file.info(" Southbound traffic flow")
+    log_file.info(" Percent link utilization")
     log_file.info("")
-    log_file.info("------------------------" )
-    log_file.info("" )
-    log_file.info(" ||                            |           " )
-    log_file.info(" ||                        +-------+       " )
-    log_file.info(" ||                        |  SAP  |       " )
-    log_file.info(" ||                        +-------+       " )
-    log_file.info(" ||                          /  \          " )
+    log_file.info("------------------------")
+    log_file.info("")
+    log_file.info(" ||                            |           ")
+    log_file.info(" ||                        +-------+       ")
+    log_file.info(" ||                        |  SAP  |       ")
+    log_file.info(" ||                        +-------+       ")
+    log_file.info(" ||                          /  \          ")
     log_file.info(log_fmt_a.format(bl1crsrx,bl2crsrx))
-    log_file.info(" ||                        /      \        " )
-    log_file.info(" ||                 +-----+        +-----+ " )
-    log_file.info(" ||                 | BL1 |        | BL2 | " )
-    log_file.info(" ||                 +-----+        +-----+ " )
-    log_file.info(" ||                    |   \      /   |    " )
-    log_file.info(" ||                    |    \    /    |    " )
+    log_file.info(" ||                        /      \        ")
+    log_file.info(" ||                 +-----+        +-----+ ")
+    log_file.info(" ||                 | BL1 |        | BL2 | ")
+    log_file.info(" ||                 +-----+        +-----+ ")
+    log_file.info(" ||                    |   \      /   |    ")
+    log_file.info(" ||                    |    \    /    |    ")
     log_file.info(log_fmt_b.format(s1bl1rx,s2bl2rx))
-    log_file.info(" ||                    |      \/      |    " )
-    log_file.info(" ||                    |      /\      |    " )
-    log_file.info(" ||                    |     /  \     |    " )
+    log_file.info(" ||                    |      \/      |    ")
+    log_file.info(" ||                    |      /\      |    ")
+    log_file.info(" ||                    |     /  \     |    ")
     log_file.info(log_fmt_c.format(s1bl2rx,s2bl1rx))
-    log_file.info(" ||                    |   /      \   |    " )
-    log_file.info(" ||                 +-----+        +-----+ " )
-    log_file.info(" ||     +---------- | SP1 |--+  +--| SP2 | ----------+    " )
-    log_file.info(" ||     |           +-----+   \/   +-----+           |    " )
-    log_file.info(" ||     |              |   \  /\  /   |              |    " )
-    log_file.info(" ||     |              |    \/  \/    |              |    " )
-    log_file.info(" ||     |              |    /\  /\    |              |    " )
-    log_file.info(" ||     |              |   /  \/  \   |              |    " )
-    log_file.info(" ||     |      +-------|--+   /\   +--|-------+      |    " )
-    log_file.info(" ||     |     /        |     /  \     |        \     |    " )
+    log_file.info(" ||                    |   /      \   |    ")
+    log_file.info(" ||                 +-----+        +-----+ ")
+    log_file.info(" ||     +---------- | SP1 |--+  +--| SP2 | ----------+    ")
+    log_file.info(" ||     |           +-----+   \/   +-----+           |    ")
+    log_file.info(" ||     |              |   \  /\  /   |              |    ")
+    log_file.info(" ||     |              |    \/  \/    |              |    ")
+    log_file.info(" ||     |              |    /\  /\    |              |    ")
+    log_file.info(" ||     |              |   /  \/  \   |              |    ")
+    log_file.info(" ||     |      +-------|--+   /\   +--|-------+      |    ")
+    log_file.info(" ||     |     /        |     /  \     |        \     |    ")
     log_file.info(log_fmt_x.format(al1s1rx,al1s2rx,al2s1rx,al2s2rx,al3s11rx,al3s21rx,al4s11rx,al4s12rx,al4s21rx,al4s22rx))               
-    log_file.info(" ||     |   /          |   /      \   |          \   |    " )
-    log_file.info(" ||  +-----+        +-----+        +-----+        +-----+ " )
-    log_file.info(" ||  | AL1 |        | AL2 |        | AL3 |        | AL4 | " )
-    log_file.info(" ||  +-----+        +-----+        +-----+        +-----+ " )
-    log_file.info(" ||     |              |              |              |    " )
-    log_file.info(" ||     |              |              |              |    " )
-    log_file.info(" ||     |              |              |              |    " )
+    log_file.info(" ||     |   /          |   /      \   |          \   |    ")
+    log_file.info(" ||  +-----+        +-----+        +-----+        +-----+ ")
+    log_file.info(" ||  | AL1 |        | AL2 |        | AL3 |        | AL4 | ")
+    log_file.info(" ||  +-----+        +-----+        +-----+        +-----+ ")
+    log_file.info(" ||     |              |              |              |    ")
+    log_file.info(" ||     |              |              |              |    ")
+    log_file.info(" ||     |              |              |              |    ")
     log_file.info(log_fmt_d.format(h1al1rx,h2al2rx,al3vc1tx,al4vc1tx))
-    log_file.info(" ||     |              |              |              |    " )
-    log_file.info(" ||     |              |              |              |    " )
-    log_file.info(" ||     |              |              |              |    " )
-    log_file.info(" ||  +-----+        +-----+        +-----+        +-----+ " )
-    log_file.info(" ||  |     |        |     |        |     |        |     | " )
-    log_file.info(" ||  | CBL |        | CBL |        | VC1 |        | VC1 | " )
-    log_file.info(" ||  |  1  |        |  2  |        | IM1 |        | IMM | " )
-    log_file.info(" ||  |     |        |     |        |  1  |        |  2  | " )
-    log_file.info(" ||  +-----+        +-----+        +-----+        +-----+ " )
-    log_file.info(" ||         \      /                |||||          |||||  " )
+    log_file.info(" ||     |              |              |              |    ")
+    log_file.info(" ||     |              |              |              |    ")
+    log_file.info(" ||     |              |              |              |    ")
+    log_file.info(" ||  +-----+        +-----+        +--------------------+ ")
+    log_file.info(" ||  |     |        |     |        |                    | ")
+    log_file.info(" ||  | CBL |        | CBL |        | VC1            VC1 | ")
+    log_file.info(" ||  |  1  |        |  2  |        | IM1            IMM | ")
+    log_file.info(" ||  |     |        |     |        |  1              2  | ")
+    log_file.info(" ||  +-----+        +-----+        +--------------------+ ")
+    log_file.info(" ||         \      /                |||||          |||||  ")
     log_file.info(log_fmt_e.format(h1ca1tx,h2ca1tx))
-    log_file.info(" ||           \  /          " )
-    log_file.info(" ||         +-------+       " )
-    log_file.info(" ||         |  IXR  |       " )
-    log_file.info(" ||         +-------+       " )
-    log_file.info(" ||             |           " )
-    log_file.info(" \/             |           " )
-    log_file.info("" )
+    log_file.info(" ||           \  /          ")
+    log_file.info(" ||         +-------+       ")
+    log_file.info(" ||         |  IXR  |       ")
+    log_file.info(" ||         +-------+       ")
+    log_file.info(" ||             |           ")
+    log_file.info(" \/             |           ")
+    log_file.info("")
 
 def show_north_traffic_util_vx():
 
-    bl1crstx  = round(tb.bl_1.to_ense_vxlan.get_util_perc('tx'),1)
-    bl2crstx  = round(tb.bl_2.to_ense_vxlan.get_util_perc('tx'),1)
+    bl1crstx  = round(tb.bl_1.to_pe.get_util_perc('tx'),1)
+    bl2crstx  = round(tb.bl_2.to_pe.get_util_perc('tx'),1)
 
     s2bl1tx  = round(tb.spine_2.to_bl_1.get_util_perc('tx'),1)
     s2bl2tx  = round(tb.spine_2.to_bl_2.get_util_perc('tx'),1)
@@ -502,74 +490,74 @@ def show_north_traffic_util_vx():
 
     #log_file.info(log_fmt_x.format(al1s1tx,al1s2tx,al2s1tx,al2s2tx,al3s11tx,al3s21tx,al4s11tx,al4s12tx,al4s21tx,al4s22tx))               
 
-    log_file.info(" Northbound traffic flow" )
-    log_file.info(" Percent link utilization" )
+    log_file.info(" Northbound traffic flow")
+    log_file.info(" Percent link utilization")
     log_file.info("")
-    log_file.info("------------------------" )
-    log_file.info("" )
-    log_file.info(" /\\                                       " )
-    log_file.info(" ||                            |           " )
-    log_file.info(" ||                        +-------+       " )
-    log_file.info(" ||                        |  P E  |       " )
-    log_file.info(" ||                        +-------+       " )
-    log_file.info(" ||                          /  \          " )
+    log_file.info("------------------------")
+    log_file.info("")
+    log_file.info(" /\\                                       ")
+    log_file.info(" ||                            |           ")
+    log_file.info(" ||                        +-------+       ")
+    log_file.info(" ||                        |  P E  |       ")
+    log_file.info(" ||                        +-------+       ")
+    log_file.info(" ||                          /  \          ")
     log_file.info(log_fmt_a.format(bl1crstx,bl2crstx))
-    log_file.info(" ||                        /      \        " )
-    log_file.info(" ||                 +-----+        +-----+ " )
-    log_file.info(" ||     +---------- | BL1 |--+  +--| BL2 | ----------+    " )
-    log_file.info(" ||     |           +-----+   \/   +-----+           |    " )
-    log_file.info(" ||     |              |   \  /\  /   |              |    " )
-    log_file.info(" ||     |              |    \/  \/    |              |    " )
-    log_file.info(" ||     |              |    /\  /\    |              |    " )
-    log_file.info(" ||     |              |   /  \/  \   |              |    " )
-    log_file.info(" ||     |      +-------|--+   /\   +--|-------+      |    " )
-    log_file.info(" ||     |     /        |     /  \     |        \     |    " )
+    log_file.info(" ||                        /      \        ")
+    log_file.info(" ||                 +-----+        +-----+ ")
+    log_file.info(" ||     +---------- | BL1 |--+  +--| BL2 | ----------+    ")
+    log_file.info(" ||     |           +-----+   \/   +-----+           |    ")
+    log_file.info(" ||     |              |   \  /\  /   |              |    ")
+    log_file.info(" ||     |              |    \/  \/    |              |    ")
+    log_file.info(" ||     |              |    /\  /\    |              |    ")
+    log_file.info(" ||     |              |   /  \/  \   |              |    ")
+    log_file.info(" ||     |      +-------|--+   /\   +--|-------+      |    ")
+    log_file.info(" ||     |     /        |     /  \     |        \     |    ")
     log_file.info(log_fmt_x.format(s1bl1tx,s1bl2tx,s2bl1tx,s2bl2tx,vs1bl1tx,vs1bl2tx,vs2bl1tx,vs2bl2tx))               
-    log_file.info(" ||     |   /          |   /      \   |          \   |    " )
-    log_file.info(" ||  +-----+        +-----+        +-----+        +-----+ " )
-    log_file.info(" ||  | S R |        | S R |        | V X |        | V X | " )
-    log_file.info(" ||  | SP1 |        | SP2 |        | SP3 |        | SP4 | " )
-    log_file.info(" ||  +-----+        +-----+        +-----+        +-----+ " )
-    log_file.info(" ||     |   \      /   |              |   \      /   |    " )
-    log_file.info(" ||     |    \    /    |              |    \    /    |    " )
-    log_file.info(" ||     |     \  /     |              |     \  /     |    " )
-    log_file.info(" ||     |      \/      |              |      \/      |    " )
-    log_file.info(" ||     |      /\      |              |      /\      |    " )
-    log_file.info(" ||     |     /  \     |              |     /  \     |    " )
+    log_file.info(" ||     |   /          |   /      \   |          \   |    ")
+    log_file.info(" ||  +-----+        +-----+        +-----+        +-----+ ")
+    log_file.info(" ||  | S R |        | S R |        | V X |        | V X | ")
+    log_file.info(" ||  | SP1 |        | SP2 |        | SP3 |        | SP4 | ")
+    log_file.info(" ||  +-----+        +-----+        +-----+        +-----+ ")
+    log_file.info(" ||     |   \      /   |              |   \      /   |    ")
+    log_file.info(" ||     |    \    /    |              |    \    /    |    ")
+    log_file.info(" ||     |     \  /     |              |     \  /     |    ")
+    log_file.info(" ||     |      \/      |              |      \/      |    ")
+    log_file.info(" ||     |      /\      |              |      /\      |    ")
+    log_file.info(" ||     |     /  \     |              |     /  \     |    ")
     log_file.info(log_fmt_y.format(al1s1tx,al1s2tx,al2s1tx,al2s2tx,val1s1tx,val1s2tx,val2s1tx,val2s2tx))               
-    log_file.info(" ||     |   /      \   |              |   /      \   |    " )
-    log_file.info(" ||  +-----+        +-----+        +-----+        +-----+ " )
-    log_file.info(" ||  | S R |        | S R |        | V X |        | V X | " )
-    log_file.info(" ||  | AL1 |        | AL2 |        | AL1 |        | AL2 | " )
-    log_file.info(" ||  +-----+        +-----+        +-----+        +-----+ " )
-    log_file.info(" ||     |             |               |              |    " )
-    log_file.info(" ||     |             |               |              |    " )
-    log_file.info(" ||     |             |               |              |    " )
-    log_file.info(" ||     |             |               |              |    " )
-    log_file.info(" ||     |             |               |              |    " )
-    log_file.info(" ||     |             |               |              |    " )
+    log_file.info(" ||     |   /      \   |              |   /      \   |    ")
+    log_file.info(" ||  +-----+        +-----+        +-----+        +-----+ ")
+    log_file.info(" ||  | S R |        | S R |        | V X |        | V X | ")
+    log_file.info(" ||  | AL1 |        | AL2 |        | AL1 |        | AL2 | ")
+    log_file.info(" ||  +-----+        +-----+        +-----+        +-----+ ")
+    log_file.info(" ||     |             |               |              |    ")
+    log_file.info(" ||     |             |               |              |    ")
+    log_file.info(" ||     |             |               |              |    ")
+    log_file.info(" ||     |             |               |              |    ")
+    log_file.info(" ||     |             |               |              |    ")
+    log_file.info(" ||     |             |               |              |    ")
     log_file.info(log_fmt_d.format(h1al1tx,h2al2tx,val1ixrx,val2ixrx))
-    log_file.info(" ||     |             |               |              |    " )
-    log_file.info(" ||     |             |               |              |    " )
-    log_file.info(" ||  +-----+       +-----+         +-----+        +-----+ " )
-    log_file.info(" ||  |     |       |     |         |  I  |        |  I  | " )
-    log_file.info(" ||  | CBL |       | CBL |         |  X  |        |  X  | " )
-    log_file.info(" ||  |  1  |       |  2  |         |  I  |        |  I  | " )
-    log_file.info(" ||  |     |       |     |         |  A  |        |  A  | " )
-    log_file.info(" ||  +-----+       +-----+         +-----+        +-----+ " )
-    log_file.info(" ||         \      /                                      " )
+    log_file.info(" ||     |             |               |              |    ")
+    log_file.info(" ||     |             |               |              |    ")
+    log_file.info(" ||  +-----+       +-----+         +-----+        +-----+ ")
+    log_file.info(" ||  |     |       |     |         |  I  |        |  I  | ")
+    log_file.info(" ||  | CBL |       | CBL |         |  X  |        |  X  | ")
+    log_file.info(" ||  |  1  |       |  2  |         |  I  |        |  I  | ")
+    log_file.info(" ||  |     |       |     |         |  A  |        |  A  | ")
+    log_file.info(" ||  +-----+       +-----+         +-----+        +-----+ ")
+    log_file.info(" ||         \      /                                      ")
     log_file.info(log_fmt_e.format(h1ca1rx,h2ca1rx))
-    log_file.info(" ||           \  /          " )
-    log_file.info(" ||         +-------+       " )
-    log_file.info(" ||         |  IXR  |       " )
-    log_file.info(" ||         +-------+       " )
-    log_file.info(" ||             |           " )
-    log_file.info("" )
+    log_file.info(" ||           \  /          ")
+    log_file.info(" ||         +-------+       ")
+    log_file.info(" ||         |  IXR  |       ")
+    log_file.info(" ||         +-------+       ")
+    log_file.info(" ||             |           ")
+    log_file.info("")
 
 def show_south_traffic_util_vx():
 
-    bl1crsrx  = round(tb.bl_1.to_ense_vxlan.get_util_perc('rx'),1)
-    bl2crsrx  = round(tb.bl_2.to_ense_vxlan.get_util_perc('rx'),1)
+    bl1crsrx  = round(tb.bl_1.to_pe.get_util_perc('rx'),1)
+    bl2crsrx  = round(tb.bl_2.to_pe.get_util_perc('rx'),1)
 
 
     s2bl1rx  = round(tb.spine_2.to_bl_1.get_util_perc('rx'),1)
@@ -618,69 +606,69 @@ def show_south_traffic_util_vx():
     log_fmt_x = ' ||{:>7}{:>5}{:>10}{:>5}{:>5}{:>5}{:>10}{:>5}'
     log_fmt_y = ' ||{:>7}{:>5}{:>5}{:>5}{:>15}{:>5}{:>5}{:>5}'
 
-    log_file.info(" Southbound traffic flow" )
-    log_file.info(" Percent link utilization" )
+    log_file.info(" Southbound traffic flow")
+    log_file.info(" Percent link utilization")
     log_file.info("")
-    log_file.info("------------------------" )
-    log_file.info("" )
-    log_file.info(" ||                            |           " )
-    log_file.info(" ||                        +-------+       " )
-    log_file.info(" ||                        |  P E  |       " )
-    log_file.info(" ||                        +-------+       " )
-    log_file.info(" ||                          /  \          " )
+    log_file.info("------------------------")
+    log_file.info("")
+    log_file.info(" ||                            |           ")
+    log_file.info(" ||                        +-------+       ")
+    log_file.info(" ||                        |  P E  |       ")
+    log_file.info(" ||                        +-------+       ")
+    log_file.info(" ||                          /  \          ")
     log_file.info(log_fmt_a.format(bl1crsrx,bl2crsrx))
-    log_file.info(" ||                        /      \        " )
-    log_file.info(" ||                 +-----+        +-----+ " )
-    log_file.info(" ||     +---------- | BL1 |--+  +--| BL2 | ----------+    " )
-    log_file.info(" ||     |           +-----+   \/   +-----+           |    " )
-    log_file.info(" ||     |              |   \  /\  /   |              |    " )
-    log_file.info(" ||     |              |    \/  \/    |              |    " )
-    log_file.info(" ||     |              |    /\  /\    |              |    " )
-    log_file.info(" ||     |              |   /  \/  \   |              |    " )
-    log_file.info(" ||     |      +-------|--+   /\   +--|-------+      |    " )
-    log_file.info(" ||     |     /        |     /  \     |        \     |    " )
+    log_file.info(" ||                        /      \        ")
+    log_file.info(" ||                 +-----+        +-----+ ")
+    log_file.info(" ||     +---------- | BL1 |--+  +--| BL2 | ----------+    ")
+    log_file.info(" ||     |           +-----+   \/   +-----+           |    ")
+    log_file.info(" ||     |              |   \  /\  /   |              |    ")
+    log_file.info(" ||     |              |    \/  \/    |              |    ")
+    log_file.info(" ||     |              |    /\  /\    |              |    ")
+    log_file.info(" ||     |              |   /  \/  \   |              |    ")
+    log_file.info(" ||     |      +-------|--+   /\   +--|-------+      |    ")
+    log_file.info(" ||     |     /        |     /  \     |        \     |    ")
     log_file.info(log_fmt_x.format(s1bl1rx,s1bl2rx,s2bl1rx,s2bl2rx,vs1bl1rx,vs1bl2rx,vs2bl1rx,vs2bl2rx))               
-    log_file.info(" ||     |   /          |   /      \   |          \   |    " )
-    log_file.info(" ||  +-----+        +-----+        +-----+        +-----+ " )
-    log_file.info(" ||  | S R |        | S R |        | V X |        | V X | " )
-    log_file.info(" ||  | SP1 |        | SP2 |        | SP3 |        | SP4 | " )
-    log_file.info(" ||  +-----+        +-----+        +-----+        +-----+ " )
-    log_file.info(" ||     |   \      /   |              |   \      /   |    " )
-    log_file.info(" ||     |    \    /    |              |    \    /    |    " )
-    log_file.info(" ||     |     \  /     |              |     \  /     |    " )
-    log_file.info(" ||     |      \/      |              |      \/      |    " )
-    log_file.info(" ||     |      /\      |              |      /\      |    " )
-    log_file.info(" ||     |     /  \     |              |     /  \     |    " )
+    log_file.info(" ||     |   /          |   /      \   |          \   |    ")
+    log_file.info(" ||  +-----+        +-----+        +-----+        +-----+ ")
+    log_file.info(" ||  | S R |        | S R |        | V X |        | V X | ")
+    log_file.info(" ||  | SP1 |        | SP2 |        | SP3 |        | SP4 | ")
+    log_file.info(" ||  +-----+        +-----+        +-----+        +-----+ ")
+    log_file.info(" ||     |   \      /   |              |   \      /   |    ")
+    log_file.info(" ||     |    \    /    |              |    \    /    |    ")
+    log_file.info(" ||     |     \  /     |              |     \  /     |    ")
+    log_file.info(" ||     |      \/      |              |      \/      |    ")
+    log_file.info(" ||     |      /\      |              |      /\      |    ")
+    log_file.info(" ||     |     /  \     |              |     /  \     |    ")
     log_file.info(log_fmt_y.format(al1s1rx,al1s2rx,al2s1rx,al2s2rx,val1s1rx,val1s2rx,val2s1rx,val2s2rx))               
-    log_file.info(" ||     |   /      \   |              |   /      \   |    " )
-    log_file.info(" ||  +-----+        +-----+        +-----+        +-----+ " )
-    log_file.info(" ||  | S R |        | S R |        | V X |        | V X | " )
-    log_file.info(" ||  | AL1 |        | AL2 |        | AL1 |        | AL2 | " )
-    log_file.info(" ||  +-----+        +-----+        +-----+        +-----+ " )
-    log_file.info(" ||     |             |               |              |    " )
-    log_file.info(" ||     |             |               |              |    " )
-    log_file.info(" ||     |             |               |              |    " )
-    log_file.info(" ||     |             |               |              |    " )
-    log_file.info(" ||     |             |               |              |    " )
-    log_file.info(" ||     |             |               |              |    " )
+    log_file.info(" ||     |   /      \   |              |   /      \   |    ")
+    log_file.info(" ||  +-----+        +-----+        +-----+        +-----+ ")
+    log_file.info(" ||  | S R |        | S R |        | V X |        | V X | ")
+    log_file.info(" ||  | AL1 |        | AL2 |        | AL1 |        | AL2 | ")
+    log_file.info(" ||  +-----+        +-----+        +-----+        +-----+ ")
+    log_file.info(" ||     |             |               |              |    ")
+    log_file.info(" ||     |             |               |              |    ")
+    log_file.info(" ||     |             |               |              |    ")
+    log_file.info(" ||     |             |               |              |    ")
+    log_file.info(" ||     |             |               |              |    ")
+    log_file.info(" ||     |             |               |              |    ")
     log_file.info(log_fmt_d.format(h1al1rx,h2al2rx,val1ixtx,val2ixtx))
-    log_file.info(" ||     |             |               |              |    " )
-    log_file.info(" ||     |             |               |              |    " )
-    log_file.info(" ||  +-----+       +-----+         +-----+        +-----+ " )
-    log_file.info(" ||  |     |       |     |         |  I  |        |  I  | " )
-    log_file.info(" ||  | CBL |       | CBL |         |  X  |        |  X  | " )
-    log_file.info(" ||  |  1  |       |  2  |         |  I  |        |  I  | " )
-    log_file.info(" ||  |     |       |     |         |  A  |        |  A  | " )
-    log_file.info(" ||  +-----+       +-----+         +-----+        +-----+ " )
-    log_file.info(" ||         \      /                                      " )
+    log_file.info(" ||     |             |               |              |    ")
+    log_file.info(" ||     |             |               |              |    ")
+    log_file.info(" ||  +-----+       +-----+         +-----+        +-----+ ")
+    log_file.info(" ||  |     |       |     |         |  I  |        |  I  | ")
+    log_file.info(" ||  | CBL |       | CBL |         |  X  |        |  X  | ")
+    log_file.info(" ||  |  1  |       |  2  |         |  I  |        |  I  | ")
+    log_file.info(" ||  |     |       |     |         |  A  |        |  A  | ")
+    log_file.info(" ||  +-----+       +-----+         +-----+        +-----+ ")
+    log_file.info(" ||         \      /                                      ")
     log_file.info(log_fmt_e.format(h1ca1tx,h2ca1tx))
-    log_file.info(" ||           \  /          " )
-    log_file.info(" ||         +-------+       " )
-    log_file.info(" ||         |  IXR  |       " )
-    log_file.info(" ||         +-------+       " )
-    log_file.info(" ||             |           " )
-    log_file.info(" \/             |           " )
-    log_file.info("" )
+    log_file.info(" ||           \  /          ")
+    log_file.info(" ||         +-------+       ")
+    log_file.info(" ||         |  IXR  |       ")
+    log_file.info(" ||         +-------+       ")
+    log_file.info(" ||             |           ")
+    log_file.info(" \/             |           ")
+    log_file.info("")
 
 def show_north_visp_fw_usage():
 
@@ -713,11 +701,11 @@ def show_north_visp_fw_usage():
 
     log_fmt_a = ' ||      |       |{:>11}    |       |          |       | {:>10}    |       |'
 
-    log_file.info("  VISP & FW Northbound" )
-    log_file.info("    " )
-    log_file.info(" /\ " )
-    log_file.info(" || " )
-    log_file.info(" ||      fw1                     bl1                      bl2                     fw2" )
+    log_file.info("  VISP & FW Northbound")
+    log_file.info("    ")
+    log_file.info(" /\ ")
+    log_file.info(" || ")
+    log_file.info(" ||      fw1                     bl1                      bl2                     fw2")
     log_file.info(" ||      +-------+               +-------+          +-------+               +-------+")
     log_file.info(" ||      |       |               |       |          |       |               |       |")
     log_file.info(" ||      |       |-------------->|       |          |       |<--------------|       |")
@@ -728,8 +716,8 @@ def show_north_visp_fw_usage():
     log_file.info(log_fmt_a.format(fw_1_inside_ingress, fw_2_inside_ingress))
     log_file.info(" ||      |       |               |       |          |       |               |       |")
     log_file.info(" ||      +-------+               |       |          |       |               +-------+")
-    log_file.info(" ||                              |       |          |       |" )
-    log_file.info(" ||      visp1                   |       |          |       |                   visp2" )
+    log_file.info(" ||                              |       |          |       |")
+    log_file.info(" ||      visp1                   |       |          |       |                   visp2")
     log_file.info(" ||      +-------+               |       |          |       |               +-------+")
     log_file.info(" ||      |       |               |       |          |       |               |       |")
     log_file.info(" ||      |       |-------------->|       |          |       |<--------------|       |")
@@ -740,7 +728,7 @@ def show_north_visp_fw_usage():
     log_file.info(log_fmt_a.format(visp_1_inside_ingress,visp_2_inside_ingress))
     log_file.info(" ||      |       |               |       |          |       |               |       |")
     log_file.info(" ||      +-------+               +-------+          +-------+               +-------+")
-    log_file.info(" || " )
+    log_file.info(" || ")
 
 def show_south_visp_fw_usage():
 
@@ -773,10 +761,10 @@ def show_south_visp_fw_usage():
 
     log_fmt_a = ' ||      |       |{:>11}    |       |          |       | {:>10}    |       |'
 
-    log_file.info("  VISP & FW Southbound" )
-    log_file.info("    " )
-    log_file.info(" || " )
-    log_file.info(" ||      fw1                     bl1                      bl2                     fw2" )
+    log_file.info("  VISP & FW Southbound")
+    log_file.info("    ")
+    log_file.info(" || ")
+    log_file.info(" ||      fw1                     bl1                      bl2                     fw2")
     log_file.info(" ||      +-------+               +-------+          +-------+               +-------+")
     log_file.info(" ||      |       |               |       |          |       |               |       |")
     log_file.info(" ||      |       |<--------------|       |          |       |-------------->|       |")
@@ -787,8 +775,8 @@ def show_south_visp_fw_usage():
     log_file.info(log_fmt_a.format(fw_1_inside_egress, fw_2_inside_egress))
     log_file.info(" ||      |       |               |       |          |       |               |       |")
     log_file.info(" ||      +-------+               |       |          |       |               +-------+")
-    log_file.info(" ||                              |       |          |       |" )
-    log_file.info(" ||      visp1                   |       |          |       |                   visp2" )
+    log_file.info(" ||                              |       |          |       |")
+    log_file.info(" ||      visp1                   |       |          |       |                   visp2")
     log_file.info(" ||      +-------+               |       |          |       |               +-------+")
     log_file.info(" ||      |       |               |       |          |       |               |       |")
     log_file.info(" ||      |       |<--------------|       |          |       |-------------->|       |")
@@ -799,8 +787,8 @@ def show_south_visp_fw_usage():
     log_file.info(log_fmt_a.format(visp_1_inside_egress,visp_2_inside_egress))
     log_file.info(" ||      |       |               |       |          |       |               |       |")
     log_file.info(" ||      +-------+               +-------+          +-------+               +-------+")
-    log_file.info(" || " )
-    log_file.info(" \/ " )
+    log_file.info(" || ")
+    log_file.info(" \/ ")
 
 def set_all_port_ether_stats_itvl(itvl=300):
 
@@ -825,7 +813,7 @@ def print_test_result(testcase_name, test_pass, duration):
     log_file.info("--------------------------------------------------")
 
 
-def generate_test_result_list(testcase_name,test_pass):
+def generate_test_result_list(testcase_name,test_pass,plot_skip):
 
     test_result_list = [] 
     if test_pass:
@@ -842,8 +830,9 @@ def generate_test_result_list(testcase_name,test_pass):
     kpi = '.'.join([testcase_name,'loss_ms'])
     kpidict['KPIs'].append(kpi)
     for traffic_item in tb.ixia_poc.traffic_names:
-        if 'Multicast' in traffic_item:
-            log_file.info("Skip Multicast loss ms plot")
+        if plot_skip: 
+            log_file.info("Skip loss ms plot")
+            log_file.info("Either m'cast or EDN Rx > Tx")
         else:
             loss_ms = tb.ixia_poc.get_stats(traffic_item,'loss_ms')
             kpidict['.'.join([kpi,traffic_item])] = loss_ms
@@ -992,19 +981,19 @@ def fail_exit_2_to_spine_2():
     return result
 
 
-def fail_exit_1_to_ense_vxlan():
+def fail_exit_1_to_pe():
 
     result = True
 
-    tb.bl_1.to_ense_vxlan.shutdown(opt=protocol)
+    tb.bl_1.to_pe.shutdown(opt=protocol)
     return result
 
 
-def fail_exit_2_to_ense_vxlan():
+def fail_exit_2_to_pe():
 
     result = True
 
-    tb.bl_2.to_ense_vxlan.shutdown(opt=protocol)
+    tb.bl_2.to_pe.shutdown(opt=protocol)
     return result
 
 def fail_ixr_to_hub_1():
@@ -1079,7 +1068,7 @@ def reboot_exit_1():
     log_file.info("-----------------------------------")
 
     tb.bl_1.sr_reboot()
-    tb.bl_1.close()
+    #tb.bl_1.sr_reboot2()
     return result
 
 def reboot_exit_2():
@@ -1141,6 +1130,19 @@ def reboot_access_3():
 
     return result
 
+def reboot_access_4():
+
+    result = True
+
+    log_file.info("-----------------------------------")
+    log_file.info("Reboot Access 4")
+    log_file.info("-----------------------------------")
+
+    tb.al_4.sr_reboot()
+    tb.al_4.close()
+
+    return result
+
 def reboot_hub_1():
 
     result = True
@@ -1153,70 +1155,12 @@ def reboot_hub_1():
     tb.hub_1.close()
     return result
 
-def isolate_exit_1():
-    tb.bl_1.to_ense_vxlan.shutdown(opt=protocol)
-    tb.bl_1.to_spine_1.shutdown(opt=protocol)
-    tb.bl_1.to_spine_2.shutdown(opt=protocol)
-    result = True
-    return result
-
-def isolate_exit_2():
-    tb.bl_2.to_ense_vxlan.shutdown(opt=protocol)
-    tb.bl_2.to_spine_1.shutdown(opt=protocol)
-    tb.bl_2.to_spine_2.shutdown(opt=protocol)
-    result = True
-    return result
-
-def isolate_spine_1():
-    tb.spine_1.to_bl_1.shutdown(opt=protocol)
-    tb.spine_1.to_bl_2.shutdown(opt=protocol)
-    tb.spine_1.to_al_1.shutdown(opt=protocol)
-    tb.spine_1.to_al_2.shutdown(opt=protocol)
-    result = True
-    return result
-
-def isolate_spine_2():
-    tb.spine_2.to_bl_1.shutdown(opt=protocol)
-    tb.spine_2.to_bl_2.shutdown(opt=protocol)
-    tb.spine_2.to_al_1.shutdown(opt=protocol)
-    tb.spine_2.to_al_2.shutdown(opt=protocol)
-    result = True
-    return result
-
-def isolate_access_1():
-    tb.al_1.to_spine_1.shutdown(opt=protocol)
-    tb.al_1.to_spine_2.shutdown(opt=protocol)
-    tb.al_1.to_hub_1.shutdown(opt=protocol)
-    result = True
-    return result
-
-def isolate_access_2():
-    tb.al_2.to_spine_1.shutdown(opt=protocol)
-    tb.al_2.to_spine_2.shutdown(opt=protocol)
-    tb.al_2.to_hub_2.shutdown(opt=protocol)
-    result = True
-    return result
-
-def isolate_hub_1():
-    tb.hub_1.to_al_1.shutdown(opt=protocol)
-    #tb.hub_1.to_hub_2.shutdown(opt=protocol)
-    tb.hub_1.to_wbx.shutdown(opt=protocol)
-    result = True
-    return result
-
-def isolate_hub_2():
-    tb.hub_2.to_al_2.shutdown(opt=protocol)
-    #tb.hub_2.to_hub_1.shutdown(opt=protocol)
-    tb.hub_2.to_wbx.shutdown(opt=protocol)
-    result = True
-    return result
-
-def edn_host_switch_active_to_standby():
+def edn_host_1_switch_active_to_standby():
     result = True
     log_file.info("")
-    log_file.info("--------------------------------------------------------")
-    log_file.info("Simulate an EDN host activity switch - active to standby")
-    log_file.info("--------------------------------------------------------")
+    log_file.info("----------------------------------------------------------")
+    log_file.info("Simulate an EDN host 1 activity switch - active to standby")
+    log_file.info("----------------------------------------------------------")
     tb.ixr6.to_vc_sn_1_1_A.shutdown(opt=protocol)
     tb.ixr6.to_vc_sn_1_2_A.shutdown(opt=protocol)
     tb.ixr6.to_vc_sn_1_1_S.no_shutdown(opt=protocol)
@@ -1229,12 +1173,12 @@ def edn_host_switch_active_to_standby():
     #    result = False
     return result
 
-def edn_host_switch_standby_to_active():
+def edn_host_1_switch_standby_to_active():
     result = True
     log_file.info("")
-    log_file.info("--------------------------------------------------------")
-    log_file.info("Simulate an EDN host activity switch - standby to active")
-    log_file.info("--------------------------------------------------------")
+    log_file.info("----------------------------------------------------------")
+    log_file.info("Simulate an EDN host 1 activity switch - standby to active")
+    log_file.info("----------------------------------------------------------")
     tb.ixr6.to_vc_sn_1_1_S.shutdown(opt=protocol)
     tb.ixr6.to_vc_sn_1_2_S.shutdown(opt=protocol)
     tb.ixr6.to_vc_sn_1_1_A.no_shutdown(opt=protocol)
@@ -1407,17 +1351,17 @@ def fail_exit_1_to_pe():
 
     result = True
 
-    tb.bl_1.to_ense_vxlan.shutdown(opt=protocol)
+    tb.bl_1.to_pe.shutdown(opt=protocol)
     return result
 
 def fail_exit_2_to_pe():
 
     result = True
 
-    tb.bl_2.to_ense_vxlan.shutdown(opt=protocol)
+    tb.bl_2.to_pe.shutdown(opt=protocol)
     return result
 
-def fail_mec_wsn_access_1_to_border_leaf_1():
+def fail_mec_access_1_to_border_leaf_1():
     result = True
     log_file.info("")
     log_file.info("---------------------------------------")
@@ -1426,7 +1370,7 @@ def fail_mec_wsn_access_1_to_border_leaf_1():
     tb.ixrs_110.to_bl1_1.shutdown(opt=protocol)
     return result
 
-def fail_mec_wsn_access_1_to_border_leaf_2():
+def fail_mec_access_1_to_border_leaf_2():
     result = True
     log_file.info("")
     log_file.info("---------------------------------------")
@@ -1435,25 +1379,74 @@ def fail_mec_wsn_access_1_to_border_leaf_2():
     tb.ixrs_110.to_bl2_1.shutdown(opt=protocol)
     return result
 
-def fail_mec_edn_access_1_to_border_leaf_1():
+def fail_mec_access_2_to_border_leaf_1():
     result = True
     log_file.info("")
     log_file.info("---------------------------------------")
-    log_file.info("Fail MEC EDN Access 1 to Border Leaf 1 ")
+    log_file.info("Fail MEC EDN Access 2 to Border Leaf 1 ")
     log_file.info("---------------------------------------")  
     tb.ixrs_127.to_bl1_1.shutdown(opt=protocol)
     return result
 
-def fail_mec_edn_access_1_to_border_leaf_2():
+def fail_mec_access_2_to_border_leaf_2():
     result = True
     log_file.info("")
     log_file.info("---------------------------------------")
-    log_file.info("Fail MEC EDN Access 1 to Border Leaf 2 ")
+    log_file.info("Fail MEC EDN Access 2 to Border Leaf 2 ")
     log_file.info("---------------------------------------")  
     tb.ixrs_127.to_bl2_1.shutdown(opt=protocol)
     return result
 
-def switch_cpm_vc():
+def fail_mec_access_3_to_border_leaf_1():
+    result = True
+    log_file.info("")
+    log_file.info("---------------------------------------")
+    log_file.info("Fail MEC EDN Access 3 to Border Leaf 1 ")
+    log_file.info("---------------------------------------")  
+    tb.ixrs_156.to_bl1_1.shutdown(opt=protocol)
+    return result
+
+def fail_mec_access_3_to_border_leaf_2():
+    result = True
+    log_file.info("")
+    log_file.info("---------------------------------------")
+    log_file.info("Fail MEC EDN Access 3 to Border Leaf 2 ")
+    log_file.info("---------------------------------------")  
+    tb.ixrs_156.to_bl2_1.shutdown(opt=protocol)
+    return result
+
+def mec_host_1_mgt_active_to_standby():
+    result = True
+    log_file.info("")
+    log_file.info("---------------------------------------------")
+    log_file.info("Simulate MEC EDN host 1 Active->Stanby switch")
+    log_file.info("---------------------------------------------")  
+    tb.wbx32.to_ixrs_156_host_1_standby.shutdown(opt=protocol)
+    tb.wbx32.to_ixrs_127_host_1_active.shutdown(opt=protocol)
+    tb.wbx32.to_ixrs_156_host_1_standby.no_shutdown(opt=protocol)
+    return result
+
+def mec_host_2_mgt_active_to_standby():
+    result = True
+    log_file.info("")
+    log_file.info("---------------------------------------------")
+    log_file.info("Simulate MEC EDN host 2 Active->Stanby switch")
+    log_file.info("---------------------------------------------")  
+    tb.wbx32.to_ixrs_127_host_2_standby.shutdown(opt=protocol)
+    tb.wbx32.to_ixrs_156_host_2_active.shutdown(opt=protocol)
+    tb.wbx32.to_ixrs_127_host_2_standby.no_shutdown(opt=protocol)
+    return result
+
+def mec_subnet_1_vrrp_switch():
+    result = True
+    log_file.info("")
+    log_file.info("------------------------------------------")
+    log_file.info("Cause MEC EDN Subnet 1 VRRP switch B1->BL2")
+    log_file.info("------------------------------------------")  
+    tb.bl_1.send_cli_command('/configure service vprn 4 interface "MEC-EDN-Subnet-1" shutdown')
+    return result
+
+def switch_vc_cpm():
 
     log_file.info("")
     log_file.info("-----------------------------------")
@@ -1466,10 +1459,16 @@ def switch_cpm_vc():
     log_file.info("----------------------------------------------------")
     tb.ixr6.to_vc_sn_1_1_A.shutdown(opt=protocol)
     tb.ixr6.to_vc_sn_1_2_A.shutdown(opt=protocol)
+    tb.ixr6.to_vc_sn_2_1_A.shutdown(opt=protocol)
+    tb.ixr6.to_vc_sn_2_2_A.shutdown(opt=protocol)
+    tb.ixr6.to_vc_sn_3_1_A.shutdown(opt=protocol)
+    tb.ixr6.to_vc_sn_3_2_A.shutdown(opt=protocol)
     tb.ixr6.to_vc_sn_1_1_S.no_shutdown(opt=protocol)
     tb.ixr6.to_vc_sn_1_2_S.no_shutdown(opt=protocol)
-    tb.ixr6.send_cli_command('/clear service id %s fdb all' %(tb.ixr6.edn_vpls_411.id)) 
-    tb.ixr6.send_cli_command('/clear service id %s fdb all' %(tb.ixr6.edn_vpls_412.id)) 
+    tb.ixr6.to_vc_sn_2_1_S.no_shutdown(opt=protocol)
+    tb.ixr6.to_vc_sn_2_2_S.no_shutdown(opt=protocol)
+    tb.ixr6.to_vc_sn_3_1_S.no_shutdown(opt=protocol)
+    tb.ixr6.to_vc_sn_3_2_S.no_shutdown(opt=protocol)
     result = True
 
     return result
@@ -1482,19 +1481,37 @@ def restore_base_set_up(mode):
     log_file.info("-----------------------------------")
     for nx in tb.node_dict.values():
         for px in nx.port_dict.values() :
-            px.no_shutdown(opt=protocol,verbose=False)
+            px.no_shutdown(opt=protocol)
+
     tb.ixr6.to_vc_sn_1_1_A.no_shutdown(opt=protocol)
     tb.ixr6.to_vc_sn_1_2_A.no_shutdown(opt=protocol)
+    tb.ixr6.to_vc_sn_2_1_A.no_shutdown(opt=protocol)
+    tb.ixr6.to_vc_sn_2_2_A.no_shutdown(opt=protocol)
+    tb.ixr6.to_vc_sn_3_1_A.no_shutdown(opt=protocol)
+    tb.ixr6.to_vc_sn_3_2_A.no_shutdown(opt=protocol)
     tb.ixr6.to_vc_sn_1_1_S.shutdown(opt=protocol)
     tb.ixr6.to_vc_sn_1_2_S.shutdown(opt=protocol)
+    tb.ixr6.to_vc_sn_2_1_S.shutdown(opt=protocol)
+    tb.ixr6.to_vc_sn_2_2_S.shutdown(opt=protocol)
+    tb.ixr6.to_vc_sn_3_1_S.shutdown(opt=protocol)
+    tb.ixr6.to_vc_sn_3_2_S.shutdown(opt=protocol)
+
     tb.ixr6.send_cli_command('/clear service id %s fdb all' %(tb.ixr6.edn_vpls_411.id)) 
     tb.ixr6.send_cli_command('/clear service id %s fdb all' %(tb.ixr6.edn_vpls_412.id)) 
 
-    #Allan
-    restore_visp_1()
-    restore_visp_2()
-    restore_fw_1()
-    restore_fw_2()
+    tb.wbx32.to_ixrs_127_host_1_active.no_shutdown(opt=protocol)
+    tb.wbx32.to_ixrs_156_host_1_standby.shutdown(opt=protocol)
+
+    tb.wbx32.to_ixrs_156_host_2_active.no_shutdown(opt=protocol)
+    tb.wbx32.to_ixrs_127_host_2_standby.shutdown(opt=protocol)
+
+    tb.bl_1.send_cli_command('/configure service vprn 4 interface "MEC-EDN-Subnet-1" no shutdown')
+
+    # Uncomment out when VXLAN added back in
+    #restore_visp_1()
+    #restore_visp_2()
+    #restore_fw_1()
+    #restore_fw_2()
 
 
 def check_base_set_up(wait):
@@ -1526,6 +1543,19 @@ def check_base_set_up(wait):
                         log_file.info("BL to MLS port is down     - OK - it's expected")
                         log_file.info("-----------------------------------------------")
                         result = True
+                    elif 'to_ixrs_156_host_1_standby' in px.name:
+                        print (nx.name)
+                        if 'wbx32' in nx.name:
+                            log_file.info("-------------------------------------------------------------------")
+                            log_file.info("WBX32 host 1 standby to IXR-S 156 port is down - OK - it's expected")
+                            log_file.info("-------------------------------------------------------------------")
+                            result = True
+                    elif 'to_ixrs_127_host_2_standby' in px.name:
+                        if 'wbx32' in nx.name:
+                            log_file.info("-------------------------------------------------------------------")
+                            log_file.info("WBX32 host 2 standby to IXR-S 127 port is down - OK - it's expected")
+                            log_file.info("-------------------------------------------------------------------")
+                            result = True
                     else:
                         result = False 
         if result:
@@ -1542,6 +1572,7 @@ def check_base_set_up(wait):
 def check_stats(max_outage,testcase_name):
 
     result = True
+    plot_skip = False
 
     log_file.info("")
     log_file.info("--------------------------------------------------")
@@ -1552,10 +1583,36 @@ def check_stats(max_outage,testcase_name):
 
     for traffic_item in tb.ixia_poc.traffic_names:
         if tb.ixia_poc.get_stats(traffic_item,'rx') > tb.ixia_poc.get_stats(traffic_item,'tx'):
+            log_file.info("Traffic item %s Rx > Tx !" %(traffic_item))
+            log_file.info("Check if this is OK")
+            log_file.info("")
+            plot_skip = True
             if 'Multicast' in traffic_item:
                 log_file.info("Multicast Traffic item %s Rx > Tx !" %(traffic_item))
                 log_file.info("Multicast Traffic item %s Pass" %(traffic_item))
                 log_file.info("")
+            elif 'MEC-SR-EDN-Subnet-1-Host-1' in traffic_item:
+                if testcase_name == 'mec_host_2_mgt_active_to_standby':
+                    log_file.info("")
+                    log_file.info("MEC SR EDN Traffic item %s Rx > Tx !" %(traffic_item))
+                    log_file.info("MEC SR EDN Traffic item %s Pass" %(traffic_item))
+                    log_file.info("")
+                else:
+                    log_file.error("Unicast Traffic item %s Rx > Tx !" %(traffic_item))
+                    log_file.error("Unicast Traffic item %s Fail" %(traffic_item))
+                    log_file.error("")
+                    result = False
+            elif 'MEC-SR-EDN-Subnet-1-Host-2' in traffic_item:
+                if testcase_name == 'mec_host_1_mgt_active_to_standby':
+                    log_file.info("")
+                    log_file.info("MEC SR EDN Traffic item %s Rx > Tx !" %(traffic_item))
+                    log_file.info("MEC SR EDN Traffic item %s Pass" %(traffic_item))
+                    log_file.info("")
+                else:
+                    log_file.error("Unicast Traffic item %s Rx > Tx !" %(traffic_item))
+                    log_file.error("Unicast Traffic item %s Fail" %(traffic_item))
+                    log_file.error("")
+                    result = False
             else:
                 log_file.error("Unicast Traffic item %s Rx > Tx !" %(traffic_item))
                 log_file.error("Unicast Traffic item %s Fail" %(traffic_item))
@@ -1564,14 +1621,10 @@ def check_stats(max_outage,testcase_name):
         else:
             loss_ms = tb.ixia_poc.get_stats(traffic_item,'loss_ms')
             if loss_ms > max_outage:
-                if testcase_name == 'reboot_hub_1_access_no_vprn' or testcase_name == 'reboot_hub_1_access_vprn':
+                if testcase_name == 'reboot_hub_1':
                     if 'Hub-1' in traffic_item:
                         log_file.info("Traffic item %s Loss of %s ms > %s ms" %(traffic_item, loss_ms, max_outage))
                         log_file.info("But HUB 1 rebooted ... so outage OK")
-                        log_file.info("Traffic item %s Pass" %(traffic_item))
-                elif testcase_name == 'isolate_hub_1_access_no_vprn' or testcase_name == 'isolate_hub_1_access_vprn':
-                        log_file.info("Traffic item %s Loss of %s ms > %s ms" %(traffic_item, loss_ms, max_outage))
-                        log_file.info("But HUB 1 isolated ... so outage OK")
                         log_file.info("Traffic item %s Pass" %(traffic_item))
                 else:
                     log_file.error("Traffic item %s Loss of %s ms > %s ms" %(traffic_item, loss_ms, max_outage))
@@ -1583,7 +1636,7 @@ def check_stats(max_outage,testcase_name):
                 log_file.info("Traffic item %s Pass" %(traffic_item))
                 log_file.info("")
     
-    return result
+    return result, plot_skip
 
 
 def check_all_ports_for_errors():
@@ -1646,10 +1699,13 @@ def ping_all_nodes():
     log_file.info("")
     log_file.info("Ping IPv6 BOF Management Addresses")
     for nx in tb.node_dict.values():
-        if nx.ipv6 != '2001:4888:a2f:4025:192:168:0:1':
+        if nx.ipv6:
             if not nx.ping6():
-                log_file.error("Ping to %s failed" %(nx.name))
-                ping_result = False
+                log_file.info("Ping to %s failed ... back off and try once more" %(nx.name))
+                time.sleep(45)
+                if not nx.ping6():
+                    log_file.error("Ping to %s really failed" %(nx.name))
+                    ping_result = False
         else:
             log_file.info("Skip ping of %s - no mgmt_ipv6 address defined in yaml" %(nx.name))
 
@@ -1695,7 +1751,7 @@ def edn_route_check():
     log_file.info("Check: eNSE BL1 EDN route info")
     log_file.info("------------------------------")
 
-    res, cli_return = tb.bl_1.send_cli_command("show router 4 route-table ipv6 12:1:74:1:1:1:1:11/128", see_return=True)
+    res, cli_return = tb.bl_1.send_cli_command("show router 4 route-table ipv6 12:1:74:1:1:1:1:11/128")
     if "12:1:74:1:1:1:1:11" not in cli_return:
         log_file.error("12:1:74:1:1:1:1:11/128 host route not seen on BL1")
         edn_result = False
@@ -1706,7 +1762,7 @@ def edn_route_check():
         log_file.error("12:1:74:1:1:1:1:11/128 should NOT be seen on BL1 via BGP VPN")
         edn_result = False
 
-    res, cli_return = tb.bl_1.send_cli_command("show router 4 route-table ipv6 12:1:74:1:1:1:1:12/128", see_return=True)
+    res, cli_return = tb.bl_1.send_cli_command("show router 4 route-table ipv6 12:1:74:1:1:1:1:12/128")
     if "12:1:74:1:1:1:1:12" not in cli_return:
         log_file.error("12:1:74:1:1:1:1:12/128 host route not seen on BL1")
         edn_result = False
@@ -1717,7 +1773,7 @@ def edn_route_check():
         log_file.error("12:1:74:1:1:1:1:12/128 should NOT be seen on BL1 via BGP VPN")
         edn_result = False
 
-    res, cli_return = tb.bl_1.send_cli_command("show router 4 route-table ipv6 12:1:127:1:1:1:1:2/64", see_return=True)
+    res, cli_return = tb.bl_1.send_cli_command("show router 4 route-table ipv6 12:1:127:1:1:1:1:2/64")
     if "12:1:127:1::/64" not in cli_return:
         log_file.error("12:1:127:1::/64 host route not seen on BL1")
         edn_result = False
@@ -1729,7 +1785,7 @@ def edn_route_check():
     log_file.info("Check: eNSE BL2 EDN route info")
     log_file.info("------------------------------")
 
-    res, cli_return = tb.bl_2.send_cli_command("show router 4 route-table ipv6 12:1:74:1:1:1:1:11/128", see_return=True)
+    res, cli_return = tb.bl_2.send_cli_command("show router 4 route-table ipv6 12:1:74:1:1:1:1:11/128")
     if "12:1:74:1:1:1:1:11" not in cli_return:
         log_file.error("12:1:74:1:1:1:1:11/128 host route not seen")
         edn_result = False
@@ -1740,7 +1796,7 @@ def edn_route_check():
         log_file.error("12:1:74:1:1:1:1:11/128 should NOT be seen on BL2 via BGP VPN")
         edn_result = False
 
-    res, cli_return = tb.bl_2.send_cli_command("show router 4 route-table ipv6 12:1:74:1:1:1:1:12/128", see_return=True)
+    res, cli_return = tb.bl_2.send_cli_command("show router 4 route-table ipv6 12:1:74:1:1:1:1:12/128")
     if "12:1:74:1:1:1:1:12" not in cli_return:
         log_file.error("12:1:74:1:1:1:1:12/128 host route not seen on BL2")
         edn_result = False
@@ -1751,7 +1807,7 @@ def edn_route_check():
         log_file.error("12:1:74:1:1:1:1:12/128 should NOT be seen on BL2 via BGP VPN")
         edn_result = False
 
-    res, cli_return = tb.bl_2.send_cli_command("show router 4 route-table ipv6 12:1:127:1:1:1:1:2/64", see_return=True)
+    res, cli_return = tb.bl_2.send_cli_command("show router 4 route-table ipv6 12:1:127:1:1:1:1:2/64")
     if "12:1:127:1::/64" not in cli_return:
         log_file.error("12:1:127:1::/64 host route not seen on BL2")
         edn_result = False
@@ -1762,17 +1818,17 @@ def edn_route_check():
     log_file.info("-----------------------")
     log_file.info("Check: eNSE AL3 EDN route info")
     log_file.info("-----------------------")
-    res, cli_return = tb.al_3.send_cli_command("show router 4 route-table ipv6 12:1:74:1:1:1:1:11/128", see_return=True)
+    res, cli_return = tb.al_3.send_cli_command("show router 4 route-table ipv6 12:1:74:1:1:1:1:11/128")
     if "ARP-ND" not in cli_return:
         log_file.error("12:1:74:1:1:1:1:11/128 should be seen on AL3 via ARP-ND")
         edn_result = False
 
-    res, cli_return = tb.al_3.send_cli_command("show router 4 route-table ipv6 12:1:74:1:1:1:1:12/128", see_return=True)
+    res, cli_return = tb.al_3.send_cli_command("show router 4 route-table ipv6 12:1:74:1:1:1:1:12/128")
     if "ARP-ND" not in cli_return:
         log_file.error("12:1:74:1:1:1:1:12/128 should be seen on AL3 via ARP-ND")
         edn_result = False
 
-    res, cli_return = tb.al_3.send_cli_command("show router 4 route-table ipv6 12:1:127:1:1:1:1:2/128", see_return=True)
+    res, cli_return = tb.al_3.send_cli_command("show router 4 route-table ipv6 12:1:127:1:1:1:1:2/128")
     if "12:1:127::/52" not in cli_return:
         log_file.error("12:1:127::/52 route NOT seen on AL3")
         edn_result = False
@@ -1784,17 +1840,17 @@ def edn_route_check():
     log_file.info("-----------------------")
     log_file.info("Check: eNSE AL4 EDN route info")
     log_file.info("-----------------------")
-    res, cli_return = tb.al_4.send_cli_command("show router 4 route-table ipv6 12:1:74:1:1:1:1:11/128", see_return=True)
+    res, cli_return = tb.al_4.send_cli_command("show router 4 route-table ipv6 12:1:74:1:1:1:1:11/128")
     if "ARP-ND" not in cli_return:
         log_file.error("12:1:74:1:1:1:1:11/128 should be seen on AL4 via ARP-ND")
         edn_result = False
 
-    res, cli_return = tb.al_4.send_cli_command("show router 4 route-table ipv6 12:1:74:1:1:1:1:12/128", see_return=True)
+    res, cli_return = tb.al_4.send_cli_command("show router 4 route-table ipv6 12:1:74:1:1:1:1:12/128")
     if "ARP-ND" not in cli_return:
         log_file.error("12:1:74:1:1:1:1:12/128 should be seen on AL4 via ARP-ND")
         edn_result = False
 
-    res, cli_return = tb.al_4.send_cli_command("show router 4 route-table ipv6 12:1:127:1:1:1:1:2/128", see_return=True)
+    res, cli_return = tb.al_4.send_cli_command("show router 4 route-table ipv6 12:1:127:1:1:1:1:2/128")
     if "12:1:127::/52" not in cli_return:
         log_file.error("12:1:127::/52 route NOT seen on AL4")
         edn_result = False
@@ -1807,7 +1863,7 @@ def edn_route_check():
     log_file.info("-----------------------")
     log_file.info("MEC IXRS 127 EDN route info")
     log_file.info("-----------------------")
-    res, cli_return = tb.ixrs_127.send_cli_command("show router 4 route-table ipv6 12:1:74:1:1:1:1:11/128", see_return=True)
+    res, cli_return = tb.ixrs_127.send_cli_command("show router 4 route-table ipv6 12:1:74:1:1:1:1:11/128")
     if "12:1:74:1:1:1:1:11/128" not in cli_return:
         log_file.error("12:1:74:1:1:1:1:11/128 host route not seen on IXR")
         edn_result = False
@@ -1816,7 +1872,7 @@ def edn_route_check():
         log_file.error("12:1:74:1:1:1:1:11/128 host route not seen on IXR via BGP VPN")
         edn_result = False
 
-    res, cli_return = tb.ixrs_127.send_cli_command("show router 4 route-table ipv6 12:1:74:1:1:1:1:12/128", see_return=True)
+    res, cli_return = tb.ixrs_127.send_cli_command("show router 4 route-table ipv6 12:1:74:1:1:1:1:12/128")
     if "12:1:74:1:1:1:1:12/128" not in cli_return:
         log_file.error("12:1:74:1:1:1:1:12/128 host route not seen on IXR")
         edn_result = False
@@ -1825,7 +1881,7 @@ def edn_route_check():
         log_file.error("12:1:74:1:1:1:1:12/128 host route not seen on IXR via BGP VPN")
         edn_result = False
 
-    res, cli_return = tb.ixrs_127.send_cli_command("show router 4 route-table ipv6 12:1:127:1:1:1:1:2/64", see_return=True)
+    res, cli_return = tb.ixrs_127.send_cli_command("show router 4 route-table ipv6 12:1:127:1:1:1:1:2/64")
     if "12:1:127:1::/64" not in cli_return:
         log_file.error("12:1:127:1::/64 host not seen on IXR")
         edn_result = False
@@ -1843,46 +1899,61 @@ def edn_route_check():
 
     return edn_result
 
+def testbed_teardown():
+    log_file.info("")
+    log_file.info("-------------------------------")
+    log_file.info("Testbed teardown")
+    log_file.info("Close SSH sessions to all nodes")
+    log_file.info("-------------------------------")
+    log_file.info("")
+    for nx in tb.node_dict.values():
+       nx.close()
+
+
 def main(testcase_name='',testsuite_name='vzw_5g_poc',csv='false',testbed_file='vzw_5g_poc.yaml'):
 
     test_pass                  = True 
-    #test_path                 = '/automation/python/tests/'
-    #testbed_file              = test_path+testbed_file
+    plot_skip                  = False 
     port_wait                  = 120
     underlay                   = 'v4'
     max_outage_sanity          = 0
     max_outage_default         = 250
-    max_outage_reboot          = 2000
+    max_outage_reboot          = 3000
+    max_outage_reboot_temp     = 15000
     max_outage_vrrp            = 4000
-    max_outage_edn_host_switch = 2000
+    max_outage_edn_host_switch = 4000
     max_outage_visp_fail       = 4500
     max_outage_fw_fail         = 4500
     max_outage_vc_cpm_host_switch = 20000
 
-
     # Initialize the testbed
-    testbed_init(testbed_file)
+    global tb
+    if not tb: tb = testbed_init(testbed_file)
+
+    if 'testbed_teardown' in testcase_name:
+        testbed_teardown()
+        test_result_list = generate_test_result_list(testcase_name,True,True)
+        return test_result_list
+
+    # Print xml
+    #tb.al_5.print_xml()
 
     # Shutdown links to MLS1 and MLS2
-    log_file.info("")
-    log_file.info("-----------------------------------")
-    log_file.info("Shutdown links to MLS1 and MLS2")
-    log_file.info("Offload Project")
-    log_file.info("-----------------------------------")
-    tb.bl_1.to_mls_1.shutdown(opt=protocol)
-    tb.bl_2.to_mls_2.shutdown(opt=protocol)
+    #log_file.info("")
+    #log_file.info("-----------------------------------")
+    #log_file.info("Shutdown links to MLS1 and MLS2")
+    #log_file.info("Offload Project")
+    #log_file.info("-----------------------------------")
+    #tb.bl_1.to_mls_1.shutdown(opt=protocol)
+    #tb.bl_2.to_mls_2.shutdown(opt=protocol)
 
     # Print testbed info
     print_testbed_info()
-
     
     # Set testbed mode based on testcase name
-    if 'access_no_vprn' in testcase_name:
-        mode = 'access_no_vprn'
-    elif 'access_vprn' in testcase_name:
+    if 'access_vprn' in testcase_name:
         mode = 'access_vprn'
     else:
-        log_file.error("Can't find testbed mode .. assume no VPRNs on access nodes")
         mode = 'access_no_vprn'
 
     testbed_config(mode,underlay)
@@ -1907,7 +1978,7 @@ def main(testcase_name='',testsuite_name='vzw_5g_poc',csv='false',testbed_file='
         tb.imn_102.admin_save()
         tb.imn_105.admin_save()
         tb.vc.admin_save()
-        tb.vxlan_al_1.admin_save()
+        #tb.vxlan_al_1.admin_save()
     else:
         log_file.info("")
         log_file.info("-------------------------------------")
@@ -1951,12 +2022,13 @@ def main(testcase_name='',testsuite_name='vzw_5g_poc',csv='false',testbed_file='
         log_file.info("")
         log_file.info("-----------------------------------")
         log_file.info("Enable the following Ixia streams: ")
-        log_file.info("- eNSE RAN ")
+        log_file.info("- eNSE RAN unicast")
+        log_file.info("- eNSE RAN multicast")
         log_file.info("- eNSE EDN ")
         log_file.info("- MEC  WSN ")
         log_file.info("- MEC  EDN ")
         log_file.info("-----------------------------------")
-        ixia_pattern = '-v' 
+        ixia_pattern = 'a-' 
 
     log_file.info("")
     log_file.info("-----------------------------------")
@@ -1985,6 +2057,13 @@ def main(testcase_name='',testsuite_name='vzw_5g_poc',csv='false',testbed_file='
         log_file.error("-----------------------------------")
 
     log_file.info("")
+    log_file.info("-------------------------------------------")
+    log_file.info("Force simulated MEC EDN host to active NIC ")
+    log_file.info("-------------------------------------------")
+    tb.wbx32.to_ixrs_127_host_1_active.no_shutdown(opt=protocol)
+    tb.wbx32.to_ixrs_156_host_1_standby.shutdown(opt=protocol)
+
+    log_file.info("")
     log_file.info("-----------------------------------")
     log_file.info('Check all nodes for hw errors')
     log_file.info("-----------------------------------")
@@ -1998,25 +2077,29 @@ def main(testcase_name='',testsuite_name='vzw_5g_poc',csv='false',testbed_file='
     #log_file.info('Check all expected ISIS adjacencies are up')
     #log_file.info("------------------------------------------")
 
-    log_file.info("")
-    log_file.info("------------------------------------------")
-    log_file.info('Check PIM has been resolved')
-    log_file.info("------------------------------------------")
-    if not tb.hub_1.wait_pim_resolved(tb.hub_1.ran_vprn.id,'ipv6',60): test_pass = False
-    else:
-        log_file.info('PIM resolved.  Look at details on Hub 1')
-        tb.hub_1.send_cli_command('show router %s pim group %s' %(tb.hub_1.ran_vprn.id,'ipv6'), see_return=True)
+    # Allan
+    # Put PIM back in when RAN back in
+    #log_file.info("")
+    #log_file.info("------------------------------------------")
+    #log_file.info('Check PIM has been resolved')
+    #log_file.info("------------------------------------------")
+    #if not tb.hub_1.wait_pim_resolved(tb.hub_1.ran_vprn.id,'ipv6',60): test_pass = False
+    #else:
+    #    log_file.info('PIM resolved.  Look at details on Hub 1')
+    #    tb.hub_1.send_cli_command('show router %s pim group %s' %(tb.hub_1.ran_vprn.id,'ipv6'))
 
+    # Allan
+    # Put back in when BGP finalized
     log_file.info("")
     log_file.info("------------------------------------------")
     log_file.info('Look at the number of BGP routes')
     log_file.info("------------------------------------------")
     log_file.info("")
-    tb.bl_1.send_cli_command('show router bgp summary neighbor 1.1.1.110 |  match Summary post-lines 13' , see_return=True)
+    tb.bl_1.send_cli_command('show router bgp summary neighbor 1.1.1.110 |  match Summary post-lines 13')
     log_file.info("")
-    tb.bl_1.send_cli_command('show router bgp summary neighbor 1.1.1.127 |  match Summary post-lines 13' , see_return=True)
+    tb.bl_1.send_cli_command('show router bgp summary neighbor 1.1.1.127 |  match Summary post-lines 13')
     log_file.info("")
-    tb.bl_1.send_cli_command('show router bgp summary neighbor 1.1.1.74 |  match Summary post-lines 13' , see_return=True)
+    tb.bl_1.send_cli_command('show router bgp summary neighbor 1.1.1.74 |  match Summary post-lines 13')
 
     log_file.info("------------------------------------------")
     log_file.info('Ping all nodes ')
@@ -2030,6 +2113,11 @@ def main(testcase_name='',testsuite_name='vzw_5g_poc',csv='false',testbed_file='
     log_file.info("------------------------------------------")
     if not check_imn_inband_mgt(): 
         test_pass = False
+
+    #Allan
+    #Check the EDN host routes
+    #Ensure MEC BGP VPN and eNSE EVPN are separate
+    #if not edn_route_check(): test_pass = False
 
     if not test_pass:
         log_file.info("")
@@ -2054,16 +2142,16 @@ def main(testcase_name='',testsuite_name='vzw_5g_poc',csv='false',testbed_file='
         print_test_result(testcase_name,test_pass, duration)
 
     else:
-        log_file.info("")
-        log_file.info("-----------------------------------")
-        log_file.info("Force Hub 1 to be RAN VRRP Master ")
-        log_file.info("-----------------------------------")
-        tb.ca_1.to_hub_2.shutdown(opt=protocol)
-        time.sleep(5)
-        tb.ca_1.to_hub_2.no_shutdown(opt=protocol)
+        # Allan
+        # Put back in when RAN back in
+        #log_file.info("")
+        #log_file.info("-----------------------------------")
+        #log_file.info("Force Hub 1 to be RAN VRRP Master ")
+        #log_file.info("-----------------------------------")
+        #tb.ca_1.to_hub_2.shutdown(opt=protocol)
+        #time.sleep(3)
+        #tb.ca_1.to_hub_2.no_shutdown(opt=protocol)
 
-        #Allan
-        if not edn_route_check(): test_pass = False
         log_file.info("")
         log_file.info("-----------------------------------")
         log_file.info("Enable Ixia streams")
@@ -2081,18 +2169,15 @@ def main(testcase_name='',testsuite_name='vzw_5g_poc',csv='false',testbed_file='
         else:
             tb.ixia_poc.set_traffic(pattern=ixia_pattern, commit=True)
 
-
         log_file.info("")
         log_file.info("-----------------------------------")
         log_file.info("Start Ixia streams")
         log_file.info("-----------------------------------")
         tb.ixia_poc.start_traffic()
-
-        utils.countdown(10)
+        utils.countdown(5)
 
         # Clear Ixia stats  
         tb.ixia_poc.clear_stats()
-        tb.vxlan_al_1.send_cli_command("/clear service statistics id [1000,2000,1100,2100] counters")
         utils.countdown(10)
 
         # Show initial traffic flow 
@@ -2119,7 +2204,7 @@ def main(testcase_name='',testsuite_name='vzw_5g_poc',csv='false',testbed_file='
             if not testbed_setup():  test_pass = False
         elif 'testbed_teardown' in testcase_name:
             if not testbed_teardown():  test_pass = False
-        elif 'sanity_access' in testcase_name:
+        elif 'ense_sanity' in testcase_name:
             max_outage = max_outage_sanity 
         elif 'e_w_local_hub_sanity_access' in testcase_name:
             max_outage = max_outage_sanity 
@@ -2163,21 +2248,10 @@ def main(testcase_name='',testsuite_name='vzw_5g_poc',csv='false',testbed_file='
             if not fail_exit_2_to_spine_1(): test_pass = False 
         elif 'fail_exit_2_to_spine_2' in testcase_name:
             if not fail_exit_2_to_spine_2(): test_pass = False 
-        elif 'fail_exit_1_to_ense_vxlan' in testcase_name:
-            if not fail_exit_1_to_ense_vxlan(): test_pass = False 
-        elif 'fail_exit_2_to_ense_vxlan_access' in testcase_name:
-            if not fail_exit_2_to_ense_vxlan(): test_pass = False 
-        elif 'isolate_exit_1' in testcase_name:
-            max_outage = max_outage_reboot 
-            if not isolate_exit_1(): test_pass = False 
-        elif 'isolate_spine_1' in testcase_name:
-            max_outage = max_outage_reboot 
-            if not isolate_spine_1(): test_pass = False 
-        elif 'isolate_access_1' in testcase_name:
-            max_outage = max_outage_reboot 
-            if not isolate_access_1(): test_pass = False 
-        elif 'isolate_hub_1' in testcase_name:
-            if not isolate_hub_1(): test_pass = False 
+        elif 'fail_exit_1_to_pe' in testcase_name:
+            if not fail_exit_1_to_pe(): test_pass = False 
+        elif 'fail_exit_2_to_pe' in testcase_name:
+            if not fail_exit_2_to_pe(): test_pass = False 
         elif 'reboot_exit_1' in testcase_name:
             max_outage = max_outage_reboot 
             if not reboot_exit_1(): test_pass = False 
@@ -2189,65 +2263,28 @@ def main(testcase_name='',testsuite_name='vzw_5g_poc',csv='false',testbed_file='
             if not reboot_hub_1(): test_pass = False 
         elif 'reboot_access_3' in testcase_name:
             if not reboot_access_3(): test_pass = False 
-        elif 'edn_host_switch_active_to_standby' in testcase_name:
+        elif 'reboot_access_4' in testcase_name:
+            max_outage = max_outage_reboot_temp 
+            if not reboot_access_4(): test_pass = False 
+        elif 'edn_host_1_switch_active_to_standby' in testcase_name:
             max_outage = max_outage_edn_host_switch
-            if not edn_host_switch_active_to_standby(): test_pass = False 
-        elif 'edn_host_switch_standby_to_active' in testcase_name:
+            if not edn_host_1_switch_active_to_standby(): test_pass = False 
+        elif 'edn_host_1_switch_standby_to_active' in testcase_name:
             max_outage = max_outage_edn_host_switch
-            if not edn_host_switch_standby_to_active(): test_pass = False 
+            if not edn_host_1_switch_standby_to_active(): test_pass = False 
         elif 'edn_vc_uplink_1_fail' in testcase_name:
             max_outage = max_outage_edn_host_switch
             if not edn_vc_uplink_1_fail(): test_pass = False 
         elif 'edn_vc_uplink_2_fail' in testcase_name:
             max_outage = max_outage_edn_host_switch
             if not edn_vc_uplink_2_fail(): test_pass = False 
-        elif 'switch_cpm_vc' in testcase_name:
+        elif 'switch_vc_cpm' in testcase_name:
             max_outage = max_outage_vc_cpm_host_switch
             if tb.vc.get_active_cpm() == 'B':
                 log_file.info("Skipping: CPM-IMM switchover on 7210 VC")
                 log_file.info("Skipping: CPM-A in needs to be active for this test")
             else:
-                if not switch_cpm_vc(): test_pass = False 
-        elif 'vxlan_fail_vxlan_access_1_to_vxlan_spine_1' in testcase_name:
-            if not fail_vxlan_access_1_to_vxlan_spine_1(): test_pass = False 
-        elif 'vxlan_fail_vxlan_access_1_to_vxlan_spine_2' in testcase_name:
-            if not fail_vxlan_access_1_to_vxlan_spine_2(): test_pass = False 
-        elif 'vxlan_fail_vxlan_access_2_to_vxlan_spine_2' in testcase_name:
-            if not fail_vxlan_access_2_to_vxlan_spine_2(): test_pass = False 
-        elif 'vxlan_fail_vxlan_access_2_to_vxlan_spine_2' in testcase_name:
-            if not fail_vxlan_access_2_to_vxlan_spine_2(): test_pass = False 
-        elif 'vxlan_fail_exit_1_to_vxlan_spine_1' in testcase_name:
-            if not fail_exit_1_to_vxlan_spine_1(): test_pass = False 
-        elif 'vxlan_fail_exit_1_to_vxlan_spine_2' in testcase_name:
-            if not fail_exit_1_to_vxlan_spine_2(): test_pass = False 
-        elif 'vxlan_fail_exit_2_to_vxlan_spine_1' in testcase_name:
-            if not fail_exit_2_to_vxlan_spine_1(): test_pass = False 
-        elif 'vxlan_fail_exit_2_to_vxlan_spine_2' in testcase_name:
-            if not fail_exit_2_to_vxlan_spine_2(): test_pass = False 
-        elif 'vxlan_fail_exit_1_to_pe' in testcase_name:
-            if not fail_exit_1_to_pe(): test_pass = False 
-        elif 'vxlan_fail_exit_2_to_pe' in testcase_name:
-            if not fail_exit_2_to_pe(): test_pass = False 
-        elif 'vxlan_fail_visp_1' in testcase_name:
-            max_outage = max_outage_visp_fail
-            if not fail_visp_1(): test_pass = False 
-        elif 'vxlan_fail_visp_2' in testcase_name:
-            max_outage = max_outage_visp_fail
-            if not fail_visp_2(): test_pass = False 
-        elif 'vxlan_fail_both_visp' in testcase_name:
-            max_outage = max_outage_visp_fail
-            if not fail_both_visp(): test_pass = False 
-        elif 'vxlan_fail_fw_1' in testcase_name:
-            max_outage = max_outage_fw_fail
-            if not fail_fw_1(): test_pass = False 
-        elif 'vxlan_fail_fw_2' in testcase_name:
-            max_outage = max_outage_fw_fail
-            if not fail_fw_2(): test_pass = False 
-        elif 'vxlan_reboot_vxlan_spine_1' in testcase_name:
-            if not reboot_vxlan_spine_1(): test_pass = False 
-        elif 'vxlan_reboot_exit_2' in testcase_name:
-            max_outage = max_outage_reboot 
-            if not reboot_exit_2(): test_pass = False 
+                if not switch_vc_cpm(): test_pass = False 
         elif 'ran_vrrp_fail_and_recover' in testcase_name:
             max_outage = max_outage_vrrp 
             if not ran_vrrp_switch_and_recover():  test_pass = False
@@ -2259,14 +2296,27 @@ def main(testcase_name='',testsuite_name='vzw_5g_poc',csv='false',testbed_file='
             if not fail_vc_uplink_2():  test_pass = False
         elif 'mec_sanity' in testcase_name:
             max_outage = max_outage_sanity 
-        elif 'mec_fail_wsn_access_1_to_border_leaf_1' in testcase_name:
-            if not fail_mec_wsn_access_1_to_border_leaf_1():  test_pass = False
-        elif 'mec_fail_wsn_access_1_to_border_leaf_2' in testcase_name:
-            if not fail_mec_wsn_access_1_to_border_leaf_2():  test_pass = False
-        elif 'mec_fail_edn_access_1_to_border_leaf_1' in testcase_name:
-            if not fail_mec_edn_access_1_to_border_leaf_1():  test_pass = False
-        elif 'mec_fail_edn_access_1_to_border_leaf_2' in testcase_name:
-            if not fail_mec_edn_access_1_to_border_leaf_2():  test_pass = False
+        elif 'mec_fail_access_1_to_border_leaf_1' in testcase_name:
+            if not fail_mec_access_1_to_border_leaf_1():  test_pass = False
+        elif 'mec_fail_access_1_to_border_leaf_2' in testcase_name:
+            if not fail_mec_access_1_to_border_leaf_2():  test_pass = False
+        elif 'mec_fail_access_2_to_border_leaf_1' in testcase_name:
+            if not fail_mec_access_2_to_border_leaf_1():  test_pass = False
+        elif 'mec_fail_access_2_to_border_leaf_2' in testcase_name:
+            if not fail_mec_access_2_to_border_leaf_2():  test_pass = False
+        elif 'mec_fail_access_3_to_border_leaf_1' in testcase_name:
+            if not fail_mec_access_3_to_border_leaf_1():  test_pass = False
+        elif 'mec_fail_access_3_to_border_leaf_2' in testcase_name:
+            if not fail_mec_access_3_to_border_leaf_2():  test_pass = False
+        elif 'mec_host_1_mgt_active_to_standby' in testcase_name:
+            max_outage = max_outage_edn_host_switch 
+            if not mec_host_1_mgt_active_to_standby(): test_pass = False
+        elif 'mec_host_2_mgt_active_to_standby' in testcase_name:
+            max_outage = max_outage_edn_host_switch 
+            if not mec_host_2_mgt_active_to_standby(): test_pass = False
+        elif 'mec_subnet_1_vrrp_switch' in testcase_name:
+            max_outage = max_outage_vrrp 
+            if not mec_subnet_1_vrrp_switch(): test_pass = False
         else:
             log_file.error("Testcase %s does not exist" %(testcase_name))
 
@@ -2274,15 +2324,6 @@ def main(testcase_name='',testsuite_name='vzw_5g_poc',csv='false',testbed_file='
         if 'reboot' not in testcase_name:
             if 'sanity' not in testcase_name:
                 utils.countdown(30)
-                if 'vxlan' in testcase_name:
-                    #tb.vxlan_al_1.sshcon.cmdline("/clear service statistics id %s counters" %(tb.vxlan_al_1.visp_1.id), timeout=0)
-                    #tb.vxlan_al_1.sshcon.cmdline("/clear service statistics id %s counters" %(tb.vxlan_al_1.fw_1.id), timeout=0)
-                    #tb.vxlan_al_1.sshcon.cmdline("/clear service statistics id %s counters" %(tb.vxlan_al_1.fw_2.id), timeout=0)
-                    #tb.vxlan_al_1.send_cli_command("/clear service statistics id %s counters" %(tb.vxlan_al_1.visp_1.id))
-                    #tb.vxlan_al_1.send_cli_command("/clear service statistics id %s counters" %(tb.vxlan_al_1.visp_2.id))
-                    #tb.vxlan_al_1.send_cli_command("/clear service statistics id %s counters" %(tb.vxlan_al_1.fw_1.id))
-                    #tb.vxlan_al_1.send_cli_command("/clear service statistics id %s counters" %(tb.vxlan_al_1.fw_2.id))
-                    tb.vxlan_al_1.send_cli_command("/clear service statistics id [1000,2000,1100,2100] counters")
                 log_file.info("")
                 log_file.info("------------------------------------------")
                 log_file.info('Traffic flow after network failure')
@@ -2303,14 +2344,16 @@ def main(testcase_name='',testsuite_name='vzw_5g_poc',csv='false',testbed_file='
                     show_south_traffic_util()
 
                 # Check PIM again 
-                log_file.info("")
-                log_file.info("------------------------------------------")
-                log_file.info('Check PIM is still resolved')
-                log_file.info("------------------------------------------")
-                if not tb.hub_1.wait_pim_resolved(tb.hub_1.ran_vprn.id,'ipv6',60): test_pass = False
-                else:
-                    log_file.info('PIM resolved.  Look at details on Hub 1')
-                    tb.hub_1.send_cli_command('show router %s pim group %s' %(tb.hub_1.ran_vprn.id,'ipv6'), see_return=True)
+                # Allan 
+                # Put back in when RAN back in
+                #log_file.info("")
+                #log_file.info("------------------------------------------")
+                #log_file.info('Check PIM is still resolved')
+                #log_file.info("------------------------------------------")
+                #if not tb.hub_1.wait_pim_resolved(tb.hub_1.ran_vprn.id,'ipv6',60): test_pass = False
+                #else:
+                #    log_file.info('PIM resolved.  Look at details on Hub 1')
+                #    tb.hub_1.send_cli_command('show router %s pim group %s' %(tb.hub_1.ran_vprn.id,'ipv6'))
 
         # Stop the Ixia streams
         tb.ixia_poc.stop_traffic()
@@ -2319,61 +2362,95 @@ def main(testcase_name='',testsuite_name='vzw_5g_poc',csv='false',testbed_file='
         log_file.info("------------------------------------------")
         log_file.info('Check inband management of IMN switches ')
         log_file.info("------------------------------------------")
-        if 'reboot_access_3' in testcase_name:
-            # Rebooting access leaf 3 isolates the IMNs
-            # So let the ping fail slide for now
-            # It's checked again in the reboot case below
-            log_file.info('Rebooting access leaf 3 isolates IMNs - lab infra ')
-            log_file.info('So do not run IMN ping test ')
-            test_pass = True
-        else:
-            if not check_imn_inband_mgt(): 
-                test_pass = False
-
         if 'reboot' in testcase_name:
             log_file.info('Reboot case')
             for nx in tb.node_dict.values():
-               if not nx.wait_node_up(300):
+               if not nx.wait_node_up2(300):
                    log_file.error ("Node %s ip %s not up after 300s" %(nx.sysname, nx.ip))
-            log_file.info("Nodes are back up.  But wont take CLI/SNMP commands for a while.  So wait.")    
-            utils.countdown(240)
+                   test_pass = False
 
             if not check_imn_inband_mgt(): 
                 test_pass = False
 
+        elif 'switch_vc_cpm' in testcase_name:
+            log_file.info('VC CPM switchover case')
+            if not tb.vc.wait_node_up2(300):
+                log_file.error ("Virtual Chassis %s ip %s not full redundant after 300s" %(tb.vc.sysname, tb.vc.ip))
+                test_pass = False
+        else:
+            log_file.info("")
+
+
         # Restore all testcase failures 
         restore_base_set_up(mode)
-        if testcase_name == 'fail_exit_1_to_ense_vxlan_access_no_vprn' or testcase_name == 'fail_exit_1_to_ense_vxlan_access_vprn' \
-            or testcase_name == 'fail_exit_2_to_ense_vxlan_access_no_vprn' or testcase_name == 'fail_exit_2_to_ense_vxlan_access_vprn' \
-            or testcase_name == 'isolate_exit_1_access_no_vprn' :
+        if '_to_pe' in testcase_name: 
             log_file.info('BL to VXLAN SAP ports have a hold time of 120s')
             log_file.info('Wait for 120s before checking port status')
             utils.countdown(120)
 
         if not check_base_set_up(30): test_pass = False
 
-        # Wait for both hubs to see the default route 
-        # from both exit leaves
-        if not tb.bl_1.wait_route_match('1','::/0',tb.bl_1.ran_vprn.def_nh,120): test_pass = False
-        if not tb.bl_2.wait_route_match('1','::/0',tb.bl_2.ran_vprn.def_nh,120): test_pass = False
+        log_file.info("--------------------------------------------------------------------")
+        log_file.info('Wait for both Border leaves to see the EDN default route from the PE')
+        log_file.info("--------------------------------------------------------------------")
+        log_file.info("")
+        if not tb.bl_1.wait_route_match(tb.bl_1.edn_vprn.id,'::/0',tb.bl_1.edn_vprn.def_nh,120): test_pass = False
+        if not tb.bl_2.wait_route_match(tb.bl_2.edn_vprn.id,'::/0',tb.bl_2.edn_vprn.def_nh,120): test_pass = False
+
+        log_file.info("-----------------------------------------------------------------------------------------")
+        log_file.info('Wait for both eNSE EDN access leaves to see the EDN default route from both Border Leaves')
+        log_file.info("-----------------------------------------------------------------------------------------")
+        log_file.info("")
+        if not tb.al_3.wait_route_match(tb.al_3.edn_vprn.id,'::/0',tb.al_3.edn_vprn.def_nh,120): test_pass = False
+        if not tb.al_3.wait_route_match(tb.al_3.edn_vprn.id,'::/0',tb.al_3.edn_vprn.def_nh_2,120): test_pass = False
+        if not tb.al_4.wait_route_match(tb.al_4.edn_vprn.id,'::/0',tb.al_4.edn_vprn.def_nh,120): test_pass = False
+        if not tb.al_4.wait_route_match(tb.al_4.edn_vprn.id,'::/0',tb.al_4.edn_vprn.def_nh_2,120): test_pass = False
+
+        log_file.info("-----------------------------------------------------------------------------------------")
+        log_file.info('Display EDN Host info on both eNSE EDN access leaves ')
+        log_file.info("-----------------------------------------------------------------------------------------")
+        log_file.info("")
+        tb.al_3.send_cli_command("show router 4 route-table 12.74.1.11")
+        tb.al_3.send_cli_command("show router 4 route-table 12.74.1.11")
+        tb.al_3.send_cli_command("show router 4 route-table 12.74.2.11")
+        tb.al_3.send_cli_command("show router 4 route-table 12.74.2.12")
+        tb.al_3.send_cli_command("show router 4 route-table 12.74.3.12")
+        tb.al_3.send_cli_command("show router 4 route-table 12.74.3.12")
+        tb.al_4.send_cli_command("show router 4 route-table 12.74.1.11")
+        tb.al_4.send_cli_command("show router 4 route-table 12.74.1.11")
+        tb.al_4.send_cli_command("show router 4 route-table 12.74.2.11")
+        tb.al_4.send_cli_command("show router 4 route-table 12.74.2.12")
+        tb.al_4.send_cli_command("show router 4 route-table 12.74.3.11")
+        tb.al_4.send_cli_command("show router 4 route-table 12.74.3.12")
 
         # Wait for both hubs to see the default route 
         # from both exit leaves
-        if underlay == 'v4':
-            # evpn with SR
-            if not tb.hub_1.wait_route_match('1','::/0',tb.hub_1.ran_vprn.def_nh,90): test_pass = False
-            if not tb.hub_2.wait_route_match('1','::/0',tb.hub_2.ran_vprn.def_nh,90): test_pass = False
-        else:
-            if not tb.hub_1.wait_route_match('1','::/0','1:1:1:111',90): test_pass = False
-            if not tb.hub_1.wait_route_match('1','::/0','1:1:1:112',90): test_pass = False
-            if not tb.hub_2.wait_route_match('1','::/0','1:1:1:111',90): test_pass = False
-            if not tb.hub_2.wait_route_match('1','::/0','1:1:1:112',90): test_pass = False
 
-        if not edn_route_check(): test_pass = False
+        # Allan - put back in post MEC
+        #if not tb.bl_1.wait_route_match('1','::/0',tb.bl_1.ran_vprn.def_nh,120): test_pass = False
+        #if not tb.bl_2.wait_route_match('1','::/0',tb.bl_2.ran_vprn.def_nh,120): test_pass = False
+
+        # Wait for both hubs to see the default route 
+        # from both exit leaves
+
+        # Allan - put back in post MEC
+        #if underlay == 'v4':
+        #    # evpn with SR
+        #    if not tb.hub_1.wait_route_match('1','::/0',tb.hub_1.ran_vprn.def_nh,90): test_pass = False
+        #    if not tb.hub_2.wait_route_match('1','::/0',tb.hub_2.ran_vprn.def_nh,90): test_pass = False
+        #else:
+        #    if not tb.hub_1.wait_route_match('1','::/0','1:1:1:111',90): test_pass = False
+        #    if not tb.hub_1.wait_route_match('1','::/0','1:1:1:112',90): test_pass = False
+        #    if not tb.hub_2.wait_route_match('1','::/0','1:1:1:111',90): test_pass = False
+        #    if not tb.hub_2.wait_route_match('1','::/0','1:1:1:112',90): test_pass = False
+
+        #if not edn_route_check(): test_pass = False
 
         # Check the Ixia stats 
-        if not check_stats(max_outage,testcase_name): test_pass = False 
+        #if not check_stats(max_outage,testcase_name): test_pass = False 
+        stats_result, plot_skip = check_stats(max_outage,testcase_name) 
 
+        if not stats_result:  test_pass = False
         # Stop the clock 
         end_time = datetime.now()
         test_dur = end_time - start_time
@@ -2383,21 +2460,11 @@ def main(testcase_name='',testsuite_name='vzw_5g_poc',csv='false',testbed_file='
         print_test_result(testcase_name,test_pass, duration)
 
         # Generate testlist
-        test_result_list = generate_test_result_list(testcase_name,test_pass)
+        test_result_list = generate_test_result_list(testcase_name,test_pass,plot_skip)
 
-        # No Shutdown links to MLS1 and MLS2
-        log_file.info("")
-        log_file.info("-----------------------------------")
-        log_file.info("No Shutdown links to MLS1 and MLS2")
-        log_file.info("Offload Project")
-        log_file.info("-----------------------------------")
-        #tb.bl_1.to_mls_1.no_shutdown(opt=protocol)
-        #tb.bl_2.to_mls_2.no_shutdown(opt=protocol)
+        # Dump out EDN host info
         utils.countdown(5)
 
-    # close ssh connections
-    for nx in tb.node_dict.values():
-       nx.close()
 
     return test_result_list
 

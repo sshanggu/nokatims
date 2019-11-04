@@ -12,18 +12,13 @@ import getopt
 import yaml
 import pdb
 import time
-import logging
 import attrdict 
-
 from datetime import datetime
 from easysnmp import Session
 from textwrap import dedent
 
 # Create a log file
-log_file=logging.getLogger(__name__)
-
-# Configure log file to output to stdout too
-log_file.addHandler(logging.StreamHandler(sys.stdout))
+log_file=utils.get_logger(__name__)
 
 testbed_data=attrdict.AttrDict()
 topology = 'none'

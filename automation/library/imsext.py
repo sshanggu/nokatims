@@ -8,18 +8,23 @@
 ##############################################################################
 from paramiko.channel import Channel
 from pexpect.pty_spawn import spawn
-import logging
 import pexpect
 import utils
 import time
 import re
 
-mylog = logging.getLogger(__name__)
-mylog.addHandler(logging.StreamHandler())
+mylog = utils.get_logger(__name__)
 
 
-def tmpf1(self, cmd=None, timeout=1, log=True):
-    """ send cmd via ssh. collect/return outputs """
+def sshcmd(self, cmd=None, timeout=1, log=True):
+    '''
+    Send cmd through node ssh session.
+
+    Parameters: cmd(str) -- command string
+                timeout(int) -- max time to wait node prompt
+                log(boolean) -- log cmd_output if True(default)
+    Return: cmd_output
+    '''
     if cmd:
         if not hasattr(self, 'prompt'):
             self.prompt = self.sysname + "#"
@@ -49,19 +54,68 @@ def tmpf1(self, cmd=None, timeout=1, log=True):
     return utils.fmtout(data, cmd)
 
 
+def mdconf(self, cmd):
+    '''
+    Send config command through model-driven edit-config global
+
+    Parameters: cmd(str) -- config command string (md style)
+    Return: (str) -- config command output
+    '''
+    self.cmdline('edit-config global', log=False)
+    cmdret = self.cmdline(cmd)
+    self.cmdline('commit', log=False)
+    self.cmdline('quit-config', log=False)
+    return cmdret
+
+
+def setmode(self, mode='classic'):
+    '''
+    Switch channel to specified configuration mode
+    self.mdcli = True if config-mode sets to model-driven
+    self.mdcli = False if config-mode sets to classic
+
+    Parameters: mode(str) -- 'classic'(default)|'md'
+    '''
+    cmd = '/!%s-cli' % (mode)
+    prompt = self.cmdline('\r', log=False)
+
+    if mode == 'classic':  # set to classic
+        if re.search(r'\[.*\]', prompt):
+            mylog.info('#! %s, model-driven => classic' % self.sysname)
+            if not re.search(r'\[\]', self.cmdline(cmd)):
+                self.cmdline('environment no more', log=False)
+                self.mdcli = self.node.mdcli = False
+    else:  # set to model-driven
+        if not re.search(r'\[.*\]', prompt):
+            mylog.info('#! %s, classic => model-driven' % self.sysname)
+            if re.search(r'\[\]', self.cmdline(cmd)):
+                self.cmdline('environment more false', log=False)
+                self.mdcli = self.node.mdcli = True
+    mylog.info('#! %s, in %s mode' %
+               (self.sysname, 'model-driven' if self.mdcli else 'classic'))
+
+
 @property
-def tmpf3(self):
+def is_active(self):
     return self.get_transport().is_active()
 
 
 # add methods in Channel class
-Channel.cmdline = tmpf1
-Channel.is_active = tmpf3
+Channel.cmdline = sshcmd
+Channel.mdconf = mdconf
+Channel.setmode = setmode
+Channel.is_active = is_active
 
 
-def tmpf2(self, cmd, timeout=40, log=True, prompt=None):
-    """ send cmd via telnet. collect/return outputs
-        timeout (default 40s) if prompt not expected """
+def telcmd(self, cmd, timeout=40, log=True, prompt=None):
+    '''
+    Send cmd via telnet session.
+
+    Parameters: cmd(str) -- command string
+                timeout(int) -- max time to wait node prompt
+                log(boolean) -- log cmd_output if True(default)
+    Return: cmd_outputs
+    '''
     mylog.info("%s %s" % (self.after.decode("utf-8"), cmd))
     if not prompt:
         prompt = r'(%s)|(\(y/n\)\?)' % self.prompt0  # or (y/n)?
@@ -77,5 +131,5 @@ def tmpf2(self, cmd, timeout=40, log=True, prompt=None):
     return data
 
 
-# add method tmpf2 in spawn class
-spawn.cmdline = tmpf2
+# add method to pexpect.pty_spawn.spawn class
+spawn.cmdline = telcmd

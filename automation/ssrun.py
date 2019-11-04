@@ -7,7 +7,7 @@
 # regrun suite-name
 # Author:
 # sam shangguan
-
+import time
 import matplotlib.pyplot as plt
 import re
 import os
@@ -15,7 +15,6 @@ import sys
 import ast
 import yaml
 import json
-import node
 import utils
 import numpy
 import pandas
@@ -59,9 +58,6 @@ if (__name__ == '__main__'):
         print("test suite <%s> not supported!" % runsuite)
         print("suite supported: %s" % validsuites)
         sys.exit(0)
-
-    # plot kpi diagram if runsuite['plotkpi'] is True
-    plotkpi = rd[runsuite].get('plotkpi')
 
     # make log directory if not exists
     logdir = os.path.join(LOGDIR, runsuite)
@@ -129,7 +125,7 @@ if (__name__ == '__main__'):
     for lh in logging.root.handlers:
         logging.root.removeHandler(lh)
 
-    # configure logging file, level and format
+    # configure logging file and format
     logging.basicConfig(filename=logfile,
         format='%(asctime)s %(name)s %(levelname)s %(message)s')
 
@@ -139,15 +135,83 @@ if (__name__ == '__main__'):
     mylog.info('Testbed file: %s' % tbyaml)
 
     # save testbed configuration before tests
+    import node
+    resultd = OrderedDict()
     bkdir = None
     bks = os.path.basename(BKPDIR)
-    if RUNNER == REGUSER and bks in suited and suited[bks]:
-        tb = node.Testbed(tbyaml, use_ixia=False)
-        for _, nd in tb.node_dict.items():
-            nd.backup_ftp()
-            nd.backup_xml()
-        bkdir = tb.bkup_dir
+    #if RUNNER == REGUSER and bks in suited and suited[bks]:
+    tb = node.Testbed(tbyaml, use_ixia=False)
+    
+    tb.al_5.send_command("show port", protocol='netconf')
+    for pt in tb.al_5:
+        pt.shutdown(opt='netconf')
+        pt.noshutdown(opt='netconf')
+    
+    tb.al_5.send_command("configure port 1/2/c12/4 shutdown", protocol='netconf')
+    tb.al_5.send_command("configure port 1/2/c12/4 no shutdown", protocol='netconf')
+    tb.al_5.send_command("configure port 1/2/c12/4 admin-state disable", protocol='netconf')
+    tb.al_5.send_command("port 1/2/c12/4 admin-state disable", protocol='netconf')
+    
+    tb.al_5.send_command("show port", style='md')
+    tb.al_5.send_command("show port", protocol='netconf')
+    tb.al_5.send_command("show port 1/2/c10", protocol='netconf')
+    tb.al_5.send_command("show system security user", protocol='netconf')
+    tb.al_5.send_command("show system management-interface configuration-sessions", protocol='netconf')
+
+    tb.al_5.send_command("configure port 1/2/c10 admin-state enable", style='md')
+    tb.al_5.send_command("show port")
+    tb.al_5.send_command("configure port 1/2/c10 admin-state disable", style='md')
+    tb.al_5.send_command("show port", style='md')
+    tb.al_5.send_command("configure port 1/2/c10 shutdown")
+    tb.al_5.send_command("show port | match 1/2/c10")
+    tb.al_5.send_command("configure port 1/2/c10 no shutdown")
+    tb.al_5.send_command("show port | match 1/2/c10")
+
+    resultd['shut/noshut port'] = 'PASS'
+    mylog.info('JSON result: %s' % json.dumps(resultd))
+    utils.log2html(logfile, logid, bkdir)
+    # restore SELinux security labels context of web
+    os.system("restorecon -R %s" % HTMLROOT)
+    sys.exit(0)
+    import pdb; pdb.set_trace()
+    
+#    import pdb; pdb.set_trace()
+
+# test backup via ftp and netconf
+    for nd in tb:
+        nd.backup_ftp()
+        nd.backup_xml()
+    bkdir = tb.bkup_dir
     mylog.info('Testbed backup: %s' % bkdir)
+    resultd['backup_case'] = 'PASS'
+    #mylog.info('JSON result: %s' % json.dumps(resultd))
+    #utils.log2html(logfile, logid, bkdir)
+    #sys.exit(0)
+
+# test port shut and noshut
+    for opt in ['ssh', 'snmp', 'netconf']:
+        for nd in tb:
+            utils.framelog(">%s< %s switch to Classic" %(opt,nd.sysname))
+            for pt in nd:
+                pt.shutdown(opt=opt)
+                pt.noshutdown(opt=opt)
+                time.sleep(2)
+                nd.cliexe('show port | match %s' %pt.port)
+
+            utils.framelog(">%s< %s switch to MD-CLI" %(opt,nd.sysname))
+            for pt in nd:
+                pt.shutdown(opt=opt)
+                pt.noshutdown(opt=opt)
+                time.sleep(2)
+                nd.cliexe('show port | match %s' %pt.port)
+
+    
+    resultd['shut/noshut port'] = 'PASS'
+    mylog.info('JSON result: %s' % json.dumps(resultd))
+    utils.log2html(logfile, logid, bkdir)
+    # restore SELinux security labels context of web
+    os.system("restorecon -R %s" % HTMLROOT)
+    sys.exit(0)
 
     # import testcase module
     tcmodule = runsuite
@@ -197,7 +261,7 @@ if (__name__ == '__main__'):
 
         # if KPIdict exists, write KPI to csv file
         # /var/www/html/$user/kpis/suite_name/kpi_name.cvs
-        if plotkpi and len(tcret) == 2:
+        if len(tcret) == 2:
             kpidir = os.path.join(KPIDIR, runsuite)
             if not os.path.exists(kpidir):
                 os.makedirs(kpidir)
@@ -235,12 +299,10 @@ if (__name__ == '__main__'):
                             col = f.readline()  # get column header
                         if col.strip() == scolhead.strip():
                             # column has no change. append row data
-                            mylog.info('file looks good, append data in')
                             with open(kpicsv, 'a+') as f:
                                 f.write(srowdata)
                         else:
                             # column has changed. create new file
-                            mylog.info('data fields altered, write new ones')
                             with open(kpicsv, 'w') as f:
                                 f.write(scolhead)
                                 f.write(srowdata)

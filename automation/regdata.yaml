@@ -1,17 +1,27 @@
 exampleA: 
-    module: example1
-    testbed: tb1.yaml
+    module: exampleA
+    testbed: example.yaml
     testcases:
-        - test-1
-        - test-2 {'traffic_item':'ipv6_hub9'}
+        - snmp_and_ssh_classic
+        - ssh_modeldriven
+        - netconf_cli
+        - netconf_xml
+
 exampleB:
-    module: example1
-    testbed: tb2.yaml
+    module: exampleB
+    testbed: example.yaml
     testcases:
-        - test-1
-        - test-2 {'traffic_item':'ipv6_hub9'}
-        - test-3
-        - test-4 {'traffic_item':'xxxyyy'}
+        - snmp_and_ssh_classic
+        - ssh_modeldriven
+        - netconf_cli
+        - netconf_xml
+
+exampleC:
+    module: exampleC
+    testbed: tb1.yaml
+    plotkpi: True
+    testcases:
+        - kpi_demo_1
 
 ott_plte:
     module: ott_plte
@@ -323,7 +333,7 @@ vzw_ense_edn_sanity:
     testbed: vzw_ng_poc.yaml
     mib_release: timos_15_0_r5
     testcases:
-        - edn_sanity_access_no_vprn 
+        - ense_edn_sanity 
 
 vzw_ense_vxlan_sanity:
     module:  new_ng_poc
@@ -409,45 +419,61 @@ vzw_ense_full:
     testbed: vzw_ng_poc.yaml
     mib_release: timos_15_0_r5
     backup_config: True
+    plotkpi: True
     testcases:
-        - sanity_access_no_vprn 
-        - fail_hub_1_to_access_1_access_no_vprn 
-        - fail_hub_2_to_access_2_access_no_vprn 
-        - fail_access_1_to_spine_1_access_no_vprn 
-        - fail_access_1_to_spine_2_access_no_vprn 
-        - fail_access_2_to_spine_1_access_no_vprn 
-        - fail_access_2_to_spine_2_access_no_vprn 
-        - fail_access_3_to_spine_1_1_access_no_vprn 
-        - fail_access_3_to_spine_1_2_access_no_vprn 
-        - fail_access_3_to_spine_2_1_access_no_vprn 
-        - fail_access_3_to_spine_2_2_access_no_vprn 
-        - fail_exit_1_to_spine_1_access_no_vprn 
-        - fail_exit_1_to_spine_2_access_no_vprn 
-        - fail_exit_2_to_spine_1_access_no_vprn 
-        - fail_exit_2_to_spine_2_access_no_vprn 
-        #- fail_exit_1_to_ense_vxlan_access_no_vprn 
-        #- fail_exit_2_to_ense_vxlan_access_no_vprn 
-        #- ran_vrrp_fail_and_recover 
-        - fail_vc_uplink_1
-        - fail_vc_uplink_2
-        - reboot_exit_1_access_no_vprn 
-        - reboot_spine_1_access_no_vprn 
-        - reboot_access_1_access_no_vprn 
-        #- reboot_access_3_access_no_vprn 
-        - reboot_hub_1_access_no_vprn 
-        - switch_cpm_vc_access_no_vprn 
-        - edn_host_switch_active_to_standby_access_no_vprn
+        - ense_sanity 
+        #- ense_fail_hub_1_to_access_1 
+        #- ense_fail_hub_2_to_access_2 
+        #- ense_fail_access_1_to_spine_1 
+        #- ense_fail_access_1_to_spine_2 
+        #- ense_fail_access_2_to_spine_1 
+        #- ense_fail_access_2_to_spine_2
+        #
+        - ense_fail_access_3_to_spine_1_1 
+        - ense_fail_access_3_to_spine_1_2 
+        - ense_fail_access_3_to_spine_2_1 
+        - ense_fail_access_3_to_spine_2_2 
+        - ense_fail_exit_1_to_spine_1 
+        - ense_fail_exit_1_to_spine_2 
+        - ense_fail_exit_2_to_spine_1 
+        - ense_fail_exit_2_to_spine_2 
+        #
+        - ense_fail_exit_1_to_pe 
+        - ense_fail_exit_2_to_pe 
+        #- ense_ran_vrrp_fail_and_recover 
+        #
+        - ense_fail_vc_uplink_1
+        - ense_fail_vc_uplink_2
+        - ense_reboot_exit_1 
+        - ense_reboot_spine_1 
+        #
+        #- ense_reboot_access_1 
+        - ense_reboot_access_3 
+        - ense_reboot_access_4 
+        #- ense_reboot_hub_1 
+        #
+        - ense_edn_host_1_switch_active_to_standby
+        - ense_switch_vc_cpm 
+        - testbed_teardown
 
 vzw_mec:
     module:  new_ng_poc
     testbed: vzw_ng_poc.yaml
+    plotkpi: True
     mib_release: timos_15_0_r5
     testcases:
         - mec_sanity
-        - mec_fail_wsn_access_1_to_border_leaf_1
-        - mec_fail_wsn_access_1_to_border_leaf_2
-        - mec_fail_edn_access_1_to_border_leaf_1
-        - mec_fail_edn_access_1_to_border_leaf_2
+        - mec_fail_access_1_to_border_leaf_1
+        - mec_fail_access_1_to_border_leaf_2
+        - mec_fail_access_2_to_border_leaf_1
+        - mec_fail_access_2_to_border_leaf_2
+        - mec_fail_access_3_to_border_leaf_1
+        - mec_fail_access_3_to_border_leaf_2
+        - mec_host_1_mgt_active_to_standby
+        - mec_host_2_mgt_active_to_standby
+        - mec_subnet_1_vrrp_switch
+        - mec_reboot_exit_1
+        - testbed_teardown
 
 vzw_5g_ixr_s_bash:
     module:  vzw_5g_ixr_s_bash

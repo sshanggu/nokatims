@@ -1,0 +1,21 @@
+# example testbed
+topology:
+    name:  'Example'
+
+nodes:
+    al_5:
+        mgmt_ip:   135.228.1.225
+        mgmt_ipv6: 2001:4888:a2f:4025:135:228:1:225
+        netconf: True
+        system_ip: 1.1.1.255
+        ports:
+            to_spine_1:  '1/2/c12/4'
+#    crs:
+#        mgmt_ip: 135.228.0.202
+#        system_ip: 1.1.1.202
+#        netconf: True
+#        ports:
+#            #nc_p1: '1/2/c1/1'
+#            #nc_p2: '1/2/c1/2'
+#            nc_p3: '1/2/c1/3'
+#            nc_p4: '1/2/c1/4'
